@@ -1,28 +1,46 @@
 package com.yyy.fuzhuangpad.sale;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.yyy.fuzhuangpad.R;
-import com.yyy.fuzhuangpad.style.StyleUtil;
+import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
+import com.yyy.fuzhuangpad.util.PxUtil;
+import com.yyy.fuzhuangpad.util.TimeUtil;
+import com.yyy.fuzhuangpad.view.button.ButtonSelect;
 import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.form.FormColumn;
 import com.yyy.fuzhuangpad.view.form.FormRow;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
+import com.yyy.yyylibrary.pick.builder.TimePickerBuilder;
+import com.yyy.yyylibrary.pick.listener.OnTimeSelectChangeListener;
+import com.yyy.yyylibrary.pick.listener.OnTimeSelectListener;
+import com.yyy.yyylibrary.pick.view.TimePickerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.yyy.fuzhuangpad.util.StringUtil.getTime;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,8 +61,17 @@ public class BillingFragment extends Fragment {
     LinearLayout llBtn;
     @BindView(R.id.rl_main)
     RelativeLayout rlMain;
+    @BindView(R.id.bs_date_start)
+    ButtonSelect bsDateStart;
+    @BindView(R.id.bs_data_end)
+    ButtonSelect bsDataEnd;
+    @BindView(R.id.bs_shop)
+    ButtonSelect bsShop;
+
     FormRow formTitle;
     List<FormColumn> titles;
+    private TimePickerView pvDateStart;
+    private TimePickerView pvDateEnd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,8 +91,8 @@ public class BillingFragment extends Fragment {
     private void init() {
         initList();
         initTitle();
+        initView();
     }
-
 
     private void initList() {
         titles = new ArrayList<>();
@@ -79,13 +106,93 @@ public class BillingFragment extends Fragment {
         rlMain.addView(formTitle, params);
     }
 
-    @OnClick({R.id.bwi_remove, R.id.bwi_search})
+    private void initView() {
+        initStartDate();
+    }
+
+    private void initStartDate() {
+        bsDateStart.setOnSelectClickListener(new OnSelectClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickDateStart();
+            }
+        });
+    }
+
+    @OnClick({R.id.bwi_remove, R.id.bwi_search, R.id.bs_data_end, R.id.bs_shop})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bwi_remove:
                 break;
             case R.id.bwi_search:
                 break;
+            case R.id.bs_date_start:
+                break;
+            case R.id.bs_data_end:
+                break;
+            case R.id.bs_shop:
+                break;
+            default:
+                break;
         }
     }
+
+    private void pickDateStart() {
+        if (pvDateStart == null) {
+            try {
+                initPvDateStart();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        pvDateStart.show();
+    }
+
+    private void initPvDateStart() throws Exception {
+        pvDateStart = new TimePickerBuilder(getActivity(), new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                Toast.makeText(getActivity(), getTime(date), Toast.LENGTH_SHORT).show();
+                Log.i("pvTime", "onTimeSelect");
+            }
+        })       .setRangDate(TimeUtil.str2calendar(getString(R.string.common_pickdate_start)), TimeUtil.str2calendar(getString(R.string.common_pickdate_end)))
+                .setDate(Calendar.getInstance())
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+                        Log.i("pvTime", "onTimeSelectChanged");
+                    }
+                })
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .addOnCancelClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("pvTime", "onCancelClickListener");
+                    }
+                }).setContentTextSize(18).setBgColor(0xFFFFFFFF)
+                .build();
+        Dialog mDialog = pvDateStart.getDialog();
+        if (mDialog != null) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    PxUtil.getWidth(getActivity()) / 2,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            pvDateStart.getDialogContainerLayout().setLayoutParams(params);
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+                dialogWindow.setDimAmount(0.1f);
+                //当显示只有一列是需要设置window宽度，防止两边有空隙；
+                WindowManager.LayoutParams winParams;
+                winParams = dialogWindow.getAttributes();
+                winParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+                dialogWindow.setAttributes(winParams);
+            }
+        }
+    }
+
 }

@@ -81,6 +81,8 @@
     <string name="common_remove">清除</string>
     <string name="common_date_start">开始日期</string>
     <string name="common_date_end">结束日期</string>
+    <string name="common_pickdate_start">2015-01-01</string>
+    <string name="common_pickdate_end">2030-12-31</string>
     <!--icon-->
     <string name="icon_man">&#xe71b;</string>
     <string name="icon_lock">&#xe644;</string>

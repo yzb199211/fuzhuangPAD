@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<dimen name="pickerview_topbar_height">48.8889dp</dimen>
+	<dimen name="pickerview_topbar_height">22.2222dp</dimen>
 	<dimen name="pickerview_topbar_padding">22.2222dp</dimen>
 	<dimen name="pickerview_topbar_btn_textsize">18.8889sp</dimen>
 	<dimen name="pickerview_topbar_title_textsize">20.0000sp</dimen>

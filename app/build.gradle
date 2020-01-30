@@ -63,4 +63,5 @@ android.useAndroidX=true*/
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-1'
     /*表格*/
     implementation 'com.github.huangyanbin:SmartTable:2.2.0'
+    implementation(name: 'yyylibrary-release', ext: 'aar')
 }

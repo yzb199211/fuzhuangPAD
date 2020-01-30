@@ -48,6 +48,10 @@ public class ColorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getData();
+    }
+
+    private void getData() {
 
     }
 
