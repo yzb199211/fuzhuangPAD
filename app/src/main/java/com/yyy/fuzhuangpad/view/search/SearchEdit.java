@@ -55,7 +55,7 @@ public class SearchEdit extends LinearLayout {
     private void initMain() {
         setGravity(Gravity.CENTER_VERTICAL);
         setOrientation(HORIZONTAL);
-        setPadding(5, 5, 5, 5);
+        setPadding(5, 0, 5, 0);
     }
 
     private void initTitle() {
@@ -73,11 +73,13 @@ public class SearchEdit extends LinearLayout {
         etContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, editSize);
         etContent.setTextColor(editColor);
         etContent.setLayoutParams(etParams());
+//        etContent.setBackground(null);
+        etContent.setGravity(Gravity.CENTER_VERTICAL);
         addView(etContent);
     }
 
     private LinearLayout.LayoutParams etParams() {
-        LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1);
+        LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
         params.leftMargin = context.getResources().getDimensionPixelSize(R.dimen.dp_3);
         return params;
     }

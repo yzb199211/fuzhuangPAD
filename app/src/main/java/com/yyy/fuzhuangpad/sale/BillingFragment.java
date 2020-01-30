@@ -13,13 +13,13 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.util.PxUtil;
+import com.yyy.fuzhuangpad.util.StringUtil;
 import com.yyy.fuzhuangpad.util.TimeUtil;
 import com.yyy.fuzhuangpad.view.button.ButtonSelect;
 import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
@@ -39,8 +39,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.yyy.fuzhuangpad.util.StringUtil.getTime;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -108,6 +106,7 @@ public class BillingFragment extends Fragment {
 
     private void initView() {
         initStartDate();
+        initEndDate();
     }
 
     private void initStartDate() {
@@ -115,6 +114,15 @@ public class BillingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 pickDateStart();
+            }
+        });
+    }
+
+    private void initEndDate() {
+        bsDataEnd.setOnSelectClickListener(new OnSelectClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickDateEnd();
             }
         });
     }
@@ -148,31 +156,66 @@ public class BillingFragment extends Fragment {
         pvDateStart.show();
     }
 
+    private void pickDateEnd() {
+        if (pvDateEnd == null) {
+            try {
+                initPvDateEnd();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        pvDateEnd.show();
+    }
+
     private void initPvDateStart() throws Exception {
         pvDateStart = new TimePickerBuilder(getActivity(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                Toast.makeText(getActivity(), getTime(date), Toast.LENGTH_SHORT).show();
-                Log.i("pvTime", "onTimeSelect");
+                bsDateStart.setContext(StringUtil.getDate(date));
             }
-        })       .setRangDate(TimeUtil.str2calendar(getString(R.string.common_pickdate_start)), TimeUtil.str2calendar(getString(R.string.common_pickdate_end)))
+        }).setRangDate(TimeUtil.str2calendar(getString(R.string.common_pickdate_start)), TimeUtil.str2calendar(getString(R.string.common_pickdate_end)))
                 .setDate(Calendar.getInstance())
-                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
-                    @Override
-                    public void onTimeSelectChanged(Date date) {
-                        Log.i("pvTime", "onTimeSelectChanged");
-                    }
-                })
                 .setType(new boolean[]{true, true, true, false, false, false})
                 .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
-                .addOnCancelClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.i("pvTime", "onCancelClickListener");
-                    }
-                }).setContentTextSize(18).setBgColor(0xFFFFFFFF)
+                .setContentTextSize(18).setBgColor(0xFFFFFFFF)
                 .build();
-        Dialog mDialog = pvDateStart.getDialog();
+
+        initPvTimeDialog(pvDateStart.getDialog());
+        initPvTimeWindow(pvDateStart.getDialog().getWindow());
+    }
+
+    private void initPvDateEnd() throws Exception {
+        pvDateEnd = new TimePickerBuilder(getActivity(), new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                bsDataEnd.setContext(StringUtil.getDate(date));
+            }
+        }).setRangDate(TimeUtil.str2calendar(getString(R.string.common_pickdate_start)), TimeUtil.str2calendar(getString(R.string.common_pickdate_end)))
+                .setDate(Calendar.getInstance())
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .setContentTextSize(18).setBgColor(0xFFFFFFFF)
+                .build();
+
+        initPvTimeDialog(pvDateEnd.getDialog());
+        initPvTimeWindow(pvDateEnd.getDialog().getWindow());
+    }
+
+    private void initPvTimeWindow(Window dialogWindow) {
+        if (dialogWindow != null) {
+            dialogWindow.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
+            dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            dialogWindow.setDimAmount(0.1f);
+            //当显示只有一列是需要设置window宽度，防止两边有空隙；
+            WindowManager.LayoutParams winParams;
+            winParams = dialogWindow.getAttributes();
+            winParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+            dialogWindow.setAttributes(winParams);
+        }
+    }
+
+
+    private void initPvTimeDialog(Dialog mDialog) {
         if (mDialog != null) {
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                     PxUtil.getWidth(getActivity()) / 2,
@@ -181,18 +224,6 @@ public class BillingFragment extends Fragment {
             params.leftMargin = 0;
             params.rightMargin = 0;
             pvDateStart.getDialogContainerLayout().setLayoutParams(params);
-            Window dialogWindow = mDialog.getWindow();
-            if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
-                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-                dialogWindow.setDimAmount(0.1f);
-                //当显示只有一列是需要设置window宽度，防止两边有空隙；
-                WindowManager.LayoutParams winParams;
-                winParams = dialogWindow.getAttributes();
-                winParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                dialogWindow.setAttributes(winParams);
-            }
         }
     }
-
 }

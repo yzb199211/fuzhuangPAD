@@ -125,7 +125,7 @@ public class ButtonSelect extends LinearLayout {
         return params;
     }
 
-    private void setContext(String content) {
+    public void setContext(String content) {
         this.content = content;
         if (tvContent != null)
             tvContent.setText(content);
