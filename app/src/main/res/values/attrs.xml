@@ -128,9 +128,10 @@
         <attr name="bsTitle" format="string" />
         <attr name="bsTitleSize" format="dimension" />
         <attr name="bsTitleColor" format="color" />
-        <attr name="bsContent" format="string"/>
-        <attr name="bsContentSize" format="dimension"/>
-        <attr name="bsContentColor" format="color"/>
+        <attr name="bsContent" format="string" />
+        <attr name="bsContentSize" format="dimension" />
+        <attr name="bsContentColor" format="color" />
         <attr name="bsSrc" format="reference" />
+        <attr name="bsSrcPadding" format="dimension" />
     </declare-styleable>
 </resources>

@@ -49,6 +49,7 @@
     <!--common-->
     <color name="common_btn_add">#FF0000</color>
     <color name="common_btn_search">#4DB2B4</color>
+    <color name="common_btn_select">#CCCCCC</color>
 
     <!--form-->
     <color name="form_bg_title">#4DB2B4</color>
