@@ -16,38 +16,38 @@
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_5"
         android:paddingRight="@dimen/dp_5">
-
-        <com.yyy.fuzhuangpad.view.search.SearchEdit
-            android:id="@+id/se_code"
-            android:layout_width="@dimen/dp_100"
-            android:layout_height="wrap_content"
-            app:seEditColor="@color/default_text_color"
-            app:seEditSize="@dimen/sp_10"
-            app:seTilte="@string/color_search_value"
-            app:seTitleColor="@color/default_text_color"
-            app:seTitleSize="@dimen/sp_10" />
-
-        <com.yyy.fuzhuangpad.view.search.SearchEdit
-            android:id="@+id/se_name"
-            android:layout_width="@dimen/dp_100"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_5"
-            android:layout_toRightOf="@id/se_code"
-            app:seEditColor="@color/default_text_color"
-            app:seEditSize="@dimen/sp_10"
-            app:seTilte="@string/color_search_name"
-            app:seTitleColor="@color/default_text_color"
-            app:seTitleSize="@dimen/sp_10" />
-
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
-            android:id="@+id/bs_type"
-            android:layout_width="@dimen/dp_80"
+            android:id="@+id/bs_date_start"
+            android:layout_width="@dimen/dp_100"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/se_name"
             app:bsContentColor="@color/white"
             app:bsContentSize="@dimen/sp_10"
             app:bsSrc="@mipmap/icon_arrow_down"
-            app:bsTitle="@string/color_form_type"
+            app:bsTitle="@string/common_date_start"
+            app:bsTitleColor="@color/default_text_color"
+            app:bsTitleSize="@dimen/sp_10" />
+        <com.yyy.fuzhuangpad.view.button.ButtonSelect
+            android:id="@+id/bs_data_end"
+            android:layout_width="@dimen/dp_100"
+            android:layout_toRightOf="@id/bs_date_start"
+            android:layout_height="wrap_content"
+            app:bsContentColor="@color/white"
+            android:layout_marginLeft="@dimen/dp_5"
+            app:bsContentSize="@dimen/sp_10"
+            app:bsSrc="@mipmap/icon_arrow_down"
+            app:bsTitle="@string/common_date_end"
+            app:bsTitleColor="@color/default_text_color"
+            app:bsTitleSize="@dimen/sp_10" />
+        <com.yyy.fuzhuangpad.view.button.ButtonSelect
+            android:id="@+id/bs_shop"
+            android:layout_width="@dimen/dp_80"
+            android:layout_toRightOf="@id/bs_data_end"
+            android:layout_height="wrap_content"
+            app:bsContentColor="@color/white"
+            android:layout_marginLeft="@dimen/dp_5"
+            app:bsContentSize="@dimen/sp_10"
+            app:bsSrc="@mipmap/icon_arrow_down"
+            app:bsTitle="@string/sale_billing_form_shop"
             app:bsTitleColor="@color/default_text_color"
             app:bsTitleSize="@dimen/sp_10" />
 
@@ -76,12 +76,40 @@
             app:bwiTitleColor="@color/common_btn_search"
             app:bwiTitleSize="@dimen/sp_10" />
     </RelativeLayout>
+<RelativeLayout
+    android:id="@+id/ll_search2"
+    android:layout_below="@+id/ll_search"
+    android:layout_width="match_parent" android:paddingLeft="@dimen/dp_5"
+    android:paddingRight="@dimen/dp_5"
+    android:layout_height="@dimen/dp_20">
 
+    <com.yyy.fuzhuangpad.view.search.SearchEdit
+        android:id="@+id/se_code"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        app:seEditColor="@color/default_text_color"
+        app:seEditSize="@dimen/sp_10"
+        app:seTilte="@string/color_search_value"
+        app:seTitleColor="@color/default_text_color"
+        app:seTitleSize="@dimen/sp_10" />
+
+    <com.yyy.fuzhuangpad.view.search.SearchEdit
+        android:id="@+id/se_name"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_toRightOf="@id/se_code"
+        app:seEditColor="@color/default_text_color"
+        app:seEditSize="@dimen/sp_10"
+        app:seTilte="@string/color_search_name"
+        app:seTitleColor="@color/default_text_color"
+        app:seTitleSize="@dimen/sp_10" />
+</RelativeLayout>
     <LinearLayout
         android:id="@+id/ll_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_20"
-        android:layout_below="@id/ll_search"
+        android:layout_below="@id/ll_search2"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_5"

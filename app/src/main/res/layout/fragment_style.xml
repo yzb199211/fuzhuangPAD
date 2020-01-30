@@ -11,7 +11,7 @@
     <RelativeLayout
         android:id="@+id/ll_search"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_30"
+        android:layout_height="@dimen/dp_20"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_5"
@@ -38,6 +38,18 @@
             app:seTilte="@string/style_search_name"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
+
+        <com.yyy.fuzhuangpad.view.button.ButtonSelect
+            android:id="@+id/bs_type"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/se_name"
+            app:bsContentColor="@color/white"
+            app:bsContentSize="@dimen/sp_10"
+            app:bsSrc="@mipmap/icon_arrow_down"
+            app:bsTitle="@string/style_form_type"
+            app:bsTitleColor="@color/default_text_color"
+            app:bsTitleSize="@dimen/sp_10" />
 
         <com.yyy.fuzhuangpad.view.button.ButtonWithImg
             android:id="@+id/bwi_remove"

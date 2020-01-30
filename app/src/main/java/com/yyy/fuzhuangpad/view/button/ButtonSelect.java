@@ -118,6 +118,9 @@ public class ButtonSelect extends LinearLayout {
 
     private RelativeLayout.LayoutParams initImageParams() {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(titleSize, titleSize);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        params.addRule(RelativeLayout.CENTER_VERTICAL);
+        params.rightMargin = context.getResources().getDimensionPixelSize(R.dimen.dp_3);
 //        LayoutParams params = new LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.sp_14), context.getResources().getDimensionPixelSize(R.dimen.sp_14));
         return params;
     }
@@ -126,5 +129,9 @@ public class ButtonSelect extends LinearLayout {
         this.content = content;
         if (tvContent != null)
             tvContent.setText(content);
+    }
+
+    public String getContent() {
+        return content;
     }
 }

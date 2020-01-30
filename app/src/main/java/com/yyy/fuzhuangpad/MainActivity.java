@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.yyy.fuzhuangpad.color.ColorFragment;
 import com.yyy.fuzhuangpad.customer.CustomerFragment;
+import com.yyy.fuzhuangpad.sale.BillingFragment;
+import com.yyy.fuzhuangpad.style.StyleFragment;
 import com.yyy.fuzhuangpad.view.main.MainMenu;
 
 import butterknife.BindView;
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     CustomerFragment customerFragment;
     ColorFragment colorFragment;
+    StyleFragment styleFragment;
+    BillingFragment billingFragment;
 
     MainMenu currentMenu;
 
@@ -69,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
                 switchFragment(customerFragment);
                 break;
             case R.id.mm_base_style:
+                if (styleFragment == null) {
+                    styleFragment = new StyleFragment();
+                }
+                switchFragment(styleFragment);
                 break;
             case R.id.mm_base_color:
                 if (colorFragment == null) {
@@ -77,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
                 switchFragment(colorFragment);
                 break;
             case R.id.mm_sale_order:
+                if (billingFragment == null) {
+                    billingFragment = new BillingFragment();
+                }
+                switchFragment(billingFragment);
                 break;
             case R.id.mm_center_pwd:
                 break;
