@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">fuzhuangPAD</string>
+
+    <string name="preferenceCache">fuzhuangPADCache</string>
+
+    <!--登录提示-->
+    <string name="login_url_empty">请扫描获取登录信息</string>
+    <string name="login_address_empty">未扫描到登录地址</string>
+    <string name="login_enter">登录</string>
+    <string name="login_sweep">扫描二维码</string>
+    <!--b版本更新dialog提示-->
+    <string name="update_latest">确认是否更新到最新版本</string>
+    <string name="update_older">确认是否退回到旧版本</string>
+    <!--JudgeDialog-->
+    <string name="judge_dialog_btn_yes">是</string>
+    <string name="judge_dialog_btn_no">否</string>
+
+    <!--error-->
+    <string name="error_data">数据解析错误</string>
+    <string name="error_json">JSON数据解析错误</string>
+    <string name="error_fail">网络请求失败</string>
+    <string name="error_empty">无数据</string>
+    <string name="error_empty_address">请求地址为空</string>
+    <!--main-->
+    <string name="main_menu_base_title">基础资料</string>
+    <string name="main_menu_base_customer">客户档案</string>
+    <string name="main_menu_base_style">款式资料</string>
+    <string name="main_menu_base_color">颜色信息</string>
+    <string name="main_menu_sale_title">销售管理</string>
+    <string name="main_menu_sale_order">订单管理</string>
+    <string name="main_menu_center_title">个人中心</string>
+    <string name="main_menu_center_pwd">修改密码</string>
+    <string name="main_menu_center_exit">退出登录</string>
+    <!--customer-->
+    <string name="customer_search_code">客户编码</string>
+    <string name="customer_search_name">客户名称</string>
+    <string name="customer_form_num">序号</string>
+    <string name="customer_form_code">编码</string>
+    <string name="customer_form_cus_name">客户简称</string>
+    <string name="customer_form_cus_saler">业务员</string>
+    <string name="customer_form_type">类别</string>
+    <string name="customer_form_phone">电话</string>
+    <!--color-->
+    <string name="color_search_value">色        号</string>
+    <string name="color_search_name">颜色名称</string>
+    <string name="color_form_num">序号</string>
+    <string name="color_form_value">色号</string>
+    <string name="color_form_name">颜色名称</string>
+    <string name="color_form_type">类别</string>
+    <string name="color_form_remark">备注</string>
+
+    <!--commonBtn-->
+    <string name="common_add">新增</string>
+    <string name="common_search">查询</string>
+    <string name="common_remove">清除</string>
+    <!--icon-->
+    <string name="icon_man">&#xe71b;</string>
+    <string name="icon_lock">&#xe644;</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

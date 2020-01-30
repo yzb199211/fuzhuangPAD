@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_bg_color"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <include layout="@layout/layout_top" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ScrollView
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/dp_1"
+            android:layout_weight="1"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:id="@+id/ll_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_25"
+                    android:background="@color/main_menu_title"
+                    android:gravity="center"
+                    android:text="@string/main_menu_base_title"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12" />
+
+                <com.yyy.fuzhuangpad.view.main.MainMenu
+                    android:id="@+id/mm_base_customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_25"
+                    app:imgSrc="@mipmap/ic_launcher_round"
+                    app:text="@string/main_menu_base_customer"
+                    app:tvSize="@dimen/sp_10"
+                    app:tvolor="@color/default_text_color" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/default_bg_color" />
+
+                <com.yyy.fuzhuangpad.view.main.MainMenu
+                    android:id="@+id/mm_base_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_25"
+                    app:imgSrc="@mipmap/ic_launcher_round"
+                    app:text="@string/main_menu_base_style"
+                    app:tvSize="@dimen/sp_10"
+                    app:tvolor="@color/default_text_color" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/default_bg_color" />
+
+                <com.yyy.fuzhuangpad.view.main.MainMenu
+                    android:id="@+id/mm_base_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_25"
+                    app:imgSrc="@mipmap/ic_launcher_round"
+                    app:text="@string/main_menu_base_color"
+                    app:tvSize="@dimen/sp_10"
+                    app:tvolor="@color/default_text_color" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_25"
+                    android:background="@color/main_menu_title"
+                    android:gravity="center"
+                    android:text="@string/main_menu_sale_title"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12" />
+
+                <com.yyy.fuzhuangpad.view.main.MainMenu
+                    android:id="@+id/mm_sale_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_25"
+                    app:imgSrc="@mipmap/ic_launcher_round"
+                    app:text="@string/main_menu_sale_order"
+                    app:tvSize="@dimen/sp_10"
+                    app:tvolor="@color/default_text_color" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_25"
+                    android:background="@color/main_menu_title"
+                    android:gravity="center"
+                    android:text="@string/main_menu_center_title"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12" />
+
+                <com.yyy.fuzhuangpad.view.main.MainMenu
+                    android:id="@+id/mm_center_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_25"
+                    app:imgSrc="@mipmap/ic_launcher_round"
+                    app:text="@string/main_menu_center_pwd"
+                    app:tvSize="@dimen/sp_10"
+                    app:tvolor="@color/default_text_color" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/default_bg_color" />
+
+                <com.yyy.fuzhuangpad.view.main.MainMenu
+                    android:id="@+id/mm_center_exit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_25"
+                    app:imgSrc="@mipmap/ic_launcher_round"
+                    app:text="@string/main_menu_center_exit"
+                    app:tvSize="@dimen/sp_10"
+                    app:tvolor="@color/default_text_color" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/default_bg_color" />
+            </LinearLayout>
+        </ScrollView>
+
+        <FrameLayout
+            android:id="@+id/fl_child"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:background="@color/white" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="textSize" format="dimension" />
+    <attr name="textColor" format="color" />
+
+    <declare-styleable name="RoundProgressBar">
+        <attr name="roundColor" format="color" />
+        <attr name="roundProgressColor" format="color" />
+        <attr name="roundWidth" format="dimension" />
+        <attr name="textColor" />
+        <attr name="textSize" />
+        <attr name="max" format="integer" />
+        <attr name="textIsDisplayable" format="boolean" />
+        <attr name="style">
+            <enum name="STROKE" value="0" />
+            <enum name="FILL" value="1" />
+        </attr>
+    </declare-styleable>
+    <!--/*选择弹窗属性*/-->
+    <declare-styleable name="pickerview">
+        <attr name="wheelview_gravity">
+            <enum name="center" value="17" />
+            <enum name="left" value="3" />
+            <enum name="right" value="5" />
+        </attr>
+        <attr name="wheelview_textSize" format="dimension" />
+        <attr name="wheelview_textColorOut" format="color" />
+        <attr name="wheelview_textColorCenter" format="color" />
+        <attr name="wheelview_dividerColor" format="color" />
+        <attr name="wheelview_lineSpacingMultiplier" format="float" />
+    </declare-styleable>
+
+    <!--轮播图属性-->
+    <declare-styleable name="CircleViewPager">
+        <!--页面切换时间间隔-->
+        <attr name="interval" format="integer" />
+        <attr name="isCanLoop" format="boolean" />
+        <attr name="isAutoPlay" format="boolean" />
+        <!--<attr name="indicator_gravity" format="integer"/>-->
+        <attr name="indicator_checked_color" format="color" />
+        <attr name="indicator_normal_color" format="color" />
+        <attr name="indicator_radius" format="dimension" />
+        <attr name="indicator_gravity" format="enum">
+            <enum name="center" value="0" />
+            <enum name="start" value="1" />
+            <enum name="end" value="2" />
+        </attr>
+    </declare-styleable>
+
+
+    <!--审核单属性列-->
+    <declare-styleable name="reviewInfo">
+        <attr name="leftText" format="string" />
+        <attr name="leftTextSize" format="dimension" />
+        <attr name="leftTextColor" format="color" />
+        <attr name="leftTextBold" format="boolean" />
+        <attr name="rightText" format="string" />
+        <attr name="rightTextSize" format="dimension" />
+        <attr name="rightTextColor" format="color" />
+        <attr name="rightTextBold" format="boolean" />
+    </declare-styleable>
+    <!--审核过程属性-->
+    <declare-styleable name="reviewProcess">
+        <attr name="llPaddingRight" format="dimension" />
+        <attr name="llPaddingTop" format="dimension" />
+        <attr name="llPaddingBottom" format="dimension" />
+        <attr name="imgsrc" format="reference" />
+        <attr name="titleText" format="string" />
+        <attr name="titleColor" format="color" />
+        <attr name="titleSize" format="dimension" />
+        <attr name="titleWidth" format="dimension" />
+        <attr name="contentText" format="string" />
+        <attr name="contentTextColor" format="color" />
+        <attr name="contentTextSize" format="dimension" />
+        <attr name="contentPaddingLeft" format="dimension" />
+        <attr name="dateText" format="string" />
+        <attr name="dateTextColor" format="color" />
+        <attr name="dateTextSize" format="dimension" />
+        <attr name="tvRemarkVisiable" format="boolean" />
+        <attr name="tvRemarkText" format="string" />
+        <attr name="tvRemarkTextColor" format="color" />
+        <attr name="tvRemarkTextSize" format="dimension" />
+        <attr name="etRemarkVisiable" format="boolean" />
+        <attr name="etRemarkText" format="string" />
+        <attr name="etRemarkHint" format="string" />
+        <attr name="etRemarkTextSize" format="dimension" />
+        <attr name="etRemarkMarginTop" format="dimension" />
+        <attr name="etRemarkTextColor" format="color" />
+    </declare-styleable>
+    <!--审核筛选样式-->
+    <declare-styleable name="reviewSelectView">
+        <attr name="spandCounts" format="integer" />
+    </declare-styleable>
+    <!--审核筛选项样式-->
+    <declare-styleable name="reviewSelectItem">
+        <attr name="normalColor" format="color" />
+        <attr name="selectColor" format="color" />
+        <attr name="textNormalColor" format="color" />
+        <attr name="textSelectColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="SelectView">
+        <attr name="type" format="integer" />
+
+        <attr name="title" format="string" />
+        <attr name="hint" format="string" />
+
+    </declare-styleable>
+    <declare-styleable name="MainMenu">
+        <attr name="imgSrc" format="reference" />
+        <attr name="text" format="string" />
+        <attr name="tvolor" format="color" />
+        <attr name="tvSize" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="SearchEdit">
+        <attr name="seTilte" format="string" />
+        <attr name="seTitleSize" format="dimension" />
+        <attr name="seTitleColor" format="color" />
+        <attr name="seEditSize" format="dimension" />
+        <attr name="seEditColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="ButtonWithImg">
+        <attr name="bwiTilte" format="string" />
+        <attr name="bwiTitleSize" format="dimension" />
+        <attr name="bwiTitleColor" format="color" />
+        <attr name="bwiSrc" format="reference" />
+    </declare-styleable>
+</resources>
