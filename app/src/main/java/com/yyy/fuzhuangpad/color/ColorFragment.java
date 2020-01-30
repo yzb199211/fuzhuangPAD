@@ -71,7 +71,7 @@ public class ColorFragment extends Fragment {
     }
 
     private void initTitle() {
-        formTitle = new FormRow(getActivity()).isTitle(true).setColumns(ColorUtil.getCustomer(getActivity())).build();
+        formTitle = new FormRow(getActivity()).isTitle(true).setColumns(ColorUtil.getTitles(getActivity())).build();
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getActivity().getResources().getDimensionPixelSize(R.dimen.dp_25));
         params.addRule(RelativeLayout.BELOW, R.id.ll_btn);
         params.topMargin = getActivity().getResources().getDimensionPixelSize(R.dimen.dp_5);

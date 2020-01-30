@@ -124,4 +124,13 @@
         <attr name="bwiTitleColor" format="color" />
         <attr name="bwiSrc" format="reference" />
     </declare-styleable>
+    <declare-styleable name="ButtonSelect">
+        <attr name="bsTitle" format="string" />
+        <attr name="bsTitleSize" format="dimension" />
+        <attr name="bsTitleColor" format="color" />
+        <attr name="bsContent" format="string"/>
+        <attr name="bsContentSize" format="dimension"/>
+        <attr name="bsContentColor" format="color"/>
+        <attr name="bsSrc" format="reference" />
+    </declare-styleable>
 </resources>

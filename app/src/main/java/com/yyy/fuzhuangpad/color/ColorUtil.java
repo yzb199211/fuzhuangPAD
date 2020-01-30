@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ColorUtil {
-    public static List<FormColumn> getCustomer(Context context) {
+    public static List<FormColumn> getTitles(Context context) {
         List<FormColumn> list = new ArrayList<>();
         list.add(new FormColumn(context.getString(R.string.color_form_num), 0.5f, true));
         list.add(new FormColumn(context.getString(R.string.color_form_value), true));

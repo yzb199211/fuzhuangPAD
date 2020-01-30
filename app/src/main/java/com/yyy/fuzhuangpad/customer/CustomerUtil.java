@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerUtil {
-    public static List<FormColumn> getCustomer(Context context) {
+    public static List<FormColumn> getTitles(Context context) {
         List<FormColumn> list = new ArrayList<>();
         list.add(new FormColumn(context.getString(R.string.customer_form_num), 0.5f, true));
         list.add(new FormColumn(context.getString(R.string.customer_form_code), true));
