@@ -82,7 +82,7 @@ public class ButtonWithImg extends LinearLayout {
     }
 
     private LayoutParams ivParams() {
-        LayoutParams params = new LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.sp_14), context.getResources().getDimensionPixelSize(R.dimen.sp_14));
+        LayoutParams params = new LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.sp_10), context.getResources().getDimensionPixelSize(R.dimen.sp_10));
         return params;
     }
 

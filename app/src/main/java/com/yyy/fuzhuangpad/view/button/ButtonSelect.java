@@ -81,7 +81,6 @@ public class ButtonSelect extends LinearLayout {
 
     private void initMain() {
         LayoutInflater.from(context).inflate(R.layout.button_select, this, true);
-        setGravity(Gravity.CENTER_VERTICAL);
     }
 
     private void initTitle() {
@@ -117,8 +116,9 @@ public class ButtonSelect extends LinearLayout {
         });
     }
 
-    private LayoutParams initImageParams() {
-        LayoutParams params = new LayoutParams(getHeight(), getHeight());
+    private RelativeLayout.LayoutParams initImageParams() {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(titleSize, titleSize);
+//        LayoutParams params = new LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.sp_14), context.getResources().getDimensionPixelSize(R.dimen.sp_14));
         return params;
     }
 
