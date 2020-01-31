@@ -40,6 +40,14 @@
     <string name="customer_form_cus_saler">业务员</string>
     <string name="customer_form_type">类别</string>
     <string name="customer_form_phone">电话</string>
+    <string name="customer_detail_title">客户信息</string>
+    <string name="customer_detail_code">客户编码</string>
+    <string name="customer_detail_name">客户名称</string>
+    <string name="customer_detail_type">类        别</string>
+    <string name="customer_detail_saler">业  务  员</string>
+    <string name="customer_detail_phone">电        话</string>
+    <string name="customer_detail_contacts">联  系  人</string>
+    <string name="customer_detail_address">地        址</string>
     <!--color-->
     <string name="color_search_value">色        号</string>
     <string name="color_search_name">颜色名称</string>

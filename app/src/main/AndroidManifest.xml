@@ -21,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".color.ColorDetailActivity"></activity>
+        <activity android:name=".customer.CustomerDetailActivity"></activity>
+        <activity android:name=".color.ColorDetailActivity" />
         <activity
             android:name=".flash.FlashActivity"
             android:screenOrientation="landscape">

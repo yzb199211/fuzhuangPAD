@@ -53,7 +53,6 @@ public class RemarkEdit extends LinearLayout {
     }
 
     private void initMain() {
-        setGravity(Gravity.CENTER_VERTICAL);
         setOrientation(HORIZONTAL);
         setPadding(5, 0, 5, 0);
     }
@@ -75,6 +74,7 @@ public class RemarkEdit extends LinearLayout {
         etContent.setLayoutParams(etParams());
         etContent.setGravity(Gravity.CENTER_VERTICAL);
         etContent.setPadding(5, 5, 5, 5);
+        etContent.setBackground(context.getResources().getDrawable(R.drawable.bg_remark_edit));
         addView(etContent);
     }
 
