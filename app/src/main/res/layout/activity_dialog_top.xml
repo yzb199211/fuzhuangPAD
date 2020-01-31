@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_5">
+
+    <com.yyy.fuzhuangpad.view.button.ButtonWithImg
+        android:id="@+id/bw_exit"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_20"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_5"
+        app:bwiSrc="@mipmap/common_exit"
+        app:bwiTilte="@string/common_exit"
+        app:bwiTitleColor="@color/default_text_color"
+        app:bwiTitleSize="@dimen/sp_10" />
+
+    <com.yyy.fuzhuangpad.view.button.ButtonWithImg
+        android:id="@+id/bw_save"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_20"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_5"
+        app:bwiSrc="@mipmap/common_save"
+        app:bwiTilte="@string/common_save"
+        app:bwiTitleColor="@color/common_btn_search"
+        app:bwiTitleSize="@dimen/sp_10" />
+</RelativeLayout>

@@ -7,10 +7,4 @@ public class NetConfig {
     public final static String url = address + server;
 
     public final static String Login_Method = "LoginHandler.ashx";
-    public final static String MobileOA_Method = "MobileOA.ashx";
-    public final static String Review_Method = "MobileCheckHandler.ashx";
-    public final static String Review_Handler_Method = "approvalHandler.ashx";
-    public final static String Message_Method = "MobileRemindHandler.ashx";
-    public final static String Form_Method = "MobileReportHandler.ashx";
-    public final static String MobileHandler_Method = "MobileHandler.ashx";
 }

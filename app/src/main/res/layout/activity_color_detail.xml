@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity_dialog"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".color.ColorDetailActivity">
+
+    <include layout="@layout/activity_dialog_top" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color_detail_title"
+        android:textColor="@color/default_text_color"
+        android:textSize="@dimen/sp_14" />
+
+    <com.yyy.fuzhuangpad.view.search.SearchEdit
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="wrap_content"
+        app:seEditColor="@color/default_content_color"
+        app:seEditSize="@dimen/sp_10"
+        app:seTilte="@string/color_detail_value"
+        app:seTitleColor="@color/default_content_color"
+        app:seTitleSize="@dimen/sp_10" />
+
+    <com.yyy.fuzhuangpad.view.search.SearchEdit
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="wrap_content"
+        app:seEditColor="@color/default_text_color"
+        app:seEditSize="@dimen/sp_10"
+        app:seTilte="@string/color_detail_name"
+        app:seTitleColor="@color/default_text_color"
+        app:seTitleSize="@dimen/sp_10" />
+
+    <com.yyy.fuzhuangpad.view.search.SearchEdit
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="wrap_content"
+        app:seEditColor="@color/default_text_color"
+        app:seEditSize="@dimen/sp_10"
+        app:seTilte="@string/color_detail_type"
+        app:seTitleColor="@color/default_text_color"
+        app:seTitleSize="@dimen/sp_10" />
+
+    <com.yyy.fuzhuangpad.view.remark.RemarkEdit
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="wrap_content"
+        app:seEditColor="@color/default_text_color"
+        app:seEditSize="@dimen/sp_10"
+        app:seTilte="@string/color_detail_remark"
+        app:seTitleColor="@color/default_text_color"
+        app:seTitleSize="@dimen/sp_10" />
+</LinearLayout>

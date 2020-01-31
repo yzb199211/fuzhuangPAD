@@ -52,7 +52,7 @@ public class ColorFragment extends Fragment {
     }
 
     private void getData() {
-
+        
     }
 
     @Override

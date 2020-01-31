@@ -63,7 +63,7 @@ public class ButtonWithImg extends LinearLayout {
 
     private void initImageView() {
         img = new ImageView(context);
-        img.setPadding(0, 0, 10, 0);
+        img.setPadding(0, 0, 0, 0);
         img.setLayoutParams(ivParams());
         img.setScaleType(ImageView.ScaleType.FIT_XY);
         img.setImageResource(src);
@@ -82,7 +82,8 @@ public class ButtonWithImg extends LinearLayout {
     }
 
     private LayoutParams ivParams() {
-        LayoutParams params = new LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.sp_10), context.getResources().getDimensionPixelSize(R.dimen.sp_10));
+        LayoutParams params = new LayoutParams(textSize, textSize);
+        params.rightMargin = 10;
         return params;
     }
 

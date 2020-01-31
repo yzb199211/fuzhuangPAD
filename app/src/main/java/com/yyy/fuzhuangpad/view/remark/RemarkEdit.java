@@ -1,4 +1,4 @@
-package com.yyy.fuzhuangpad.view.search;
+package com.yyy.fuzhuangpad.view.remark;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
 
-public class SearchEdit extends LinearLayout {
+public class RemarkEdit extends LinearLayout {
     Context context;
     String title;
     int titleSize;
@@ -25,11 +25,11 @@ public class SearchEdit extends LinearLayout {
     TextView tvTitle;
     EditText etContent;
 
-    public SearchEdit(Context context) {
+    public RemarkEdit(Context context) {
         this(context, null);
     }
 
-    public SearchEdit(Context context, @Nullable AttributeSet attrs) {
+    public RemarkEdit(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         initAttrs(attrs);
@@ -69,13 +69,12 @@ public class SearchEdit extends LinearLayout {
 
     private void initEdit() {
         etContent = new EditText(context);
-        etContent.setSingleLine();
+        etContent.setLines(5);
         etContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, editSize);
         etContent.setTextColor(editColor);
         etContent.setLayoutParams(etParams());
-        etContent.setPadding(5, 0, 5, 0);
-//        etContent.setBackground(null);
         etContent.setGravity(Gravity.CENTER_VERTICAL);
+        etContent.setPadding(5, 5, 5, 5);
         addView(etContent);
     }
 
