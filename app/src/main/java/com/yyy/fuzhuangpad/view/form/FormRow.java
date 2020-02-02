@@ -90,6 +90,12 @@ public class FormRow extends LinearLayout {
         return this;
     }
 
+    public FormRow addDefaultParams() {
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, context.getResources().getDimensionPixelSize(R.dimen.dp_20));
+        setLayoutParams(params);
+        return this;
+    }
+
     public FormRow build() {
         if (this.columns != null) {
             init();

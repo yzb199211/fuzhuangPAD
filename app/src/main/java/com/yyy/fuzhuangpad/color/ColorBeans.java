@@ -1,5 +1,10 @@
 package com.yyy.fuzhuangpad.color;
 
+import com.yyy.fuzhuangpad.view.form.FormColumn;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ColorBeans {
     private int iRecNo;
     private String sColorID;
@@ -8,6 +13,13 @@ public class ColorBeans {
     private String sClassName;
     private String dStopDate;
     private String sRemark;
+    private int row;
+
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
 
     public int getiRecNo() {
         return iRecNo;
@@ -63,5 +75,15 @@ public class ColorBeans {
 
     public void setsRemark(String sRemark) {
         this.sRemark = sRemark;
+    }
+
+    public List<FormColumn> getList() {
+        List<FormColumn> list = new ArrayList<>();
+        list.add(new FormColumn(row+1 + "", 0.5f, true, 0, row));
+        list.add(new FormColumn(sColorID + "", 1.0f, true, 1, row));
+        list.add(new FormColumn(sColorName + "", 1.0f, true, 2, row));
+        list.add(new FormColumn(sClassName + "", 1.0f, true, 3, row));
+        list.add(new FormColumn(sRemark + "", 3.0f, true, 4, row));
+        return list;
     }
 }

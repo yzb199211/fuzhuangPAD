@@ -1,5 +1,10 @@
 package com.yyy.fuzhuangpad.style;
 
+import com.yyy.fuzhuangpad.view.form.FormColumn;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class StyleBeans {
     private int iRecNo;
     private String sStyleNo;
@@ -15,9 +20,11 @@ public class StyleBeans {
     private double fBulkTotal1;
     private double fSalePrice;
     private String sCustStyleNo;
-    private  String sWaterElents;
+    private String sWaterElents;
     private String sReMark;
     private double dStopDate;
+    private int row;
+
 
     public int getiRecNo() {
         return iRecNo;
@@ -153,5 +160,23 @@ public class StyleBeans {
 
     public void setdStopDate(double dStopDate) {
         this.dStopDate = dStopDate;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public List<FormColumn> getList() {
+        List<FormColumn> list = new ArrayList<>();
+        list.add(new FormColumn(row+1 + "", 0.5f, true, 0, row));
+        list.add(new FormColumn(sStyleNo,1.0f,true,1,row));
+        list.add(new FormColumn(sStyleName,1.0f,true,2,row));
+        list.add(new FormColumn(sClassName,1.0f,true,3,row));
+        list.add(new FormColumn(sGroupName,1.0f,true,4,row));
+        list.add(new FormColumn(sCustShortName,1.0f,true,5,row));
+        list.add(new FormColumn(iYear,1.0f,true,6,row));
+        list.add(new FormColumn(fCostPrice+"",1.0f,true,7,row));
+        list.add(new FormColumn(fBulkTotal1+"",1.0f,true,8,row));
+        return list;
     }
 }

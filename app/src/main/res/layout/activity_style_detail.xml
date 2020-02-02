@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity_dialog"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include layout="@layout/activity_dialog_top" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color_detail_title"
+        android:textColor="@color/default_text_color"
+        android:textSize="@dimen/sp_14" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="horizontal">
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_code"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_name"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_type"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="horizontal">
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_size"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_customer"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_customer_style"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="horizontal">
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_year"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_weight="2"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_composition"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+            </LinearLayout>
+
+            <com.yyy.fuzhuangpad.view.search.SearchEdit
+                android:id="@+id/se_address"
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                app:seEditColor="@color/default_text_color"
+                app:seEditSize="@dimen/sp_10"
+                app:seTilte="@string/style_detail_remark"
+                app:seTitleColor="@color/default_text_color"
+                app:seTitleSize="@dimen/sp_10" />
+
+            <View
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="@dimen/dp_3"
+                android:layout_marginTop="@dimen/dp_3"
+                android:background="@color/default_line_color" />
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_3"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_15"
+                    android:layout_height="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_3"
+                    android:src="@mipmap/common_price" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/style_detail_setting_price"
+                    android:textColor="@color/default_content_color"
+                    android:textSize="@dimen/sp_10" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="@dimen/dp_3"
+                android:layout_marginTop="@dimen/dp_3"
+                android:background="@drawable/bg_line_dotted" />
+
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_3"
+                android:orientation="horizontal">
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_price_trade"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_price_trade"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+
+                <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_weight="1"
+                    app:seEditColor="@color/default_text_color"
+                    app:seEditSize="@dimen/sp_10"
+                    app:seTilte="@string/style_detail_price_tag"
+                    app:seTitleColor="@color/default_text_color"
+                    app:seTitleSize="@dimen/sp_10" />
+            </LinearLayout>
+            <View
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="@dimen/dp_3"
+                android:layout_marginTop="@dimen/dp_3"
+                android:background="@color/default_line_color" />
+            <LinearLayout
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_3"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_15"
+                    android:layout_height="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_3"
+                    android:src="@mipmap/common_color_select" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/style_detail_setting_color"
+                    android:textColor="@color/default_content_color"
+                    android:textSize="@dimen/sp_10" />
+            </LinearLayout>
+            <View
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="@dimen/dp_3"
+                android:layout_marginTop="@dimen/dp_3"
+                android:background="@drawable/bg_line_dotted" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

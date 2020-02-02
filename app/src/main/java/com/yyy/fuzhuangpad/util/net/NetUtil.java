@@ -26,6 +26,7 @@ public class NetUtil {
     Request request;
 
     List<NetParams> list;
+
     String url;
 
     ResponseListener responseListener;

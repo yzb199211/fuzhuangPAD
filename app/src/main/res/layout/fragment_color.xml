@@ -12,7 +12,6 @@
         android:id="@+id/ll_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_20"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_5"
         android:paddingRight="@dimen/dp_5">
@@ -24,6 +23,7 @@
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/color_search_value"
+            android:layout_centerVertical="true"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
 
@@ -32,6 +32,7 @@
             android:layout_width="@dimen/dp_100"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_5"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@id/se_code"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"

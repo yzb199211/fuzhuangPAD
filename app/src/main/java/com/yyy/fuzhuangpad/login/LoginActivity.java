@@ -77,6 +77,7 @@ public class LoginActivity extends BaseActivity {
     String password;
     String url;
     String address;
+    String companyCode;
 
     int versionSystem;
     String dowmloadUrl;
@@ -101,8 +102,10 @@ public class LoginActivity extends BaseActivity {
         address = (String) preferencesHelper.getSharedPreference("address", "");
         if (isTest == true) {
             preferencesHelper.put("address", NetConfig.address);
+            preferencesHelper.put("companyCode", NetConfig.companyCode);
             address = NetConfig.address;
         }
+        companyCode = (String) preferencesHelper.getSharedPreference("companyCode", "");
         versionSystem = VersionUtil.getAppVersionCode(this);
 
     }
@@ -112,9 +115,7 @@ public class LoginActivity extends BaseActivity {
         String passWord = (String) preferencesHelper.getSharedPreference("password", "");
 
         etUser.setText(userId);
-//        etUser.setSelection(userId.length());
         etPwd.setText(passWord);
-//        etPwd.setSelection(passWord.length());
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -133,14 +134,7 @@ public class LoginActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_sweep:
-//                if (isTest == true) {
-//                    preferencesHelper.put("address", NetConfig.addressLocal);
-//                    address = NetConfig.addressLocal;
-//                }
                 permission();
-//                String filePath = "/storage/emulated/0/Download/browser/031001700311-20586419.pdf";
-//                String fileName = "031001700311-20586419.pdf";
-//                DisplayFileActivity.openDispalyFileActivity(LoginActivity.this, filePath, fileName);
                 break;
         }
     }
@@ -183,7 +177,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(String string) {
                 try {
-                    initData(string);
+                    initData2(string);
                 } catch (Exception e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
@@ -219,10 +213,38 @@ public class LoginActivity extends BaseActivity {
         List<NetParams> list = new ArrayList<>();
         list.add(new NetParams("userid", userid));
         list.add(new NetParams("password", password));
+        list.add(new NetParams("companycode", companyCode));
         return list;
     }
 
     JudgeDialog updateDialog;
+
+    private void initData2(String response) throws Exception {
+        JSONObject jsonObject = new JSONObject(response);
+        if (jsonObject.optBoolean("success")) {
+            final Intent intent = new Intent()
+                    .setClass(LoginActivity.this, MainActivity.class);
+            preferencesHelper.put("userid", etUser.getText().toString());
+            preferencesHelper.put("password", etPwd.getText().toString());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    LoadingDialog.cancelDialogForLoading();
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    LoadingDialog.cancelDialogForLoading();
+                    Toasts.showLong(LoginActivity.this, jsonObject.optString("message"));
+                }
+            });
+
+        }
+    }
 
     /**
      * 返回数据处理
@@ -321,8 +343,8 @@ public class LoginActivity extends BaseActivity {
                 .putExtra("data", data)
                 .putExtra("num", num);
         preferencesHelper.put("userid", model.getTables().getPerson().get(0).getSCode());
-        preferencesHelper.put("userName", model.getTables().getPerson().get(0).getSName());
-        preferencesHelper.put("userDepartment", model.getTables().getPerson().get(0).getSClassName());
+//        preferencesHelper.put("userName", model.getTables().getPerson().get(0).getSName());
+//        preferencesHelper.put("userDepartment", model.getTables().getPerson().get(0).getSClassName());
         preferencesHelper.put("password", etPwd.getText().toString());
         runOnUiThread(new Runnable() {
             @Override

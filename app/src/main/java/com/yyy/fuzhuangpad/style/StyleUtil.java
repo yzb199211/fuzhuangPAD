@@ -17,7 +17,6 @@ public class StyleUtil {
         list.add(new FormColumn(context.getString(R.string.style_form_type), true));
         list.add(new FormColumn(context.getString(R.string.style_form_sizes), true));
         list.add(new FormColumn(context.getString(R.string.style_form_customer), true));
-        list.add(new FormColumn(context.getString(R.string.style_form_saler), true));
         list.add(new FormColumn(context.getString(R.string.style_form_year), true));
         list.add(new FormColumn(context.getString(R.string.style_form_sale_price), true));
         list.add(new FormColumn(context.getString(R.string.style_form_wholesale_price), true));
