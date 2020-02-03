@@ -1,4 +1,4 @@
-package com.yyy.fuzhuangpad.color;
+package com.yyy.fuzhuangpad.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -13,12 +13,12 @@ import com.yyy.fuzhuangpad.view.form.FormRow;
 
 import java.util.List;
 
-public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.VH> {
+public class FormAdapter extends RecyclerView.Adapter<FormAdapter.VH> {
     List<List<FormColumn>> list;
     Context context;
     OnItemClickListener onItemClickListener;
 
-    public ColorAdapter(List<List<FormColumn>> list, Context context) {
+    public FormAdapter(List<List<FormColumn>> list, Context context) {
         this.list = list;
         this.context = context;
     }

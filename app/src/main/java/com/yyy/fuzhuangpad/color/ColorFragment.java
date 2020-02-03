@@ -1,7 +1,6 @@
 package com.yyy.fuzhuangpad.color;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.adapter.FormAdapter;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
@@ -91,7 +91,7 @@ public class ColorFragment extends Fragment {
     private String filter = "";
     private final int formTitleId = 0x00001000;
     private SharedPreferencesHelper preferencesHelper;
-    private ColorAdapter colorAdapter;
+    private FormAdapter colorAdapter;
 
     private OptionsPickerView pvColorType;
     private boolean isFrist = true;
@@ -160,10 +160,10 @@ public class ColorFragment extends Fragment {
                 filter = "sClassName=" + "\'" + colorType + "\'";
             }
             if (StringUtil.isNotEmpty(colorId)) {
-                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "sColorID=" + "\'" + colorId + "\'";
+                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "sColorID like" + "\'|" + colorId + "|\'";
             }
             if (StringUtil.isNotEmpty(colorName)) {
-                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "sColorName=" + "\'" + colorName + "\'";
+                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "sColorName like" + "\'|" + colorName + "|\'";
             }
         } else {
             isFrist = false;
@@ -226,7 +226,7 @@ public class ColorFragment extends Fragment {
     }
 
     private void initFormAdapter() {
-        colorAdapter = new ColorAdapter(formDatas, getActivity());
+        colorAdapter = new FormAdapter(formDatas, getActivity());
         colorAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
@@ -337,16 +337,16 @@ public class ColorFragment extends Fragment {
         List<NetParams> params = new ArrayList<>();
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", "GetTableData"));
-        params.add(new NetParams("sTableName", "vwBscDataColor"));
+        params.add(new NetParams("sTableName", "bscdataclass"));
         params.add(new NetParams("sFields", "sClassName"));
-        params.add(new NetParams("sFilters", ""));
+        params.add(new NetParams("sFilters", "sType='color'"));
         return params;
     }
 
     private void initColorData(String string) throws JSONException, Exception {
         JSONObject jsonObject = new JSONObject(string);
         if (jsonObject.optBoolean("success")) {
-            setColorTypeData(jsonObject.optJSONObject("dataset").optString("vwBscDataColor"));
+            setColorTypeData(jsonObject.optJSONObject("dataset").optString("bscdataclass"));
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }

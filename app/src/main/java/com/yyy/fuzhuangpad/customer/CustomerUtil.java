@@ -16,6 +16,7 @@ public class CustomerUtil {
         list.add(new FormColumn(context.getString(R.string.customer_form_cus_name), true));
         list.add(new FormColumn(context.getString(R.string.customer_form_cus_saler), true));
         list.add(new FormColumn(context.getString(R.string.customer_form_type), true));
+        list.add(new FormColumn(context.getString(R.string.customer_detail_contacts), true));
         list.add(new FormColumn(context.getString(R.string.customer_form_phone), true));
         return list;
     }
