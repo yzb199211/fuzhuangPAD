@@ -85,13 +85,16 @@ public class ColorFragment extends Fragment {
     private String url;
     private String address;
     private String companyCode;
-    private String colorType="";
-    private String filter;
+    private String colorType = "";
+    private String colorId = "";
+    private String colorName = "";
+    private String filter = "";
     private final int formTitleId = 0x00001000;
     private SharedPreferencesHelper preferencesHelper;
     private ColorAdapter colorAdapter;
 
     private OptionsPickerView pvColorType;
+    private boolean isFrist = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,7 +152,23 @@ public class ColorFragment extends Fragment {
     }
 
     private String getFilter() {
-        return StringUtil.isNotEmpty(colorType) ? "sClassName=" +"\'"+ colorType+"\'" : "";
+        filter = "";
+        if (!isFrist) {
+            colorId = seCode.getText();
+            colorName = seName.getText();
+            if (StringUtil.isNotEmpty(colorType)) {
+                filter = "sClassName=" + "\'" + colorType + "\'";
+            }
+            if (StringUtil.isNotEmpty(colorId)) {
+                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "sColorID=" + "\'" + colorId + "\'";
+            }
+            if (StringUtil.isNotEmpty(colorName)) {
+                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "sColorName=" + "\'" + colorName + "\'";
+            }
+        } else {
+            isFrist = false;
+        }
+        return filter;
     }
 
     private void initFormData(String string) throws JSONException {
@@ -271,12 +290,22 @@ public class ColorFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bwi_remove:
+                clearFilter();
                 break;
             case R.id.bwi_search:
+                refreshData();
                 break;
             default:
                 break;
         }
+    }
+
+    private void clearFilter() {
+        seCode.clear();
+        seName.clear();
+        bsType.setContext("");
+        colorType = "";
+        refreshData();
     }
 
     private void getColorType() {
@@ -355,7 +384,6 @@ public class ColorFragment extends Fragment {
                 if (!type.equals(colorType)) {
                     colorType = type.equals(getString(R.string.common_empty)) ? "" : colorTypes.get(options1).getPickerViewText();
                     bsType.setContext(colorType);
-                    refreshData();
                 }
             }
         })
@@ -418,7 +446,7 @@ public class ColorFragment extends Fragment {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 PxUtil.getWidth(getActivity()) / 2,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
         params.leftMargin = 0;
         params.rightMargin = 0;
         return params;

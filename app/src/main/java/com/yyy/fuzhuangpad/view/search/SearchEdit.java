@@ -88,4 +88,7 @@ public class SearchEdit extends LinearLayout {
     public String getText() {
         return etContent.getText().toString();
     }
+    public void clear(){
+        etContent.setText("");
+    }
 }
