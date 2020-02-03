@@ -20,6 +20,7 @@
         android:textSize="@dimen/sp_14" />
 
     <com.yyy.fuzhuangpad.view.search.SearchEdit
+        android:id="@+id/se_colorId"
         android:layout_width="@dimen/dp_200"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
@@ -30,26 +31,43 @@
         app:seTitleSize="@dimen/sp_10" />
 
     <com.yyy.fuzhuangpad.view.search.SearchEdit
+        android:id="@+id/se_colorName"
         android:layout_width="@dimen/dp_200"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         app:seEditColor="@color/default_text_color"
         app:seEditSize="@dimen/sp_10"
+        app:seMust="true"
         app:seTilte="@string/color_detail_name"
         app:seTitleColor="@color/default_text_color"
         app:seTitleSize="@dimen/sp_10" />
 
-    <com.yyy.fuzhuangpad.view.search.SearchEdit
+
+    <com.yyy.fuzhuangpad.view.SelectView
+        android:id="@+id/sv_colorType"
         android:layout_width="@dimen/dp_200"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
-        app:seEditColor="@color/default_text_color"
-        app:seEditSize="@dimen/sp_10"
-        app:seTilte="@string/color_detail_type"
-        app:seTitleColor="@color/default_text_color"
-        app:seTitleSize="@dimen/sp_10" />
+        app:svContentColor="@color/default_text_color"
+        app:svContentSize="@dimen/sp_10"
+        app:svMust="true"
+        app:svTilte="@string/color_detail_type"
+        app:svTitleColor="@color/default_text_color"
+        app:svTitleSize="@dimen/sp_10" />
+
+    <com.yyy.fuzhuangpad.view.SelectView
+        android:id="@+id/sv_dateStop"
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:svContentColor="@color/default_text_color"
+        app:svContentSize="@dimen/sp_10"
+        app:svTilte="@string/common_date_stop"
+        app:svTitleColor="@color/default_text_color"
+        app:svTitleSize="@dimen/sp_10" />
 
     <com.yyy.fuzhuangpad.view.remark.RemarkEdit
+        android:id="@+id/re_remark"
         android:layout_width="@dimen/dp_200"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"

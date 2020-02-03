@@ -114,6 +114,7 @@
     <string name="common_unable">停用</string>
     <string name="common_date_start">开始日期</string>
     <string name="common_date_end">结束日期</string>
+    <string name="common_date_stop">停用日期</string>
     <string name="common_pickdate_start">2015-01-01</string>
     <string name="common_pickdate_end">2030-12-31</string>
     <string name="common_empty">无</string>

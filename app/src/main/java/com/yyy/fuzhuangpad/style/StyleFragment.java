@@ -297,9 +297,11 @@ public class StyleFragment extends Fragment {
     }
 
     private void refreshData() {
-        formDatas.clear();
-        styleDatas.clear();
-        formAdapter.notifyDataSetChanged();
+        if (formAdapter != null) {
+            formDatas.clear();
+            styleDatas.clear();
+            formAdapter.notifyDataSetChanged();
+        }
         getData();
     }
 

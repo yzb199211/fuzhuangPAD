@@ -21,8 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".customer.CustomerDetailActivity"></activity>
-        <activity android:name=".color.ColorDetailActivity" />
+
         <activity
             android:name=".flash.FlashActivity"
             android:screenOrientation="landscape">
@@ -32,6 +31,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".customer.CustomerDetailActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".color.ColorDetailActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/DialogActivity" />
         <activity
             android:name=".login.LoginActivity"
             android:screenOrientation="landscape"

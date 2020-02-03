@@ -299,12 +299,16 @@ public class CustomerFragment extends Fragment {
                 break;
         }
     }
+
     private void refreshData() {
-        formDatas.clear();
-        customerDatas.clear();
-        formAdapter.notifyDataSetChanged();
+        if (formAdapter != null) {
+            formDatas.clear();
+            customerDatas.clear();
+            formAdapter.notifyDataSetChanged();
+        }
         getData();
     }
+
     private void clearFilter() {
         seCode.clear();
         seName.clear();
@@ -312,6 +316,7 @@ public class CustomerFragment extends Fragment {
         customerType = "";
         refreshData();
     }
+
     private void getType() {
         LoadingDialog.showDialogForLoading(getActivity());
         new NetUtil(getTypeParams(), url, new ResponseListener() {
@@ -400,6 +405,7 @@ public class CustomerFragment extends Fragment {
         params.add(new NetParams("sFilters", "sType='customer'"));
         return params;
     }
+
     private void LoadingFinish(String msg) {
         getActivity().runOnUiThread(new Runnable() {
             @Override

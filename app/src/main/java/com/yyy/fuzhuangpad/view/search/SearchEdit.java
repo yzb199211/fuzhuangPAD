@@ -21,6 +21,7 @@ public class SearchEdit extends LinearLayout {
     int titleColor;
     int editSize;
     int editColor;
+    boolean isMust;
 
     TextView tvTitle;
     EditText etContent;
@@ -43,6 +44,7 @@ public class SearchEdit extends LinearLayout {
         titleColor = typedArray.getColor(R.styleable.SearchEdit_seTitleColor, 0xFF000000);
         editSize = typedArray.getDimensionPixelSize(R.styleable.SearchEdit_seEditSize, 12);
         editColor = typedArray.getColor(R.styleable.SearchEdit_seEditColor, 0xFF000000);
+        isMust = typedArray.getBoolean(R.styleable.SelectView_svMust, false);
         typedArray.recycle();
     }
 
@@ -59,6 +61,9 @@ public class SearchEdit extends LinearLayout {
     }
 
     private void initTitle() {
+        if (isMust) {
+            addMust();
+        }
         tvTitle = new TextView(context);
         tvTitle.setText(title);
         tvTitle.setSingleLine();
@@ -67,13 +72,22 @@ public class SearchEdit extends LinearLayout {
         addView(tvTitle);
     }
 
+    private void addMust() {
+        TextView textView = new TextView(context);
+        textView.setText("*");
+        textView.setTextColor(context.getResources().getColor(R.color.red));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
+        addView(textView);
+    }
+
     private void initEdit() {
         etContent = new EditText(context);
         etContent.setSingleLine();
         etContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, editSize);
         etContent.setTextColor(editColor);
         etContent.setLayoutParams(etParams());
-        etContent.setPadding(5, 0, 5, 0);
+        etContent.setPadding(5, 5, 5, 5);
+        etContent.setBackgroundResource(R.drawable.bg_detail_edit);
 //        etContent.setBackground(null);
         etContent.setGravity(Gravity.CENTER_VERTICAL);
         addView(etContent);
@@ -88,7 +102,13 @@ public class SearchEdit extends LinearLayout {
     public String getText() {
         return etContent.getText().toString();
     }
-    public void clear(){
+
+    public void setText(String text) {
+        etContent.setText(text);
+    }
+
+    public void clear() {
         etContent.setText("");
     }
+
 }

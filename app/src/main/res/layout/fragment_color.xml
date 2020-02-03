@@ -20,10 +20,10 @@
             android:id="@+id/se_code"
             android:layout_width="@dimen/dp_100"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/color_search_value"
-            android:layout_centerVertical="true"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
 
@@ -31,8 +31,8 @@
             android:id="@+id/se_name"
             android:layout_width="@dimen/dp_100"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_5"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_5"
             android:layout_toRightOf="@id/se_code"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
@@ -92,6 +92,7 @@
         android:paddingRight="@dimen/dp_5">
 
         <com.yyy.fuzhuangpad.view.button.ButtonWithImg
+            android:id="@+id/bwi_add"
             android:layout_width="@dimen/dp_50"
             android:layout_height="@dimen/dp_15"
             android:background="@drawable/common_btn_add"

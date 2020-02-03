@@ -98,13 +98,6 @@
         <attr name="textNormalColor" format="color" />
         <attr name="textSelectColor" format="color" />
     </declare-styleable>
-    <declare-styleable name="SelectView">
-        <attr name="type" format="integer" />
-
-        <attr name="title" format="string" />
-        <attr name="hint" format="string" />
-
-    </declare-styleable>
     <declare-styleable name="MainMenu">
         <attr name="imgSrc" format="reference" />
         <attr name="text" format="string" />
@@ -117,6 +110,7 @@
         <attr name="seTitleColor" format="color" />
         <attr name="seEditSize" format="dimension" />
         <attr name="seEditColor" format="color" />
+        <attr name="seMust" format="boolean" />
     </declare-styleable>
     <declare-styleable name="ButtonWithImg">
         <attr name="bwiTilte" format="string" />
@@ -133,5 +127,13 @@
         <attr name="bsContentColor" format="color" />
         <attr name="bsSrc" format="reference" />
         <attr name="bsSrcPadding" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="SelectView">
+        <attr name="svTilte" format="string" />
+        <attr name="svTitleSize" format="dimension" />
+        <attr name="svTitleColor" format="color" />
+        <attr name="svContentSize" format="dimension" />
+        <attr name="svContentColor" format="color" />
+        <attr name="svMust" format="boolean" />
     </declare-styleable>
 </resources>

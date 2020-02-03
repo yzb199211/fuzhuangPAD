@@ -1,6 +1,7 @@
 package com.yyy.fuzhuangpad.color;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,7 @@ import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
 import com.yyy.fuzhuangpad.util.StringUtil;
@@ -74,6 +77,7 @@ public class ColorFragment extends Fragment {
     RelativeLayout rlMain;
     @BindView(R.id.bs_type)
     ButtonSelect bsType;
+
 
     RecyclerView recyclerView;
 
@@ -230,7 +234,7 @@ public class ColorFragment extends Fragment {
         colorAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                Log.e("pos", pos + "");
+                go2Detail(new Gson().toJson(colorDatas.get(pos)));
             }
         });
         recyclerView.setAdapter(colorAdapter);
@@ -244,6 +248,14 @@ public class ColorFragment extends Fragment {
         params.addRule(RelativeLayout.BELOW, formTitleId);
         recyclerView.setBackgroundColor(getActivity().getResources().getColor(R.color.black));
         rlMain.addView(recyclerView, params);
+    }
+
+    private void go2Detail(@Nullable String data) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), ColorDetailActivity.class);
+        if (StringUtil.isNotEmpty(data))
+            intent.putExtra("data", data);
+        getActivity().startActivityForResult(intent, CodeUtil.COLORDETAIL);
     }
 
     @Override
@@ -286,7 +298,7 @@ public class ColorFragment extends Fragment {
         });
     }
 
-    @OnClick({R.id.bwi_remove, R.id.bwi_search, R.id.bs_type})
+    @OnClick({R.id.bwi_remove, R.id.bwi_search, R.id.bwi_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bwi_remove:
@@ -294,6 +306,9 @@ public class ColorFragment extends Fragment {
                 break;
             case R.id.bwi_search:
                 refreshData();
+                break;
+            case R.id.bwi_add:
+                go2Detail(null);
                 break;
             default:
                 break;
@@ -399,9 +414,11 @@ public class ColorFragment extends Fragment {
     }
 
     private void refreshData() {
-        formDatas.clear();
-        colorDatas.clear();
-        colorAdapter.notifyDataSetChanged();
+        if (colorAdapter != null) {
+            formDatas.clear();
+            colorDatas.clear();
+            colorAdapter.notifyDataSetChanged();
+        }
         getData();
     }
 

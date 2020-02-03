@@ -22,6 +22,7 @@
     <color name="btn_blue_press">#122DDF</color>
     <color name="gray">#555</color>
     <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
 
     <color name="white">#fff</color>
     <color name="form_menu_white">#FCFCED</color>

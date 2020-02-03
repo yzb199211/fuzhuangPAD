@@ -87,4 +87,12 @@ public class RemarkEdit extends LinearLayout {
     public String getText() {
         return etContent.getText().toString();
     }
+
+    public void setText(String text) {
+        etContent.setText(text);
+    }
+
+    public void clear() {
+        etContent.setText("");
+    }
 }
