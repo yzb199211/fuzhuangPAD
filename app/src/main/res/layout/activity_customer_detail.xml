@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:background="@drawable/bg_activity_dialog"
     tools:context=".customer.CustomerDetailActivity">
 
     <include layout="@layout/activity_dialog_top" />
+
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
@@ -16,6 +18,7 @@
         android:text="@string/customer_detail_title"
         android:textColor="@color/default_text_color"
         android:textSize="@dimen/sp_14" />
+
     <LinearLayout
         android:layout_width="@dimen/dp_300"
         android:layout_height="wrap_content"
@@ -51,27 +54,28 @@
         android:layout_marginTop="@dimen/dp_10"
         android:orientation="horizontal">
 
-        <com.yyy.fuzhuangpad.view.search.SearchEdit
+        <com.yyy.fuzhuangpad.view.SelectView
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp_10"
             android:layout_weight="1"
-            app:seEditColor="@color/default_text_color"
-            app:seEditSize="@dimen/sp_10"
-            app:seTilte="@string/customer_detail_type"
-            app:seTitleColor="@color/default_text_color"
-            app:seTitleSize="@dimen/sp_10" />
+            app:svContentColor="@color/default_text_color"
+            app:svContentSize="@dimen/sp_10"
+            app:svTilte="@string/customer_detail_type"
+            app:svTitleColor="@color/default_text_color"
+            app:svTitleSize="@dimen/sp_10"
+            app:svMust="true"/>
 
-        <com.yyy.fuzhuangpad.view.search.SearchEdit
+        <com.yyy.fuzhuangpad.view.SelectView
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_weight="1"
-            app:seEditColor="@color/default_text_color"
-            app:seEditSize="@dimen/sp_10"
-            app:seTilte="@string/customer_detail_saler"
-            app:seTitleColor="@color/default_text_color"
-            app:seTitleSize="@dimen/sp_10" />
+            app:svContentColor="@color/default_text_color"
+            app:svContentSize="@dimen/sp_10"
+            app:svTilte="@string/customer_detail_saler"
+            app:svTitleColor="@color/default_text_color"
+            app:svTitleSize="@dimen/sp_10" />
     </LinearLayout>
 
     <LinearLayout
@@ -104,6 +108,30 @@
             app:seTitleSize="@dimen/sp_10" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="@dimen/dp_300"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:orientation="horizontal">
+
+        <com.yyy.fuzhuangpad.view.SelectView
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_weight="1"
+            app:svContentColor="@color/default_text_color"
+            app:svContentSize="@dimen/sp_10"
+            app:svTilte="@string/common_date_stop"
+            app:svTitleColor="@color/default_text_color"
+            app:svTitleSize="@dimen/sp_10" />
+
+        <TextView
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <com.yyy.fuzhuangpad.view.search.SearchEdit
         android:id="@+id/se_address"
         android:layout_width="@dimen/dp_300"
@@ -119,9 +147,9 @@
         android:id="@+id/re_remark"
         android:layout_width="@dimen/dp_300"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
         app:seEditColor="@color/default_text_color"
         app:seEditSize="@dimen/sp_10"
-        android:layout_marginTop="@dimen/dp_10"
         app:seTilte="@string/color_detail_remark"
         app:seTitleColor="@color/default_text_color"
         app:seTitleSize="@dimen/sp_10" />

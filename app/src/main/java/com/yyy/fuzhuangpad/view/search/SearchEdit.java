@@ -1,11 +1,16 @@
 package com.yyy.fuzhuangpad.view.search;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +19,7 @@ import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
 
-public class SearchEdit extends LinearLayout {
+public class SearchEdit extends LinearLayout implements View.OnKeyListener {
     Context context;
     String title;
     int titleSize;
@@ -90,6 +95,7 @@ public class SearchEdit extends LinearLayout {
         etContent.setBackgroundResource(R.drawable.bg_detail_edit);
 //        etContent.setBackground(null);
         etContent.setGravity(Gravity.CENTER_VERTICAL);
+        etContent.setOnKeyListener(this);
         addView(etContent);
     }
 
@@ -111,4 +117,18 @@ public class SearchEdit extends LinearLayout {
         etContent.setText("");
     }
 
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if ((keyCode == EditorInfo.IME_ACTION_SEND
+                || keyCode == EditorInfo.IME_ACTION_DONE || keyCode == KeyEvent.KEYCODE_ENTER) && event.getAction() == KeyEvent.ACTION_DOWN)
+            closeKeybord();
+        return true;
+    }
+
+    public void closeKeybord() {
+        InputMethodManager imm = (InputMethodManager) ((Activity) context).getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(((Activity) context).getWindow().getDecorView().getWindowToken(), 0);
+        }
+    }
 }

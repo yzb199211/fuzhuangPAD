@@ -33,7 +33,8 @@
         </activity>
         <activity
             android:name=".customer.CustomerDetailActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@style/DialogActivity" />
         <activity
             android:name=".color.ColorDetailActivity"
             android:screenOrientation="landscape"

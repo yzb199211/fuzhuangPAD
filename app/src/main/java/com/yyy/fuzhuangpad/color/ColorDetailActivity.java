@@ -20,6 +20,7 @@ import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
 import com.yyy.fuzhuangpad.util.StringUtil;
+import com.yyy.fuzhuangpad.util.TimeUtil;
 import com.yyy.fuzhuangpad.util.Toasts;
 import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
@@ -28,14 +29,20 @@ import com.yyy.fuzhuangpad.view.SelectView;
 import com.yyy.fuzhuangpad.view.remark.RemarkEdit;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
 import com.yyy.yyylibrary.pick.builder.OptionsPickerBuilder;
+import com.yyy.yyylibrary.pick.builder.TimePickerBuilder;
 import com.yyy.yyylibrary.pick.listener.OnOptionsSelectListener;
+import com.yyy.yyylibrary.pick.listener.OnTimeSelectListener;
+import com.yyy.yyylibrary.pick.view.BasePickerView;
 import com.yyy.yyylibrary.pick.view.OptionsPickerView;
+import com.yyy.yyylibrary.pick.view.TimePickerView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -61,6 +68,7 @@ public class ColorDetailActivity extends AppCompatActivity {
     private String companyCode;
     private List<ColorType> colorTypes;
     private OptionsPickerView pvColorType;
+    private TimePickerView pvDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +124,7 @@ public class ColorDetailActivity extends AppCompatActivity {
 
     private void initView() {
         setTypeListener();
+        setDataListener();
     }
 
     private void setTypeListener() {
@@ -217,6 +226,41 @@ public class ColorDetailActivity extends AppCompatActivity {
         pvColorType.show();
     }
 
+    private void setDataListener() {
+        svDateStop.setOnSelectClickListener(new OnSelectClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (pvDate == null) {
+                    try {
+                        initPvDate();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast(getString(R.string.error_pcik));
+                    }
+                }
+                pvDate.show();
+            }
+        });
+    }
+
+    private void initPvDate() throws Exception {
+        pvDate = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                svDateStop.setText(StringUtil.getDate(date));
+            }
+        }).setRangDate(TimeUtil.str2calendar(getString(R.string.common_pickdate_start)), TimeUtil.str2calendar(getString(R.string.common_pickdate_end)))
+                .setDate(Calendar.getInstance())
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .setContentTextSize(18)
+                .setBgColor(0xFFFFFFFF)
+                .setTitleText(getString(R.string.common_date_stop))
+                .build();
+        setDialog(pvDate);
+        initDialogWindow(pvDate.getDialog().getWindow());
+    }
+
     @OnClick({R.id.bw_exit, R.id.bw_save})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -224,8 +268,13 @@ public class ColorDetailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.bw_save:
+                save();
                 break;
         }
+    }
+
+    private void save() {
+
     }
 
     private void LoadingFinish(String msg) {
@@ -244,7 +293,7 @@ public class ColorDetailActivity extends AppCompatActivity {
         Toasts.showShort(this, msg);
     }
 
-    private void setDialog(OptionsPickerView pickview) {
+    private void setDialog(BasePickerView pickview) {
         getDialogLayoutParams();
         pickview.getDialogContainerLayout().setLayoutParams(getDialogLayoutParams());
         initDialogWindow(pickview.getDialog().getWindow());

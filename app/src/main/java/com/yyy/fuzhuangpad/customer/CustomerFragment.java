@@ -1,5 +1,6 @@
 package com.yyy.fuzhuangpad.customer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +28,7 @@ import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.style.StyleBeans;
 import com.yyy.fuzhuangpad.style.StyleType;
+import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
 import com.yyy.fuzhuangpad.util.StringUtil;
@@ -55,7 +58,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class CustomerFragment extends Fragment {
+public class CustomerFragment extends Fragment{
     private final int formTitleId = 0x00001000;
     @BindView(R.id.se_code)
     SearchEdit seCode;
@@ -221,11 +224,12 @@ public class CustomerFragment extends Fragment {
         formAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                Log.e("pos", pos + "");
+                go2Detail(new Gson().toJson(customerDatas.get(pos)));
             }
         });
         recyclerView.setAdapter(formAdapter);
     }
+
 
     private void initRecycleView() {
         recyclerView = new RecyclerView(getActivity());
@@ -286,7 +290,7 @@ public class CustomerFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.bwi_remove, R.id.bwi_search})
+    @OnClick({R.id.bwi_remove, R.id.bwi_search, R.id.bwi_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bwi_remove:
@@ -294,6 +298,9 @@ public class CustomerFragment extends Fragment {
                 break;
             case R.id.bwi_search:
                 refreshData();
+                break;
+            case R.id.bwi_add:
+                go2Detail(null);
                 break;
             default:
                 break;
@@ -404,6 +411,14 @@ public class CustomerFragment extends Fragment {
         params.add(new NetParams("sFields", "sClassName"));
         params.add(new NetParams("sFilters", "sType='customer'"));
         return params;
+    }
+
+    private void go2Detail(@Nullable String data) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), CustomerDetailActivity.class);
+        if (StringUtil.isNotEmpty(data))
+            intent.putExtra("data", data);
+        getActivity().startActivityForResult(intent, CodeUtil.CUSTOMERDETAIL);
     }
 
     private void LoadingFinish(String msg) {

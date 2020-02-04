@@ -1,11 +1,16 @@
 package com.yyy.fuzhuangpad.view.remark;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,8 +18,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.application.BaseApplication;
 
-public class RemarkEdit extends LinearLayout {
+public class RemarkEdit extends LinearLayout implements View.OnKeyListener {
     Context context;
     String title;
     int titleSize;
@@ -72,9 +78,10 @@ public class RemarkEdit extends LinearLayout {
         etContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, editSize);
         etContent.setTextColor(editColor);
         etContent.setLayoutParams(etParams());
-        etContent.setGravity(Gravity.CENTER_VERTICAL);
+        etContent.setGravity(Gravity.START);
         etContent.setPadding(5, 5, 5, 5);
         etContent.setBackground(context.getResources().getDrawable(R.drawable.bg_remark_edit));
+        etContent.setOnKeyListener(this);
         addView(etContent);
     }
 
@@ -95,4 +102,20 @@ public class RemarkEdit extends LinearLayout {
     public void clear() {
         etContent.setText("");
     }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if ((keyCode == EditorInfo.IME_ACTION_SEND
+                || keyCode == EditorInfo.IME_ACTION_DONE || keyCode == KeyEvent.KEYCODE_ENTER) && event.getAction() == KeyEvent.ACTION_DOWN)
+            closeKeybord();
+        return true;
+    }
+
+    public void closeKeybord() {
+        InputMethodManager imm = (InputMethodManager) ((Activity) context).getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(((Activity) context).getWindow().getDecorView().getWindowToken(), 0);
+        }
+    }
+
 }

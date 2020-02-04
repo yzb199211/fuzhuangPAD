@@ -20,6 +20,7 @@
     <string name="error_json">JSON数据解析错误</string>
     <string name="error_fail">网络请求失败</string>
     <string name="error_empty">无数据</string>
+    <string name="error_pcik">选择初始化错误</string>
     <string name="error_empty_address">请求地址为空</string>
     <!--main-->
     <string name="main_menu_base_title">基础资料</string>
