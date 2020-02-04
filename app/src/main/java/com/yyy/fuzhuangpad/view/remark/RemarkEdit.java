@@ -106,9 +106,11 @@ public class RemarkEdit extends LinearLayout implements View.OnKeyListener {
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         if ((keyCode == EditorInfo.IME_ACTION_SEND
-                || keyCode == EditorInfo.IME_ACTION_DONE || keyCode == KeyEvent.KEYCODE_ENTER) && event.getAction() == KeyEvent.ACTION_DOWN)
+                || keyCode == EditorInfo.IME_ACTION_DONE || keyCode == KeyEvent.KEYCODE_ENTER) && event.getAction() == KeyEvent.ACTION_DOWN) {
             closeKeybord();
-        return true;
+            return true;
+        }
+        return false;
     }
 
     public void closeKeybord() {
