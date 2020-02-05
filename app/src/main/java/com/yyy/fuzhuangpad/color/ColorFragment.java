@@ -255,7 +255,7 @@ public class ColorFragment extends Fragment {
         intent.setClass(getActivity(), ColorDetailActivity.class);
         if (StringUtil.isNotEmpty(data))
             intent.putExtra("data", data);
-        getActivity().startActivityForResult(intent, CodeUtil.COLORDETAIL);
+       startActivityForResult(intent, CodeUtil.COLORDETAIL);
     }
 
     @Override
@@ -467,5 +467,13 @@ public class ColorFragment extends Fragment {
         params.leftMargin = 0;
         params.rightMargin = 0;
         return params;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("code",resultCode+"");
+        if (resultCode == CodeUtil.REFRESH)
+            refreshData();
     }
 }

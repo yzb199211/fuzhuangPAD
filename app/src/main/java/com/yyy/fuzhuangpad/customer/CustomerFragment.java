@@ -418,7 +418,7 @@ public class CustomerFragment extends Fragment{
         intent.setClass(getActivity(), CustomerDetailActivity.class);
         if (StringUtil.isNotEmpty(data))
             intent.putExtra("data", data);
-        getActivity().startActivityForResult(intent, CodeUtil.CUSTOMERDETAIL);
+      startActivityForResult(intent, CodeUtil.CUSTOMERDETAIL);
     }
 
     private void LoadingFinish(String msg) {
@@ -465,5 +465,12 @@ public class CustomerFragment extends Fragment{
         params.leftMargin = 0;
         params.rightMargin = 0;
         return params;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==CodeUtil.REFRESH)
+            refreshData();
     }
 }

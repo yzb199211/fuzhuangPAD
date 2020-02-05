@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ColorBeans {
     private int iRecNo;
-    private String sColorID;
-    private String sColorName;
-    private String sClassID;
-    private String sClassName;
-    private String dStopDate;
-    private String sRemark;
+    private String sColorID = "";
+    private String sColorName = "";
+    private String sClassID = "";
+    private String sClassName = "";
+    private String dStopDate = "";
+    private String sRemark = "";
     private int row;
 
 
@@ -79,11 +79,39 @@ public class ColorBeans {
 
     public List<FormColumn> getList() {
         List<FormColumn> list = new ArrayList<>();
-        list.add(new FormColumn(row+1 + "", 0.5f, true, 0, row));
+        list.add(new FormColumn(row + 1 + "", 0.5f, true, 0, row));
         list.add(new FormColumn(sColorID + "", 1.0f, true, 1, row));
         list.add(new FormColumn(sColorName + "", 1.0f, true, 2, row));
         list.add(new FormColumn(sClassName + "", 1.0f, true, 3, row));
         list.add(new FormColumn(sRemark + "", 3.0f, true, 4, row));
         return list;
+    }
+
+    public String paramsFields() {
+        return "sColorName" + ",sColorID" + ",sClassID" + ",dStopDate" + ",sRemark";
+    }
+
+    public String paramsFieldsValues() {
+        return sColorName + "," + sColorID + "," + sClassID  + "," + dStopDate + "," + sRemark;
+    }
+
+    public String paramsFilterFields() {
+        return "iRecNo";
+    }
+
+    public String paramsFilterComOprts() {
+        return "=";
+    }
+
+    public String paramsFilterValues() {
+        return iRecNo == 0 ? "" : iRecNo + "";
+    }
+
+    public String paramsFieldKeys() {
+        return "iRecNo";
+    }
+
+    public String paramsFieldKeysValues() {
+        return iRecNo == 0 ? "" : iRecNo + "";
     }
 }

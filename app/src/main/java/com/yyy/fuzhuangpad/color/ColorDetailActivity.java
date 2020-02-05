@@ -1,5 +1,6 @@
 package com.yyy.fuzhuangpad.color;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,14 +18,18 @@ import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
 import com.yyy.fuzhuangpad.util.StringUtil;
 import com.yyy.fuzhuangpad.util.TimeUtil;
 import com.yyy.fuzhuangpad.util.Toasts;
+import com.yyy.fuzhuangpad.util.net.MainQuery;
 import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
+import com.yyy.fuzhuangpad.util.net.Operatortype;
+import com.yyy.fuzhuangpad.util.net.Otype;
 import com.yyy.fuzhuangpad.view.SelectView;
 import com.yyy.fuzhuangpad.view.remark.RemarkEdit;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
@@ -70,6 +75,8 @@ public class ColorDetailActivity extends AppCompatActivity {
     private OptionsPickerView pvColorType;
     private TimePickerView pvDate;
 
+    String operatortype = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,9 +99,11 @@ public class ColorDetailActivity extends AppCompatActivity {
         String data = getIntent().getStringExtra("data");
         if (StringUtil.isNotEmpty(data)) {
             colorBeans = new Gson().fromJson(data, ColorBeans.class);
+            operatortype = Operatortype.update;
             setData();
         } else {
             colorBeans = new ColorBeans();
+            operatortype = Operatortype.add;
         }
     }
 
@@ -268,13 +277,77 @@ public class ColorDetailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.bw_save:
+                setColorBeans();
                 save();
                 break;
         }
     }
 
-    private void save() {
+    private void setColorBeans() {
+        colorBeans.setdStopDate(svDateStop.getText());
+        colorBeans.setsColorID(seColorId.getText());
+        colorBeans.setsColorName(seColorName.getText());
+        colorBeans.setsRemark(reRemark.getText());
+    }
 
+    private void save() {
+        if (!StringUtil.isNotEmpty(colorBeans.getsColorName())) {
+            Toast(getString(R.string.color_empty_name));
+            return;
+        }
+        if (!StringUtil.isNotEmpty(colorBeans.getsClassName())) {
+            Toast(getString(R.string.color_empty_type));
+            return;
+        }
+        new NetUtil(getSaveParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initSaveDate(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initSaveDate(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject(data);
+        if (jsonObject.optBoolean("success")) {
+            LoadingFinish(getString(R.string.success_save));
+            eixt();
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private List<NetParams> getSaveParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", Otype.OperateData));
+        params.add(new NetParams("mainquery", getMainquery()));
+        return params;
+    }
+
+    private String getMainquery() {
+        MainQuery mainQuery = new MainQuery();
+        mainQuery.setFields(colorBeans.paramsFields());
+        mainQuery.setFieldsValues(colorBeans.paramsFieldsValues());
+        mainQuery.setFieldKeys(colorBeans.paramsFieldKeys());
+        mainQuery.setFieldKeysValues(colorBeans.paramsFieldKeysValues());
+        mainQuery.setFilterFields(colorBeans.paramsFilterFields());
+        mainQuery.setFilterValues(colorBeans.paramsFilterValues());
+        mainQuery.setFilterComOprts(colorBeans.paramsFilterComOprts());
+        mainQuery.setTableName("BscDataColor");
+        mainQuery.setOperatortype(operatortype);
+        return new Gson().toJson(mainQuery);
     }
 
     private void LoadingFinish(String msg) {
@@ -321,5 +394,15 @@ public class ColorDetailActivity extends AppCompatActivity {
         params.leftMargin = 0;
         params.rightMargin = 0;
         return params;
+    }
+
+    private void eixt() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setResult(CodeUtil.REFRESH);
+                finish();
+            }
+        });
     }
 }

@@ -149,4 +149,34 @@ public class CustomerBeans {
         list.add(new FormColumn(sTel, 1.0f, true, 6, row));
         return list;
     }
+
+    public String paramsFields() {
+        return "sCustName" + ",sCustID" + ",sCustShortName" + ",sClassID"  + ",sSaleID" + ",sPerson" + ",sTel" + ",sAddress" + ",dStopDate" + ",sRemark";
+    }
+
+    public String paramsFieldsValues() {
+        return sCustName + "," + sCustID + "," + sCustShortName + ","
+                + sClassID + "," + sSaleID + ","
+                + sPerson + "," + sTel + "," + sAddress + "," + dStopDate + "," + sRemark;
+    }
+
+    public String paramsFilterFields() {
+        return "iRecNo";
+    }
+
+    public String paramsFilterComOprts() {
+        return "=";
+    }
+
+    public String paramsFilterValues() {
+        return iRecNo == 0 ? "" : iRecNo + "";
+    }
+
+    public String paramsFieldKeys() {
+        return "iRecNo";
+    }
+
+    public String paramsFieldKeysValues() {
+        return iRecNo == 0 ? "" : iRecNo + "";
+    }
 }

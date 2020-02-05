@@ -22,6 +22,9 @@
     <string name="error_empty">无数据</string>
     <string name="error_pcik">选择初始化错误</string>
     <string name="error_empty_address">请求地址为空</string>
+    <!--error-->
+    <string name="success_save">保存成功</string>
+    <string name="success_delete">删除成功</string>
     <!--main-->
     <string name="main_menu_base_title">基础资料</string>
     <string name="main_menu_base_customer">客户档案</string>
@@ -44,11 +47,15 @@
     <string name="customer_detail_title">客户信息</string>
     <string name="customer_detail_code">客户编码</string>
     <string name="customer_detail_name">客户名称</string>
+    <string name="customer_detail_name_short">客户简称</string>
     <string name="customer_detail_type">类        别</string>
     <string name="customer_detail_saler">业  务  员</string>
     <string name="customer_detail_phone">电        话</string>
     <string name="customer_detail_contacts">联  系  人</string>
     <string name="customer_detail_address">地        址</string>
+    <string name="customer_empty_code">客户编号不能为空</string>
+    <string name="customer_empty_name">客户名称不能为空</string>
+    <string name="customer_empty_type">类别不能为空</string>
     <!--color-->
     <string name="color_search_value">色        号</string>
     <string name="color_search_name">颜色名称</string>
@@ -62,6 +69,8 @@
     <string name="color_detail_name">颜色名称</string>
     <string name="color_detail_type">类        别</string>
     <string name="color_detail_remark">备        注</string>
+    <string name="color_empty_name">颜色名称不能为空</string>
+    <string name="color_empty_type">类别不能为空</string>
 
     <!--style-->
     <string name="style_search_value">款        号</string>
