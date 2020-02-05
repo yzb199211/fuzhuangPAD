@@ -3,6 +3,8 @@ package com.yyy.fuzhuangpad.view.search;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -26,6 +28,8 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
     int titleColor;
     int editSize;
     int editColor;
+    private int inputType;
+    private int maxLength;
     boolean isMust;
 
     TextView tvTitle;
@@ -49,7 +53,9 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
         titleColor = typedArray.getColor(R.styleable.SearchEdit_seTitleColor, 0xFF000000);
         editSize = typedArray.getDimensionPixelSize(R.styleable.SearchEdit_seEditSize, 12);
         editColor = typedArray.getColor(R.styleable.SearchEdit_seEditColor, 0xFF000000);
-        isMust = typedArray.getBoolean(R.styleable.SelectView_svMust, false);
+        isMust = typedArray.getBoolean(R.styleable.SearchEdit_seMust, false);
+        inputType = typedArray.getInt(R.styleable.SearchEdit_seInputType, 0);
+        maxLength = typedArray.getInteger(R.styleable.SearchEdit_seMaxLength, 0);
         typedArray.recycle();
     }
 
@@ -96,8 +102,28 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
 //        etContent.setBackground(null);
         etContent.setGravity(Gravity.CENTER_VERTICAL);
         etContent.setOnKeyListener(this);
+        if (inputType != 0) {
+            etContent.setInputType(getIntype());
+        }
+        if (maxLength != 0)
+            etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
         addView(etContent);
     }
+
+    private int getIntype() {
+        switch (inputType) {
+            case 3:
+                return InputType.TYPE_CLASS_NUMBER;
+            case 2:
+                return InputType.TYPE_NUMBER_FLAG_DECIMAL;
+            case 1:
+                return InputType.TYPE_TEXT_FLAG_MULTI_LINE;
+            default:
+                return InputType.TYPE_TEXT_VARIATION_NORMAL;
+        }
+
+    }
+
 
     private LinearLayout.LayoutParams etParams() {
         LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);

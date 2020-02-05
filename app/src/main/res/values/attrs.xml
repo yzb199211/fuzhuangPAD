@@ -111,6 +111,13 @@
         <attr name="seEditSize" format="dimension" />
         <attr name="seEditColor" format="color" />
         <attr name="seMust" format="boolean" />
+        <attr name="seMaxLength" format="integer"/>
+        <attr name="seInputType" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="enlish" value="1" />
+            <enum name="floats" value="2" />
+            <enum name="number" value="3" />
+        </attr>
     </declare-styleable>
     <declare-styleable name="ButtonWithImg">
         <attr name="bwiTilte" format="string" />

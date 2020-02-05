@@ -112,6 +112,8 @@
             app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/customer_detail_phone"
             app:seTitleColor="@color/default_text_color"
+            app:seInputType="number"
+            app:seMaxLength="11"
             app:seTitleSize="@dimen/sp_10" />
     </LinearLayout>
 
