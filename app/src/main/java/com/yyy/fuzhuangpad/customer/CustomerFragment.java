@@ -2,7 +2,6 @@ package com.yyy.fuzhuangpad.customer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +25,6 @@ import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
-import com.yyy.fuzhuangpad.style.StyleBeans;
-import com.yyy.fuzhuangpad.style.StyleType;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;

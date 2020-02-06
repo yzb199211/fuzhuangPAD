@@ -35,6 +35,7 @@
                 android:orientation="horizontal">
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:id="@+id/se_code"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_10"
@@ -47,6 +48,7 @@
                     app:seMust="true"/>
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:id="@+id/se_name"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
@@ -59,6 +61,7 @@
                     app:seMust="true"/>
 
                 <com.yyy.fuzhuangpad.view.SelectView
+                    android:id="@+id/sv_type"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
@@ -79,6 +82,7 @@
                 android:orientation="horizontal">
 
                 <com.yyy.fuzhuangpad.view.SelectView
+                    android:id="@+id/sv_size"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_10"
@@ -91,6 +95,7 @@
                     app:svMust="true"/>
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:id="@+id/se_customer"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
@@ -102,6 +107,7 @@
                     app:seTitleSize="@dimen/sp_10" />
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:id="@+id/se_customer_style"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
@@ -120,6 +126,7 @@
                 android:orientation="horizontal">
 
                 <com.yyy.fuzhuangpad.view.SelectView
+                    android:id="@+id/sv_year"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_10"
@@ -131,6 +138,7 @@
                     app:svTitleSize="@dimen/sp_10" />
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:id="@+id/se_composition"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
@@ -148,6 +156,7 @@
                 android:orientation="horizontal">
 
                 <com.yyy.fuzhuangpad.view.SelectView
+                    android:id="@+id/sv_dateStop"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_10"
@@ -159,6 +168,7 @@
                     app:svTitleSize="@dimen/sp_10" />
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:id="@+id/se_remark"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
@@ -211,6 +221,7 @@
                 android:orientation="horizontal">
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:id="@+id/se_price_trade"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_10"
@@ -222,17 +233,19 @@
                     app:seTitleSize="@dimen/sp_10" />
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:id="@+id/se_price_retail"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:layout_weight="1"
                     app:seEditColor="@color/default_text_color"
                     app:seEditSize="@dimen/sp_10"
-                    app:seTilte="@string/style_detail_price_trade"
+                    app:seTilte="@string/style_detail_price_retail"
                     app:seTitleColor="@color/default_text_color"
                     app:seTitleSize="@dimen/sp_10" />
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
+                    android:id="@+id/se_price_tag"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"

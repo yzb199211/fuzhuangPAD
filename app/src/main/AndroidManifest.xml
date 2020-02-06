@@ -21,7 +21,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".style.StyleDetailActivity"></activity>
         <activity
             android:name=".flash.FlashActivity"
             android:screenOrientation="landscape">
@@ -31,6 +30,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".style.StyleDetailActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/DialogActivity" />
         <activity
             android:name=".customer.CustomerDetailActivity"
             android:screenOrientation="landscape"

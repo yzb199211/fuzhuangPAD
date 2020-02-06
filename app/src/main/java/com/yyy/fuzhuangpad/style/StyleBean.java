@@ -5,7 +5,7 @@ import com.yyy.fuzhuangpad.view.form.FormColumn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StyleBeans {
+public class StyleBean {
     private int iRecNo;
     private String sStyleNo;
     private String sStyleName;
@@ -22,7 +22,7 @@ public class StyleBeans {
     private String sCustStyleNo;
     private String sWaterElents;
     private String sReMark;
-    private double dStopDate;
+    private String dStopDate;
     private int row;
 
 
@@ -154,11 +154,11 @@ public class StyleBeans {
         this.sReMark = sReMark;
     }
 
-    public double getdStopDate() {
+    public String getdStopDate() {
         return dStopDate;
     }
 
-    public void setdStopDate(double dStopDate) {
+    public void setdStopDate(String dStopDate) {
         this.dStopDate = dStopDate;
     }
 

@@ -101,6 +101,7 @@
     <string name="style_detail_price_retail">零  售  价</string>
     <string name="style_detail_price_tag">吊  牌  价</string>
 
+
     <!--sale_billing-->
     <string name="sale_billing_search_value">单        号</string>
     <string name="sale_billing_search_customer">客        户</string>

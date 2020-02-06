@@ -1,6 +1,7 @@
 package com.yyy.fuzhuangpad.style;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +26,7 @@ import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
 import com.yyy.fuzhuangpad.util.StringUtil;
@@ -79,7 +81,7 @@ public class StyleFragment extends Fragment {
     FormRow formTitle;
     RecyclerView recyclerView;
     List<FormColumn> titles;
-    private List<StyleBeans> styleDatas;
+    private List<StyleBean> styleDatas;
     private List<List<FormColumn>> formDatas;
     private List<StyleType> styleTypes;
 
@@ -173,7 +175,7 @@ public class StyleFragment extends Fragment {
 
     private void setListData(String data) {
         if (StringUtil.isNotEmpty(data)) {
-            styleDatas.addAll(new Gson().fromJson(data, new TypeToken<List<StyleBeans>>() {
+            styleDatas.addAll(new Gson().fromJson(data, new TypeToken<List<StyleBean>>() {
             }.getType()));
             setFormData();
         } else {
@@ -189,7 +191,7 @@ public class StyleFragment extends Fragment {
 
     private void getFormData() {
         for (int i = 0; i < styleDatas.size(); i++) {
-            StyleBeans style = styleDatas.get(i);
+            StyleBean style = styleDatas.get(i);
             style.setRow(i);
             formDatas.add(style.getList());
         }
@@ -221,7 +223,8 @@ public class StyleFragment extends Fragment {
         formAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                Log.e("pos", pos + "");
+//                Log.e("pos", pos + "");
+                go2Detail(new Gson().toJson(styleDatas.get(pos)));
             }
         });
         recyclerView.setAdapter(formAdapter);
@@ -284,7 +287,7 @@ public class StyleFragment extends Fragment {
         rlMain.addView(formTitle, params);
     }
 
-    @OnClick({R.id.bwi_remove, R.id.bwi_search})
+    @OnClick({R.id.bwi_remove, R.id.bwi_search, R.id.bwi_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bwi_remove:
@@ -293,7 +296,21 @@ public class StyleFragment extends Fragment {
             case R.id.bwi_search:
                 refreshData();
                 break;
+            case R.id.bwi_add:
+                go2Detail(null);
+                break;
+            default:
+                break;
         }
+    }
+
+    private void go2Detail(String data) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), StyleDetailActivity.class);
+        if (StringUtil.isNotEmpty(data)) {
+            intent.putExtra("data", data);
+        }
+        startActivityForResult(intent, CodeUtil.STYLEDETAIL);
     }
 
     private void refreshData() {

@@ -142,6 +142,12 @@ public class StringUtil {
             date = new Date(System.currentTimeMillis());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
+    }public static String getYear(@Nullable Date date) {//可根据需要自行截取数据显示
+//        Log.d("getTime()", "choice date millis: " + date.getTime());
+        if (date == null)
+            date = new Date(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
+        return format.format(date);
     }
 
     /*获取筛选条件默认值*/
