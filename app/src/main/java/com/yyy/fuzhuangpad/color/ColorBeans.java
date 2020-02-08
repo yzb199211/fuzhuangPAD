@@ -15,7 +15,6 @@ public class ColorBeans {
     private String sRemark = "";
     private int row;
 
-
     public void setRow(int row) {
         this.row = row;
     }
@@ -77,6 +76,7 @@ public class ColorBeans {
         this.sRemark = sRemark;
     }
 
+
     public List<FormColumn> getList() {
         List<FormColumn> list = new ArrayList<>();
         list.add(new FormColumn(row + 1 + "", 0.5f, true, 0, row));
@@ -92,7 +92,7 @@ public class ColorBeans {
     }
 
     public String paramsFieldsValues() {
-        return sColorName + "," + sColorID + "," + sClassID  + "," + dStopDate + "," + sRemark;
+        return sColorName + "," + sColorID + "," + sClassID + "," + dStopDate + "," + sRemark;
     }
 
     public String paramsFilterFields() {

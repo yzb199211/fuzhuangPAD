@@ -13,7 +13,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/color_detail_title"
+        android:text="@string/style_detail_title"
         android:textColor="@color/default_text_color"
         android:textSize="@dimen/sp_14" />
 
@@ -42,10 +42,10 @@
                     android:layout_weight="1"
                     app:seEditColor="@color/default_text_color"
                     app:seEditSize="@dimen/sp_10"
+                    app:seMust="true"
                     app:seTilte="@string/style_detail_code"
                     app:seTitleColor="@color/default_text_color"
-                    app:seTitleSize="@dimen/sp_10"
-                    app:seMust="true"/>
+                    app:seTitleSize="@dimen/sp_10" />
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
                     android:id="@+id/se_name"
@@ -55,10 +55,10 @@
                     android:layout_weight="1"
                     app:seEditColor="@color/default_text_color"
                     app:seEditSize="@dimen/sp_10"
+                    app:seMust="true"
                     app:seTilte="@string/style_detail_name"
                     app:seTitleColor="@color/default_text_color"
-                    app:seTitleSize="@dimen/sp_10"
-                    app:seMust="true"/>
+                    app:seTitleSize="@dimen/sp_10" />
 
                 <com.yyy.fuzhuangpad.view.SelectView
                     android:id="@+id/sv_type"
@@ -68,11 +68,10 @@
                     android:layout_weight="1"
                     app:svContentColor="@color/default_text_color"
                     app:svContentSize="@dimen/sp_10"
+                    app:svMust="true"
                     app:svTilte="@string/style_detail_type"
                     app:svTitleColor="@color/default_text_color"
-                    app:svTitleSize="@dimen/sp_10"
-                    app:svMust="true"
-                    />
+                    app:svTitleSize="@dimen/sp_10" />
             </LinearLayout>
 
             <LinearLayout
@@ -89,10 +88,10 @@
                     android:layout_weight="1"
                     app:svContentColor="@color/default_text_color"
                     app:svContentSize="@dimen/sp_10"
+                    app:svMust="true"
                     app:svTilte="@string/style_detail_size"
                     app:svTitleColor="@color/default_text_color"
-                    app:svTitleSize="@dimen/sp_10"
-                    app:svMust="true"/>
+                    app:svTitleSize="@dimen/sp_10" />
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
                     android:id="@+id/se_customer"
@@ -149,6 +148,7 @@
                     app:seTitleColor="@color/default_text_color"
                     app:seTitleSize="@dimen/sp_10" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="@dimen/dp_370"
                 android:layout_height="wrap_content"
@@ -256,11 +256,13 @@
                     app:seTitleColor="@color/default_text_color"
                     app:seTitleSize="@dimen/sp_10" />
             </LinearLayout>
+
             <View
                 android:layout_width="@dimen/dp_370"
                 android:layout_height="@dimen/dp_3"
                 android:layout_marginTop="@dimen/dp_3"
                 android:background="@color/default_line_color" />
+
             <LinearLayout
                 android:layout_width="@dimen/dp_370"
                 android:layout_height="wrap_content"
@@ -275,12 +277,24 @@
                     android:src="@mipmap/common_color_select" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/style_detail_setting_color"
                     android:textColor="@color/default_content_color"
                     android:textSize="@dimen/sp_10" />
+
+                <com.yyy.fuzhuangpad.view.button.ButtonWithImg
+                    android:id="@+id/bwi_add_color"
+                    android:layout_width="@dimen/dp_50"
+                    android:layout_height="@dimen/dp_20"
+                    android:background="@drawable/bg_detail_add"
+                    app:bwiTilte="@string/common_add"
+                    app:bwiTitleColor="@color/white"
+                    app:bwiTitleSize="@dimen/sp_10"
+                    android:layout_marginRight="@dimen/dp_10"/>
             </LinearLayout>
+
             <View
                 android:layout_width="@dimen/dp_370"
                 android:layout_height="@dimen/dp_3"

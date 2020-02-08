@@ -8,105 +8,113 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.color.ColorBeans;
+import com.yyy.fuzhuangpad.style.StyleColor;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ColorGroup extends ViewGroup {
     private static final String TAG = "WrapLayout";
-    /**
-     * TextView的style
-     */
-    public int TEXTVIEW_STYLE = 0;
-    /**
-     * Button的style
-     */
-    public int BUTTON_STYLE = 1;
-    private int style;
-    private View btn;
+    private Context context;
+    private List<StyleColor> colors;
 
     public ColorGroup(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public ColorGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
     }
 
-    public ColorGroup(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
 
     /**
      * 设置数据
-     * @param data  文字
-     * @param context 上下文
+     *
+     * @param data     文字
      * @param textSize 文字大小
-     * @param pl 左内边距
-     * @param pt 上内边距
-     * @param pr 右内边距
-     * @param pb 下内边距
-     * @param ml 左外边距
-     * @param mt 上外边距
-     * @param mr 右外边距
-     * @param mb 下外边距
+     * @param pl       左内边距
+     * @param pt       上内边距
+     * @param pr       右内边距
+     * @param pb       下内边距
+     * @param ml       左外边距
+     * @param mt       上外边距
+     * @param mr       右外边距
+     * @param mb       下外边距
      */
-    public void setData(String[] data,Context context,int textSize,int pl,int pt,int pr,int pb,int ml,int mt,int mr,int mb){
-        createChild(data,context,textSize, pl, pt, pr, pb, ml, mt, mr, mb);
+    public void setData(List<StyleColor> data, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
+        this.colors = data;
+        createChild(data, textSize, pl, pt, pr, pb, ml, mt, mr, mb);
     }
 
-    public void setData(List<String> data, Context context, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb){
-        String[] mydata = null;
-        if(data!=null){
-            int length = data.size();
-            mydata = new String[length];
-            for(int i = 0 ; i<length;i++){
-                mydata[i] = data.get(i);
-            }
-        }
-        setData(mydata,context, textSize,pl, pt, pr, pb, ml, mt, mr, mb);
-    }
-
-    private void createChild(String[] data, final Context context, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb){
-        int size = data.length;
-        for(int i = 0;i<size;i++){
-            String text = data[i];
+    private void createChild(List<StyleColor> data, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
+        int size = data.size();
+        for (int i = 0; i < size; i++) {
+            String text = data.get(i).getsColorName();
+            boolean isChecked = data.get(i).isChecked();
             //通过判断style是TextView还是Button进行不同的操作，还可以继续添加不同的view
-            if (style == TEXTVIEW_STYLE){
-                btn = new TextView(context);
-                ((TextView) btn).setGravity(Gravity.CENTER);
-                ((TextView) btn).setText(text);
-                ((TextView) btn).setTextSize(textSize);
-            }else if (style == BUTTON_STYLE){
-                btn = new Button(context);
-                ((Button) btn).setGravity(Gravity.CENTER);
-                ((Button) btn).setText(text);
-                ((Button) btn).setTextSize(textSize);
-            }
+//            if (style == TEXTVIEW_STYLE) {
+            TextView btn = new TextView(context);
+            btn.setGravity(Gravity.CENTER);
+            btn.setText(text);
+            btn.setTextSize(textSize);
+//            } else if (style == BUTTON_STYLE) {
+//                btn = new Button(context);
+//                ((Button) btn).setGravity(Gravity.CENTER);
+//                ((Button) btn).setText(text);
+//                ((Button) btn).setTextSize(textSize);
+//            }
             btn.setClickable(true);
 
-            btn.setPadding(dip2px(context, pl),dip2px(context, pt),dip2px(context, pr),dip2px(context, pb));
-            MarginLayoutParams params = new MarginLayoutParams(MarginLayoutParams.WRAP_CONTENT,MarginLayoutParams.WRAP_CONTENT);
+            btn.setPadding(dip2px(context, pl), dip2px(context, pt), dip2px(context, pr), dip2px(context, pb));
+            MarginLayoutParams params = new MarginLayoutParams(MarginLayoutParams.WRAP_CONTENT, MarginLayoutParams.WRAP_CONTENT);
             params.setMargins(ml, mt, mr, mb);
 
             btn.setLayoutParams(params);
+            if (isChecked) {
+                setChecked(btn);
+            } else {
+                setNormal(btn);
+            }
             final int finalI = i;
             //给每个view添加点击事件
             btn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    markClickListener.clickMark(finalI);
+                    if (colors.get(finalI).isChecked()) {
+                        setNormal(btn);
+                        colors.get(finalI).setChecked(false);
+                    } else {
+                        setChecked(btn);
+                        colors.get(finalI).setChecked(true);
+                    }
+                    if (markClickListener != null)
+                        markClickListener.clickMark(finalI);
                 }
             });
             this.addView(btn);
         }
     }
+
+    private void setNormal(TextView btn) {
+        btn.setBackgroundResource(R.drawable.bg_color_normal);
+        btn.setTextColor(context.getResources().getColor(R.color.default_content_color));
+    }
+
+    private void setChecked(TextView btn) {
+        btn.setBackgroundResource(R.drawable.bg_color_checked);
+        btn.setTextColor(context.getResources().getColor(R.color.white));
+    }
+
     private MarkClickListener markClickListener;
 
     public void setMarkClickListener(MarkClickListener markClickListener) {
         this.markClickListener = markClickListener;
     }
 
-    public interface MarkClickListener{
+    public interface MarkClickListener {
         void clickMark(int position);
     }
 
@@ -117,7 +125,6 @@ public class ColorGroup extends ViewGroup {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
-
 
 
     @Override
@@ -138,27 +145,26 @@ public class ColorGroup extends ViewGroup {
         int lineHeight = 0;
         int width = 0;//warpcontet是需要记录的宽度
         int height = 0;
-        for(int i = 0 ; i< childCount;i++){
+        for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
             // 测量每一个child的宽和高
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
             MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
-            int childWidth = child.getMeasuredWidth()+lp.leftMargin+lp.rightMargin;
-            int childHeight = child.getMeasuredHeight()+lp.topMargin+lp.bottomMargin;
+            int childWidth = child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
+            int childHeight = child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
 //            Log.e(TAG, "onMeasure: lineHeight = "+lineHeight+" childHeight = "+childHeight );
-            if(lineWidth+childWidth>widthSize){
+            if (lineWidth + childWidth > widthSize) {
                 width = Math.max(lineWidth, childWidth);//这种情况就是排除单个标签很长的情况
                 lineWidth = childWidth;//开启新行
                 height += lineHeight;//记录总行高
                 lineHeight = childHeight;//因为开了新行，所以这行的高度要记录一下
-            }else{
+            } else {
                 lineWidth += childWidth;
 //                lineHeight = Math.max(lineHeight, childHeight); //记录行高
                 lineHeight = Math.max(height, childHeight); //记录行高
             }
             // 如果是最后一个，则将当前记录的最大宽度和当前lineWidth做比较
-            if (i == childCount - 1)
-            {
+            if (i == childCount - 1) {
                 width = Math.max(width, lineWidth);  //宽度
                 height += lineHeight;  //
             }
@@ -194,13 +200,13 @@ public class ColorGroup extends ViewGroup {
         List<View> lineViews = new ArrayList<View>();
         int lineWidth = 0;  //行宽
         int lineHeight = 0; //总行高
-        for(int i = 0 ; i<childCount;i++){
+        for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
             MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();//得到属性参数
             int childWidth = child.getMeasuredWidth();
             int childHeight = child.getMeasuredHeight();
             // 如果已经需要换行
-            if (i == 3){
+            if (i == 3) {
                 i = 3;
             }
             if (childWidth + lp.leftMargin + lp.rightMargin + lineWidth > width)  //大于父布局的宽度
@@ -226,32 +232,27 @@ public class ColorGroup extends ViewGroup {
         int left = 0;
         int top = 0;
         int lineNums = mAllViews.size();
-        for(int i = 0;i<lineNums;i++){
+        for (int i = 0; i < lineNums; i++) {
             // 每一行的所有的views
             lineViews = mAllViews.get(i);
             // 当前行的最大高度  每一行的高度都相同  所以使用（i+1）进行设置高度
-            lineHeight = (i+1)*mLineHeight.get(i);
-            for(int j = 0 ;j < lineViews.size() ; j++){
+            lineHeight = (i + 1) * mLineHeight.get(i);
+            for (int j = 0; j < lineViews.size(); j++) {
                 View lineChild = lineViews.get(j);
-                if(lineChild.getVisibility() == View.GONE){
+                if (lineChild.getVisibility() == View.GONE) {
                     continue;
                 }
                 MarginLayoutParams lp = (MarginLayoutParams) lineChild.getLayoutParams();
                 //开始画标签了。左边和上边的距离是要根据累计的数确定的。
                 int lc = left + lp.leftMargin;
-                int tc = top+lp.topMargin;
-                int rc = lc+lineChild.getMeasuredWidth();
-                int bc = tc+lineChild.getMeasuredHeight();
+                int tc = top + lp.topMargin;
+                int rc = lc + lineChild.getMeasuredWidth();
+                int bc = tc + lineChild.getMeasuredHeight();
                 lineChild.layout(lc, tc, rc, bc);
                 left += lineChild.getMeasuredWidth() + lp.rightMargin + lp.leftMargin;
             }
             left = 0;//将left归零
             top = lineHeight;
         }
-    }
-
-
-    public void setStyle(int style) {
-        this.style = style;
     }
 }

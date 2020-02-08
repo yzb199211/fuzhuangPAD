@@ -1,5 +1,6 @@
 package com.yyy.fuzhuangpad.style;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -436,7 +437,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         initDialogWindow(pvDate.getDialog().getWindow());
     }
 
-    @OnClick({R.id.bw_exit, R.id.bw_save})
+    @OnClick({R.id.bw_exit, R.id.bw_save, R.id.bwi_add_color})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bw_exit:
@@ -444,7 +445,16 @@ public class StyleDetailActivity extends AppCompatActivity {
                 break;
             case R.id.bw_save:
                 break;
+            case R.id.bwi_add_color:
+                selectColor();
+                break;
         }
+    }
+
+    private void selectColor() {
+        Intent intent = new Intent();
+        intent.setClass(this, StyleColorActivity.class);
+        startActivity(intent);
     }
 
     private void LoadingFinish(String msg) {
