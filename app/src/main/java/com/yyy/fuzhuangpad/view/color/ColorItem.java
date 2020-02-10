@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
+import com.yyy.fuzhuangpad.color.OnColorClick;
 import com.yyy.fuzhuangpad.style.StyleColor;
 
 import java.util.ArrayList;
@@ -16,6 +17,11 @@ public class ColorItem extends LinearLayout {
     List<StyleColor> colors;
     ColorTitle colorTitle;
     ColorGroup colorGroup;
+    OnColorClick onColorClick;
+
+    public void setOnColorClick(OnColorClick onColorClick) {
+        this.onColorClick = onColorClick;
+    }
 
     public ColorItem(Context context) {
         this(context, null);
@@ -58,8 +64,10 @@ public class ColorItem extends LinearLayout {
         colorGroup.setVisibility(GONE);
         colorGroup.setMarkClickListener(new ColorGroup.MarkClickListener() {
             @Override
-            public void clickMark(int position) {
-
+            public void clickMark(int position, boolean isCkecked) {
+                if (onColorClick != null) {
+                    onColorClick.colorClick(colors.get(position), isCkecked);
+                }
             }
         });
         addView(colorGroup);

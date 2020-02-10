@@ -91,7 +91,7 @@ public class ColorGroup extends ViewGroup {
                         colors.get(finalI).setChecked(true);
                     }
                     if (markClickListener != null)
-                        markClickListener.clickMark(finalI);
+                        markClickListener.clickMark(finalI,colors.get(finalI).isChecked());
                 }
             });
             this.addView(btn);
@@ -115,7 +115,7 @@ public class ColorGroup extends ViewGroup {
     }
 
     public interface MarkClickListener {
-        void clickMark(int position);
+        void clickMark(int position,boolean isChecked);
     }
 
     /**
