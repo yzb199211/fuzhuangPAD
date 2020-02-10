@@ -42,7 +42,7 @@ public class ColorTitle extends LinearLayout {
         setBackgroundColor(context.getResources().getColor(R.color.default_bg_color));
         setTvOpen();
         setTvTitle();
-        setPadding(10, 20, 10, 20);
+        setPadding(10, 5, 10, 5);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +62,7 @@ public class ColorTitle extends LinearLayout {
 
     private void setTvOpen() {
         tvOpen = new TextView(context);
-        tvOpen.setText(R.string.common_open);
+        tvOpen.setText(R.string.common_close);
         tvOpen.setTextColor(context.getResources().getColor(R.color.default_text_color));
         tvOpen.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimensionPixelSize(R.dimen.sp_10));
         tvOpen.setPadding(10, 0, 10, 0);
@@ -82,6 +82,6 @@ public class ColorTitle extends LinearLayout {
     }
 
     public void setTitle(String title) {
-
+        tvTitle.setText(title);
     }
 }

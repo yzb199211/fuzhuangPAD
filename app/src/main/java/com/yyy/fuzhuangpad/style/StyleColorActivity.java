@@ -1,16 +1,34 @@
 package com.yyy.fuzhuangpad.style;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.dialog.LoadingDialog;
+import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.util.PxUtil;
+import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
+import com.yyy.fuzhuangpad.util.StringUtil;
+import com.yyy.fuzhuangpad.util.Toasts;
+import com.yyy.fuzhuangpad.util.net.NetConfig;
+import com.yyy.fuzhuangpad.util.net.NetParams;
+import com.yyy.fuzhuangpad.util.net.NetUtil;
 import com.yyy.fuzhuangpad.view.color.ColorGroup;
+import com.yyy.fuzhuangpad.view.color.ColorItem;
+import com.yyy.fuzhuangpad.view.color.ColorList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +40,14 @@ public class StyleColorActivity extends AppCompatActivity {
 
     @BindView(R.id.ll_color)
     LinearLayout llColor;
+    @BindView(R.id.scroll)
+    ScrollView scrollView;
+
+    List<StyleColor> colors;
+    SharedPreferencesHelper preferencesHelper;
+    private String url;
+    private String address;
+    private String companyCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,25 +55,112 @@ public class StyleColorActivity extends AppCompatActivity {
         setWindow();
         setContentView(R.layout.activity_style_color);
         ButterKnife.bind(this);
-        ColorGroup group = new ColorGroup(this);
-        List<StyleColor> list = new ArrayList<>();
-        list.add(new StyleColor("红色", "红色"));
-        list.add(new StyleColor("绿色", "绿色"));
-        list.add(new StyleColor("蓝", "蓝"));
-        list.add(new StyleColor("白色", "白色"));
-        list.add(new StyleColor("白色", "白色"));
-        list.add(new StyleColor("白色", "白色"));
-        list.add(new StyleColor("白色", "白色"));
-        list.add(new StyleColor("白色", "白色11111111"));
-        list.add(new StyleColor("白色", "白色"));
-        list.add(new StyleColor("白色", "白色1111"));
-        list.add(new StyleColor("白色", "白色"));
-        list.add(new StyleColor("白色", "白色"));
-        list.add(new StyleColor("白色", "白色11111"));
-        list.add(new StyleColor("白色", "白色"));
-        list.add(new StyleColor("白色", "白色"));
-        group.setData(list, 12, 20, 5, 20, 5, 20, 20, 20, 20);
-        llColor.addView(group);
+        preferencesHelper = new SharedPreferencesHelper(this, getString(R.string.preferenceCache));
+        init();
+        getData();
+//        ColorGroup group = new ColorGroup(this);
+//        List<StyleColor> list = new ArrayList<>();
+//        list.add(new StyleColor("红色", "红色"));
+//        list.add(new StyleColor("绿色", "绿色"));
+//        list.add(new StyleColor("蓝", "蓝"));
+//        list.add(new StyleColor("白色", "白色"));
+//        list.add(new StyleColor("白色", "白色"));
+//        list.add(new StyleColor("白色", "白色"));
+//        list.add(new StyleColor("白色", "白色"));
+//        list.add(new StyleColor("白色", "白色11111111"));
+//        list.add(new StyleColor("白色", "白色"));
+//        list.add(new StyleColor("白色", "白色1111"));
+//        list.add(new StyleColor("白色", "白色"));
+//        list.add(new StyleColor("白色", "白色"));
+//        list.add(new StyleColor("白色", "白色11111"));
+//        list.add(new StyleColor("白色", "白色"));
+//        list.add(new StyleColor("白色", "白色"));
+//        group.setData(list, 12, 20, 5, 20, 5, 20, 20, 20, 20);
+//        llColor.addView(group);
+
+    }
+
+    private void init() {
+        initDefaultData();
+        initList();
+    }
+
+    private void initDefaultData() {
+        address = (String) preferencesHelper.getSharedPreference("address", "");
+        companyCode = (String) preferencesHelper.getSharedPreference("companyCode", "");
+        url = address + NetConfig.server + NetConfig.MobileAppHandler_Method;
+    }
+
+    private void initList() {
+        colors = new ArrayList<>();
+    }
+
+    private void getData() {
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(getParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initColorData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_data));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initColorData(String string) throws JSONException {
+        JSONObject jsonObject = new JSONObject(string);
+        if (jsonObject.optBoolean("success")) {
+            setListData(jsonObject.optJSONObject("dataset").optString("vwBscDataColor"));
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private void setListData(String data) {
+        if (StringUtil.isNotEmpty(data)) {
+            colors.addAll(new Gson().fromJson(data, new TypeToken<List<StyleColor>>() {
+            }.getType()));
+            setColorView();
+        } else {
+            LoadingFinish(getString(R.string.error_empty));
+        }
+    }
+
+    private void setColorView() {
+        LoadingFinish(null);
+        if (colors.size() > 0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ColorList colorList = new ColorList(StyleColorActivity.this);
+                    colorList.setData(colors);
+                    llColor.addView(colorList);
+                }
+            });
+        }
+    }
+
+    private List<NetParams> getParams() {
+        List<NetParams> list = new ArrayList<>();
+        list.add(new NetParams("sCompanyCode", companyCode));
+        list.add(new NetParams("otype", "GetTableData"));
+        list.add(new NetParams("sTableName", "vwBscDataColor"));
+        list.add(new NetParams("sFields", "iRecNo,sColorName,sColorID,sClassID,sClassName"));
+        list.add(new NetParams("sFilters", ""));
+        list.add(new NetParams("sSorts", "sClassID asc"));
+        return list;
     }
 
     private void setWindow() {
@@ -68,4 +181,21 @@ public class StyleColorActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    private void LoadingFinish(String msg) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (StringUtil.isNotEmpty(msg)) {
+                    Toast(msg);
+                }
+                LoadingDialog.cancelDialogForLoading();
+            }
+        });
+    }
+
+    private void Toast(String msg) {
+        Toasts.showShort(this, msg);
+    }
+
 }
