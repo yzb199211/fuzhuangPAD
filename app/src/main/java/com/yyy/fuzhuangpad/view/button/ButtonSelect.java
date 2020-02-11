@@ -7,6 +7,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -88,8 +89,13 @@ public class ButtonSelect extends LinearLayout {
         tvTitle.setText(title);
         tvTitle.setTextColor(titleColor);
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
+        tvTitle.setLayoutParams(titleParams());
+        tvTitle.setGravity(Gravity.RIGHT);
     }
-
+    private LayoutParams titleParams() {
+        LayoutParams params = new LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.sp_10) * 4 + 1, ViewGroup.LayoutParams.WRAP_CONTENT);
+        return params;
+    }
     private void initContent() {
         tvContent = findViewById(R.id.tv_content);
         tvContent.setText(content);

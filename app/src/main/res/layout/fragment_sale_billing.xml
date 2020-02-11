@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             app:bsContentColor="@color/white"
             app:bsContentSize="@dimen/sp_10"
-            app:bsSrc="@mipmap/icon_arrow_down"
+            app:bsSrc="@mipmap/common_date"
             android:layout_centerVertical="true"
             app:bsTitle="@string/common_date_start"
             app:bsTitleColor="@color/default_text_color"
@@ -37,14 +37,14 @@
             app:bsContentColor="@color/white"
             android:layout_centerVertical="true"
             app:bsContentSize="@dimen/sp_10"
-            app:bsSrc="@mipmap/icon_arrow_down"
+            app:bsSrc="@mipmap/common_date"
             app:bsTitle="@string/common_date_end"
             app:bsTitleColor="@color/default_text_color"
             app:bsTitleSize="@dimen/sp_10" />
 
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
             android:id="@+id/bs_shop"
-            android:layout_width="@dimen/dp_80"
+            android:layout_width="@dimen/dp_100"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_5"

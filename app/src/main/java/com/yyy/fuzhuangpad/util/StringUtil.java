@@ -91,12 +91,18 @@ public class StringUtil {
      * @param type
      * @return
      */
-    public static String getDate(String date, int type) throws Exception {
-        if (type == 1) {
+    public static String getDate(String date, int type)  {
+        if (!StringUtil.isNotEmpty(date)){
+            return date;
+        }
+        if (type == 1&&date.length()>15) {
             date = date.substring(0, 16);
             date = date.replace("T", " ");
             return date;
-        } else
+        }else if (type == 2&&date.length()>9){
+            date = date.substring(0, 10);
+            return date;
+        }else
             return date;
     }
 

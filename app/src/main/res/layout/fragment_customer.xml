@@ -42,7 +42,7 @@
 
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
             android:id="@+id/bs_type"
-            android:layout_width="@dimen/dp_80"
+            android:layout_width="@dimen/dp_100"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/se_name"

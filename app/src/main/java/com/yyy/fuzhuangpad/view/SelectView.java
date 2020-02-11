@@ -85,9 +85,14 @@ public class SelectView extends LinearLayout {
         tvTitle.setSingleLine();
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         tvTitle.setTextColor(titleColor);
+        tvTitle.setLayoutParams(titleParams());
+        tvTitle.setGravity(Gravity.RIGHT);
         addView(tvTitle);
     }
-
+    private LayoutParams titleParams() {
+        LayoutParams params = new LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.sp_10) * 4 + 1, ViewGroup.LayoutParams.WRAP_CONTENT);
+        return params;
+    }
     private void addMust() {
         TextView textView = new TextView(context);
         textView.setText("*");

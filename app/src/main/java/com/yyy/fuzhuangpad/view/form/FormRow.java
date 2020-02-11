@@ -67,6 +67,7 @@ public class FormRow extends LinearLayout {
         textView.setGravity(column.isCenter() ? Gravity.CENTER : gravity);
         textView.setLayoutParams(columnParams(column.getWeight()));
         textView.setText(column.getText());
+        textView.setSingleLine();
         return textView;
     }
 

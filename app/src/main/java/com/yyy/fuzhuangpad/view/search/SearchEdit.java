@@ -80,6 +80,8 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
         tvTitle.setSingleLine();
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         tvTitle.setTextColor(titleColor);
+        tvTitle.setLayoutParams(titleParams());
+        tvTitle.setGravity(Gravity.RIGHT);
         addView(tvTitle);
     }
 
@@ -124,6 +126,10 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
 
     }
 
+    private LayoutParams titleParams() {
+        LayoutParams params = new LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.sp_10) * 4 + 1, ViewGroup.LayoutParams.WRAP_CONTENT);
+        return params;
+    }
 
     private LinearLayout.LayoutParams etParams() {
         LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
