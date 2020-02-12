@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
+        <activity android:name=".sale.BillingStyleDetailActivity"></activity>
         <activity
             android:name=".flash.FlashActivity"
             android:screenOrientation="landscape">

@@ -15,6 +15,7 @@
     <color name="default_text_color">#000</color>
     <color name="default_bg_color">#eee</color>
     <color name="default_content_color">#666666</color>
+    <color name="default_title_color">#cccccc</color>
     <color name="default_line_color">#cccccc</color>
     <color name="editor_stroke_gray">#666</color>
     <color name="editor_solid_gray">#5DA5AD</color>

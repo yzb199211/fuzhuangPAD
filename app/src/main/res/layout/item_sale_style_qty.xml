@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/tv_color"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/default_text_color"
+        android:textSize="@dimen/sp_10" />
+
+    <TextView
+        android:id="@+id/tv_size"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/default_text_color"
+        android:textSize="@dimen/sp_10" />
+
+    <TextView
+        android:id="@+id/tv_storage"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/default_text_color"
+        android:textSize="@dimen/sp_10" />
+
+    <com.yyy.fuzhuangpad.view.NumSelectView
+        android:id="@+id/nsv_qty"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+</merge>

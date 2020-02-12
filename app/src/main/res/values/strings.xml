@@ -124,13 +124,18 @@
     <string name="sale_billing_empty_shop">请选择门店</string>
 
     <string name="sale_billing_add_code">款号</string>
+    <string name="sale_billing_add_name">款式名称</string>
     <string name="sale_billing_add_color">色号</string>
+    <string name="sale_billing_add_class">类别</string>
     <string name="sale_billing_add_size">尺码</string>
+    <string name="sale_billing_add_sizes">尺码组</string>
     <string name="sale_billing_add_qty">数量</string>
+    <string name="sale_billing_add_storage">可用库存</string>
     <string name="sale_billing_add_price">单价</string>
     <string name="sale_billing_add_total">小计</string>
     <string name="sale_billing_add_remark">备注</string>
     <string name="sale_billing_add_operate">操作</string>
+    <string name="sale_billing_add_select_color">选择颜色</string>
 
 
     <!--commonBtn-->
