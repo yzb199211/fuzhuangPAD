@@ -18,6 +18,15 @@ public class SaleStyleQtyView extends LinearLayout {
     TextView tvSize;
     TextView tvStorage;
     NumSelectView nsvQty;
+    private int Qty = 0;
+
+    public int getQty() {
+        return Qty;
+    }
+
+    public void setQty(int qty) {
+        Qty = qty;
+    }
 
     public SaleStyleQtyView(Context context) {
         this(context, null);
@@ -41,6 +50,12 @@ public class SaleStyleQtyView extends LinearLayout {
         tvSize = findViewById(R.id.tv_size);
         tvStorage = findViewById(R.id.tv_storage);
         nsvQty = findViewById(R.id.nsv_qty);
+        nsvQty.setOnQtyChange(new OnQtyChange() {
+            @Override
+            public void onQty(int qty) {
+                setQty(qty);
+            }
+        });
     }
 
     private void initMain() {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.view.sale.OnQtyChange;
 
 public class NumSelectView extends LinearLayout {
     Context context;
@@ -20,7 +21,11 @@ public class NumSelectView extends LinearLayout {
     TextView tvNum;
     int num = 0;
     int max = 10000;
+    OnQtyChange onQtyChange;
 
+    public void setOnQtyChange(OnQtyChange onQtyChange) {
+        this.onQtyChange = onQtyChange;
+    }
     public NumSelectView(Context context) {
         this(context, null);
     }
@@ -69,6 +74,9 @@ public class NumSelectView extends LinearLayout {
                 if (num < max) {
                     num = num + 1;
                     tvNum.setText(num + "");
+                    if (onQtyChange!=null){
+                        onQtyChange.onQty(num);
+                    }
                 }
             }
         });
@@ -90,6 +98,9 @@ public class NumSelectView extends LinearLayout {
                 if (num > 0) {
                     num = num - 1;
                     tvNum.setText(num + "");
+                    if (onQtyChange!=null){
+                        onQtyChange.onQty(num);
+                    }
                 }
             }
         });

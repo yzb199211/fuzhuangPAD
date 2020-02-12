@@ -129,6 +129,7 @@
     </LinearLayout>
 
     <com.yyy.fuzhuangpad.view.color.ColorGroup
+        android:id="@+id/cg_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_5"
@@ -192,6 +193,7 @@
         android:paddingRight="@dimen/dp_20">
 
         <LinearLayout
+            android:id="@+id/ll_style"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" />
