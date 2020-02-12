@@ -12,16 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
-import com.yyy.fuzhuangpad.style.StyleBean;
+import com.yyy.fuzhuangpad.util.ImageLoaderUtil;
 
 import java.util.List;
 
 public class BillStyleAdapter extends RecyclerView.Adapter<BillStyleAdapter.VH> {
     Context context;
-    List<StyleBean> list;
+    List<BillStyle> list;
     OnItemClickListener onItemClickListener;
 
-    public BillStyleAdapter(Context context, List<StyleBean> list) {
+    public BillStyleAdapter(Context context, List<BillStyle> list) {
         this.context = context;
         this.list = list;
     }
@@ -35,10 +35,11 @@ public class BillStyleAdapter extends RecyclerView.Adapter<BillStyleAdapter.VH> 
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        StyleBean style = list.get(position);
-        holder.tvPrice.setText(style.getsCustStyleNo());
+        BillStyle style = list.get(position);
+        holder.tvNo.setText(style.getsStyleNo());
         holder.tvClass.setText(style.getsClassName());
         holder.tvPrice.setText("零售：" + style.getfCostPrice());
+        ImageLoaderUtil.loadDrawableImg(holder.ivLogo, R.mipmap.default_style);
         holder.setIsRecyclable(false);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

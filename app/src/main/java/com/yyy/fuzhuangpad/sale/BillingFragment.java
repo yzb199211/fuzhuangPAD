@@ -199,6 +199,11 @@ public class BillingFragment extends Fragment {
 
     private void go2Detail(@Nullable String data) {
         Intent intent = new Intent();
+        intent.setClass(getActivity(), BillDetailActivity.class);
+        if (StringUtil.isNotEmpty(data)) {
+            intent.putExtra("data", data);
+        }
+        startActivityForResult(intent, CodeUtil.BILLINGDETAIL);
     }
 
     private void initRecycleView() {
@@ -388,7 +393,7 @@ public class BillingFragment extends Fragment {
                 }
             }
         })
-                .setTitleText("类别选择")
+                .setTitleText("门店选择")
                 .setContentTextSize(18)//设置滚轮文字大小
                 .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
                 .setLabels("", "", "")
@@ -399,13 +404,16 @@ public class BillingFragment extends Fragment {
         pvShop.show();
     }
 
-    @OnClick({R.id.bwi_remove, R.id.bwi_search})
+    @OnClick({R.id.bwi_remove, R.id.bwi_search, R.id.bwi_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bwi_remove:
                 clearFilter();
                 break;
             case R.id.bwi_search:
+                break;
+            case R.id.bwi_add:
+                go2Detail(null);
                 break;
             default:
                 break;
@@ -501,14 +509,14 @@ public class BillingFragment extends Fragment {
     }
 
 
-    private  FrameLayout.LayoutParams initPvTimeDialog() {
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    PxUtil.getWidth(getActivity()) / 2,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-            params.leftMargin = 0;
-            params.rightMargin = 0;
-           return params;
+    private FrameLayout.LayoutParams initPvTimeDialog() {
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                PxUtil.getWidth(getActivity()) / 2,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+        params.leftMargin = 0;
+        params.rightMargin = 0;
+        return params;
     }
 
 

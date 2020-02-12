@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_activity_dialog"
     android:orientation="vertical"
     tools:context=".sale.BillingStyleSelectActivity">
 
@@ -11,12 +12,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_style"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_0"
-        android:layout_weight="1"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"></androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

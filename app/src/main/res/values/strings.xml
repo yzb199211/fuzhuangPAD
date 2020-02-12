@@ -78,8 +78,10 @@
     <string name="style_form_num">序号</string>
     <string name="style_form_code">款号</string>
     <string name="style_form_name">名称</string>
+    <string name="style_form_color">颜色</string>
     <string name="style_form_type">类别</string>
     <string name="style_form_sizes">尺码组</string>
+    <string name="style_form_size">尺码</string>
     <string name="style_form_customer">客户</string>
     <string name="style_form_saler">业务员</string>
     <string name="style_form_year">年份</string>
@@ -119,6 +121,17 @@
     <string name="sale_billing_detail_remark">备注</string>
     <string name="sale_billing_detail_add">+新增</string>
     <string name="sale_billing_detail_add_style">添加款式</string>
+    <string name="sale_billing_empty_shop">请选择门店</string>
+
+    <string name="sale_billing_add_code">款号</string>
+    <string name="sale_billing_add_color">色号</string>
+    <string name="sale_billing_add_size">尺码</string>
+    <string name="sale_billing_add_qty">数量</string>
+    <string name="sale_billing_add_price">单价</string>
+    <string name="sale_billing_add_total">小计</string>
+    <string name="sale_billing_add_remark">备注</string>
+    <string name="sale_billing_add_operate">操作</string>
+
 
     <!--commonBtn-->
     <string name="common_add">新增</string>

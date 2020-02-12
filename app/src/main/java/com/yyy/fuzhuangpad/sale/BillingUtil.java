@@ -22,4 +22,18 @@ public class BillingUtil {
         list.add(new FormColumn(context.getString(R.string.sale_billing_form_sum), true));
         return list;
     }
+
+    public static List<FormColumn> getAddTitles(Context context) {
+        List<FormColumn> list = new ArrayList<>();
+        list.add(new FormColumn(context.getString(R.string.sale_billing_form_num), 0.5f, true));
+        list.add(new FormColumn(context.getString(R.string.sale_billing_add_code), true));
+        list.add(new FormColumn(context.getString(R.string.sale_billing_add_color), true));
+        list.add(new FormColumn(context.getString(R.string.sale_billing_add_size), true));
+        list.add(new FormColumn(context.getString(R.string.sale_billing_add_qty), true));
+        list.add(new FormColumn(context.getString(R.string.sale_billing_add_price), true));
+        list.add(new FormColumn(context.getString(R.string.sale_billing_add_total), true));
+        list.add(new FormColumn(context.getString(R.string.sale_billing_add_remark), true));
+        list.add(new FormColumn(context.getString(R.string.sale_billing_add_operate), true));
+        return list;
+    }
 }

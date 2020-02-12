@@ -94,7 +94,7 @@ public class SearchText extends LinearLayout {
     }
 
     private void initEdit() {
-        tvContent = new EditText(context);
+        tvContent = new TextView(context);
         tvContent.setSingleLine();
         tvContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, editSize);
         tvContent.setTextColor(editColor);
