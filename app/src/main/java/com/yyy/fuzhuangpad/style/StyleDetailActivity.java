@@ -525,7 +525,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         initDialogWindow(pvDate.getDialog().getWindow());
     }
 
-    @OnClick({R.id.bw_exit, R.id.bw_save, R.id.bwi_add_color})
+    @OnClick({R.id.bw_exit, R.id.bw_save, R.id.bwi_add_color, R.id.bw_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bw_exit:
@@ -537,7 +537,64 @@ public class StyleDetailActivity extends AppCompatActivity {
             case R.id.bwi_add_color:
                 selectColor();
                 break;
+            case R.id.bw_delete:
+                delete();
+                break;
+            default:
+                break;
         }
+    }
+
+    private void delete() {
+        new NetUtil(deteleParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initDeleteData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initDeleteData(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject(data);
+        if (jsonObject.optBoolean("success")) {
+            LoadingFinish(getString(R.string.success_delete));
+            eixt();
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private List<NetParams> deteleParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", Otype.OperateData));
+        params.add(new NetParams("mainquery", getDeleltMainquery()));
+        return params;
+    }
+
+    private String getDeleltMainquery() {
+        MainQuery mainQuery = new MainQuery();
+        mainQuery.setFields("");
+        mainQuery.setFieldsValues("");
+        mainQuery.setFieldKeys(styleBean.paramsFieldKeys());
+        mainQuery.setFieldKeysValues(styleBean.paramsFieldKeysValues());
+        mainQuery.setFilterFields(styleBean.paramsFilterFields());
+        mainQuery.setFilterValues(styleBean.paramsFilterValues());
+        mainQuery.setFilterComOprts(styleBean.paramsFilterComOprts());
+        mainQuery.setTableName("BscDataStyleM");
+        mainQuery.setOperatortype(Operatortype.delete);
+        return new Gson().toJson(mainQuery);
     }
 
     private void save() {
@@ -564,6 +621,7 @@ public class StyleDetailActivity extends AppCompatActivity {
 //
 //        }
     }
+
     private void initSaveDate(String data) throws JSONException {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
@@ -591,7 +649,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         mainQuery.setFilterFields(styleBean.paramsFilterFields());
         mainQuery.setFilterValues(styleBean.paramsFilterValues());
         mainQuery.setFilterComOprts(styleBean.paramsFilterComOprts());
-        mainQuery.setTableName("BscDataColor");
+        mainQuery.setTableName("BscDataStyleM");
         mainQuery.setOperatortype(operatortype);
         mainQuery.setData("[" + getChildquery() + "]");
         return new Gson().toJson(mainQuery);

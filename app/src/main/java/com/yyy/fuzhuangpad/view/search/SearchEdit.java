@@ -72,9 +72,7 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
     }
 
     private void initTitle() {
-        if (isMust) {
             addMust();
-        }
         tvTitle = new TextView(context);
         tvTitle.setText(title);
         tvTitle.setSingleLine();
@@ -90,6 +88,8 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
         textView.setText("*");
         textView.setTextColor(context.getResources().getColor(R.color.red));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
+        if (!isMust)
+            textView.setVisibility(INVISIBLE);
         addView(textView);
     }
 

@@ -72,9 +72,7 @@ public class SearchText extends LinearLayout {
     }
 
     private void initTitle() {
-        if (isMust) {
-            addMust();
-        }
+        addMust();
         tvTitle = new TextView(context);
         tvTitle.setText(title);
         tvTitle.setSingleLine();
@@ -90,6 +88,8 @@ public class SearchText extends LinearLayout {
         textView.setText("*");
         textView.setTextColor(context.getResources().getColor(R.color.red));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
+        if (!isMust)
+            textView.setVisibility(INVISIBLE);
         addView(textView);
     }
 
