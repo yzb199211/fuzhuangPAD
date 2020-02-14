@@ -168,15 +168,48 @@ public class StyleBean {
 
     public List<FormColumn> getList() {
         List<FormColumn> list = new ArrayList<>();
-        list.add(new FormColumn(row+1 + "", 0.5f, true, 0, row));
-        list.add(new FormColumn(sStyleNo,1.0f,true,1,row));
-        list.add(new FormColumn(sStyleName,1.0f,true,2,row));
-        list.add(new FormColumn(sClassName,1.0f,true,3,row));
-        list.add(new FormColumn(sGroupName,1.0f,true,4,row));
-        list.add(new FormColumn(sCustShortName,1.0f,true,5,row));
-        list.add(new FormColumn(iYear,1.0f,true,6,row));
-        list.add(new FormColumn(fCostPrice+"",1.0f,true,7,row));
-        list.add(new FormColumn(fBulkTotal1+"",1.0f,true,8,row));
+        list.add(new FormColumn(row + 1 + "", 0.5f, true, 0, row));
+        list.add(new FormColumn(sStyleNo, 1.0f, true, 1, row));
+        list.add(new FormColumn(sStyleName, 1.0f, true, 2, row));
+        list.add(new FormColumn(sClassName, 1.0f, true, 3, row));
+        list.add(new FormColumn(sGroupName, 1.0f, true, 4, row));
+        list.add(new FormColumn(sCustShortName, 1.0f, true, 5, row));
+        list.add(new FormColumn(iYear, 1.0f, true, 6, row));
+        list.add(new FormColumn(fCostPrice + "", 1.0f, true, 7, row));
+        list.add(new FormColumn(fBulkTotal1 + "", 1.0f, true, 8, row));
         return list;
+    }
+
+    public String paramsFields() {
+        return "iRecNo" + ",sStyleNo" + ",sStyleName" + ",sClassID"
+                + ",sSizeGroupID" + ",iBscDataCustomerRecNo" + ",iYear"
+                + ",fCostPrice" + ",fBulkTotal1" + ",fSalePrice" + ",sCustStyleNo"
+                + ",sWaterElents" + ",sReMark" + ",dStopDate";
+    }
+
+    public String paramsFieldsValues() {
+        return iRecNo + "," + sStyleNo + "," + sStyleName + "," + sClassID
+                + "," + sSizeGroupID + "," + iBscDataCustomerRecNo + "," + iYear
+                + "," + fCostPrice + "," + fBulkTotal1 + "," + fSalePrice + "," + sCustStyleNo
+                + "," + sWaterElents + "," + sReMark + "," + dStopDate;
+    }
+    public String paramsFilterFields() {
+        return "iRecNo";
+    }
+
+    public String paramsFilterComOprts() {
+        return "=";
+    }
+
+    public String paramsFilterValues() {
+        return iRecNo == 0 ? "" : iRecNo + "";
+    }
+
+    public String paramsFieldKeys() {
+        return "iRecNo";
+    }
+
+    public String paramsFieldKeysValues() {
+        return iRecNo == 0 ? "" : iRecNo + "";
     }
 }

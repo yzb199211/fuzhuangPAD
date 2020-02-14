@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
@@ -21,6 +22,7 @@ import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
 import com.yyy.fuzhuangpad.util.StringUtil;
@@ -534,6 +536,10 @@ public class BillDetailActivity extends AppCompatActivity {
                 go2AddCustomer();
                 break;
             case R.id.bwi_add_style:
+                if (shopId == 0) {
+                    Toast(getString(R.string.sale_billing_empty_shop));
+                    return;
+                }
                 go2AddStyle();
                 break;
         }
@@ -545,7 +551,7 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void go2AddStyle() {
-        startActivity(new Intent().setClass(this, BillingStyleSelectActivity.class));
+        startActivityForResult(new Intent().setClass(this, BillingStyleSelectActivity.class), CodeUtil.BILLINGSTYLE);
     }
 
     private void initPvTimeWindow(Window dialogWindow) {
@@ -617,5 +623,19 @@ public class BillDetailActivity extends AppCompatActivity {
         params.leftMargin = 0;
         params.rightMargin = 0;
         return params;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == CodeUtil.BILLINGSTYLE || data != null) {
+            go2StyleDetail(data);
+        }
+    }
+
+    private void go2StyleDetail(Intent data) {
+        data.setClass(this, BillingStyleDetailActivity.class);
+        data.putExtra("shopId", shopId + "");
+        startActivityForResult(data, CodeUtil.BILLINGSTYLEDETAIL);
     }
 }

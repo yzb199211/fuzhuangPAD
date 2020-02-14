@@ -38,7 +38,11 @@ public class ColorList extends LinearLayout {
         this.colors = colors;
         initData();
     }
-
+    public void setData(List<StyleColor> colors,List<StyleColor> colorsChecked) {
+        this.colors = colors;
+        this.colorsChecked .addAll(colorsChecked);
+        initData();
+    }
     private void initData() {
         String className = "";
         List<List<StyleColor>> groups = new ArrayList<>();
@@ -83,7 +87,7 @@ public class ColorList extends LinearLayout {
         addView(colorItem);
     }
 
-    private List<StyleColor> getColors() {
+    public List<StyleColor> getColors() {
         return colorsChecked;
     }
 }

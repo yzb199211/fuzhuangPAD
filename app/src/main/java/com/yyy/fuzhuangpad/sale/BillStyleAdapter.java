@@ -21,6 +21,10 @@ public class BillStyleAdapter extends RecyclerView.Adapter<BillStyleAdapter.VH> 
     List<BillStyle> list;
     OnItemClickListener onItemClickListener;
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     public BillStyleAdapter(Context context, List<BillStyle> list) {
         this.context = context;
         this.list = list;

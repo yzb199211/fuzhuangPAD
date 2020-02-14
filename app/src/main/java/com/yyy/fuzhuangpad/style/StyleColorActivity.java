@@ -1,5 +1,6 @@
 package com.yyy.fuzhuangpad.style;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
 import com.yyy.fuzhuangpad.util.StringUtil;
@@ -42,8 +44,11 @@ public class StyleColorActivity extends AppCompatActivity {
     LinearLayout llColor;
     @BindView(R.id.scroll)
     ScrollView scrollView;
+    ColorList colorList;
 
     List<StyleColor> colors;
+    List<StyleColor> colorsChecked;
+    List<StyleColor> colorsOld;
     SharedPreferencesHelper preferencesHelper;
     private String url;
     private String address;
@@ -58,31 +63,23 @@ public class StyleColorActivity extends AppCompatActivity {
         preferencesHelper = new SharedPreferencesHelper(this, getString(R.string.preferenceCache));
         init();
         getData();
-//        ColorGroup group = new ColorGroup(this);
-//        List<StyleColor> list = new ArrayList<>();
-//        list.add(new StyleColor("红色", "红色"));
-//        list.add(new StyleColor("绿色", "绿色"));
-//        list.add(new StyleColor("蓝", "蓝"));
-//        list.add(new StyleColor("白色", "白色"));
-//        list.add(new StyleColor("白色", "白色"));
-//        list.add(new StyleColor("白色", "白色"));
-//        list.add(new StyleColor("白色", "白色"));
-//        list.add(new StyleColor("白色", "白色11111111"));
-//        list.add(new StyleColor("白色", "白色"));
-//        list.add(new StyleColor("白色", "白色1111"));
-//        list.add(new StyleColor("白色", "白色"));
-//        list.add(new StyleColor("白色", "白色"));
-//        list.add(new StyleColor("白色", "白色11111"));
-//        list.add(new StyleColor("白色", "白色"));
-//        list.add(new StyleColor("白色", "白色"));
-//        group.setData(list, 12, 20, 5, 20, 5, 20, 20, 20, 20);
-//        llColor.addView(group);
-
     }
 
     private void init() {
-        initDefaultData();
         initList();
+        initIntentData();
+        initDefaultData();
+    }
+
+    private void initList() {
+        colors = new ArrayList<>();
+        colorsChecked = new ArrayList<>();
+        colorsOld = new ArrayList<>();
+    }
+
+    private void initIntentData() {
+        colorsOld = new Gson().fromJson(getIntent().getStringExtra("colors"), new TypeToken<List<StyleColor>>() {
+        }.getType());
     }
 
     private void initDefaultData() {
@@ -91,9 +88,6 @@ public class StyleColorActivity extends AppCompatActivity {
         url = address + NetConfig.server + NetConfig.MobileAppHandler_Method;
     }
 
-    private void initList() {
-        colors = new ArrayList<>();
-    }
 
     private void getData() {
         LoadingDialog.showDialogForLoading(this);
@@ -141,14 +135,34 @@ public class StyleColorActivity extends AppCompatActivity {
     private void setColorView() {
         LoadingFinish(null);
         if (colors.size() > 0) {
+            setColorChecked();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ColorList colorList = new ColorList(StyleColorActivity.this);
-                    colorList.setData(colors);
+                    colorList = new ColorList(StyleColorActivity.this);
+                    colorList.setData(colors, colorsChecked);
                     llColor.addView(colorList);
                 }
             });
+        }
+    }
+
+    private void setColorChecked() {
+        if (colorsOld.size() > 0) {
+            for (StyleColor color : colorsOld) {
+                if (color.isChecked()) {
+                    setChecked(color.getiRecNo());
+                }
+            }
+        }
+    }
+
+    private void setChecked(int iRecNo) {
+        for (int i = 0; i < colors.size(); i++) {
+            if (iRecNo == colors.get(i).getiRecNo()) {
+                colors.get(i).setChecked(true);
+                colorsChecked.add(colors.get(i));
+            }
         }
     }
 
@@ -177,7 +191,11 @@ public class StyleColorActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.bw_save:
-
+                if (colorList != null) {
+                    colorList.getColors();
+                    setResult(CodeUtil.STYLECOLOR, new Intent().putExtra("colors", new Gson().toJson(colorList.getColors())));
+                    finish();
+                }
                 break;
         }
     }

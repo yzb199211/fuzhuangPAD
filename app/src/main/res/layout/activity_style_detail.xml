@@ -288,11 +288,11 @@
                     android:id="@+id/bwi_add_color"
                     android:layout_width="@dimen/dp_50"
                     android:layout_height="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_10"
                     android:background="@drawable/bg_detail_add"
                     app:bwiTilte="@string/common_add"
                     app:bwiTitleColor="@color/white"
-                    app:bwiTitleSize="@dimen/sp_10"
-                    android:layout_marginRight="@dimen/dp_10"/>
+                    app:bwiTitleSize="@dimen/sp_10" />
             </LinearLayout>
 
             <View
@@ -300,6 +300,12 @@
                 android:layout_height="@dimen/dp_3"
                 android:layout_marginTop="@dimen/dp_3"
                 android:background="@drawable/bg_line_dotted" />
+
+            <com.yyy.fuzhuangpad.view.color.ColorGroup
+                android:id="@+id/cg_color"
+                android:layout_width="@dimen/dp_370"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_3" />
 
         </LinearLayout>
 

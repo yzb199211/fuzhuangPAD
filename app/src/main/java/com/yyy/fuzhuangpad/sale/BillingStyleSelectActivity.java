@@ -1,5 +1,6 @@
 package com.yyy.fuzhuangpad.sale;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
+import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -21,6 +23,7 @@ import com.yyy.fuzhuangpad.util.Toasts;
 import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
+import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,10 +36,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.yyy.fuzhuangpad.util.CodeUtil.BILLINGSTYLE;
+
 public class BillingStyleSelectActivity extends AppCompatActivity {
     SharedPreferencesHelper preferencesHelper;
     @BindView(R.id.rv_style)
     RecyclerView rvStyle;
+    @BindView(R.id.bw_save)
+    ButtonWithImg bwSave;
 
     private String url;
     private String address;
@@ -122,6 +129,15 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
 
     private void initAdapter() {
         mAdapter = new BillStyleAdapter(this, styles);
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                Intent intent = new Intent();
+                intent.putExtra("style", new Gson().toJson(styles.get(pos)));
+                setResult(BILLINGSTYLE, intent);
+                finish();
+            }
+        });
         rvStyle.setAdapter(mAdapter);
     }
 
@@ -130,7 +146,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
         list.add(new NetParams("sCompanyCode", companyCode));
         list.add(new NetParams("otype", "GetTableData"));
         list.add(new NetParams("sTableName", "vwBscDataStyleM"));
-        list.add(new NetParams("sFields", "iRecNo,sStyleNo,sStyleName,sClassID,sClassName,fCostPrice,sReMark"));
+        list.add(new NetParams("sFields", "iRecNo,sStyleNo,sStyleName,sClassID,sClassName,fCostPrice,sReMark,sGroupName"));
         list.add(new NetParams("sFilters", ""));
         return list;
     }
@@ -154,6 +170,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
 
     private void initView() {
         rvStyle.setLayoutManager(new GridLayoutManager(this, 6));
+        bwSave.setVisibility(View.INVISIBLE);
     }
 
     @OnClick({R.id.bw_exit, R.id.bw_save})

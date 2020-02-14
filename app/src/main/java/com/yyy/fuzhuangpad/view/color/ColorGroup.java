@@ -2,6 +2,7 @@ package com.yyy.fuzhuangpad.view.color;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,15 @@ import com.yyy.fuzhuangpad.style.StyleColor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColorGroup extends ViewGroup {
+public class ColorGroup<T extends StyleColor> extends ViewGroup {
     private static final String TAG = "WrapLayout";
     private Context context;
-    private List<StyleColor> colors;
+    private List<T> colors;
+    private boolean canClick = true;
+
+    public void setCanClick(boolean canClick) {
+        this.canClick = canClick;
+    }
 
     public ColorGroup(Context context) {
         this(context, null);
@@ -27,6 +33,7 @@ public class ColorGroup extends ViewGroup {
     public ColorGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+        colors = new ArrayList<>();
     }
 
 
@@ -44,12 +51,15 @@ public class ColorGroup extends ViewGroup {
      * @param mr       右外边距
      * @param mb       下外边距
      */
-    public void setData(List<StyleColor> data, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
-        this.colors = data;
+    public void setData(List<T> data, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
+        colors.clear();
+        removeAllViews();
+        invalidate();
+        this.colors.addAll(data);
         createChild(data, textSize, pl, pt, pr, pb, ml, mt, mr, mb);
     }
 
-    private void createChild(List<StyleColor> data, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
+    private void createChild(List<T> data, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
         int size = data.size();
         for (int i = 0; i < size; i++) {
             String text = data.get(i).getsColorName();
@@ -59,7 +69,7 @@ public class ColorGroup extends ViewGroup {
             TextView btn = new TextView(context);
             btn.setGravity(Gravity.CENTER);
             btn.setText(text);
-            btn.setTextSize(textSize);
+            btn.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
 //            } else if (style == BUTTON_STYLE) {
 //                btn = new Button(context);
 //                ((Button) btn).setGravity(Gravity.CENTER);
@@ -83,6 +93,9 @@ public class ColorGroup extends ViewGroup {
             btn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (!canClick) {
+                        return;
+                    }
                     if (colors.get(finalI).isChecked()) {
                         setNormal(btn);
                         colors.get(finalI).setChecked(false);
@@ -91,7 +104,7 @@ public class ColorGroup extends ViewGroup {
                         colors.get(finalI).setChecked(true);
                     }
                     if (markClickListener != null)
-                        markClickListener.clickMark(finalI,colors.get(finalI).isChecked());
+                        markClickListener.clickMark(finalI, colors.get(finalI).isChecked());
                 }
             });
             this.addView(btn);
@@ -115,7 +128,7 @@ public class ColorGroup extends ViewGroup {
     }
 
     public interface MarkClickListener {
-        void clickMark(int position,boolean isChecked);
+        void clickMark(int position, boolean isChecked);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.yyy.fuzhuangpad.style;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
@@ -25,11 +27,17 @@ import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
 import com.yyy.fuzhuangpad.util.StringUtil;
 import com.yyy.fuzhuangpad.util.TimeUtil;
 import com.yyy.fuzhuangpad.util.Toasts;
+import com.yyy.fuzhuangpad.util.net.MainQuery;
+import com.yyy.fuzhuangpad.util.net.MainQueryChild;
+import com.yyy.fuzhuangpad.util.net.MainQueryExtend;
 import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
 import com.yyy.fuzhuangpad.util.net.Operatortype;
+import com.yyy.fuzhuangpad.util.net.Otype;
 import com.yyy.fuzhuangpad.view.SelectView;
+import com.yyy.fuzhuangpad.view.color.ColorGroup;
+import com.yyy.fuzhuangpad.view.color.ColorList;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
 import com.yyy.yyylibrary.pick.builder.OptionsPickerBuilder;
 import com.yyy.yyylibrary.pick.builder.TimePickerBuilder;
@@ -82,10 +90,14 @@ public class StyleDetailActivity extends AppCompatActivity {
     SearchEdit sePriceRetail;
     @BindView(R.id.se_price_tag)
     SearchEdit sePriceTag;
+    @BindView(R.id.cg_color)
+    ColorGroup colorGroup;
 
     StyleBean styleBean;
+
     private List<StyleType> styleTypes;
     private List<StyleSize> styleSizes;
+    private List<StyleColor> styleColors;
     SharedPreferencesHelper preferencesHelper;
     private String url;
     private String address;
@@ -104,7 +116,6 @@ public class StyleDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_style_detail);
         ButterKnife.bind(this);
         preferencesHelper = new SharedPreferencesHelper(this, getString(R.string.preferenceCache));
-        getData();
         init();
     }
 
@@ -116,17 +127,19 @@ public class StyleDetailActivity extends AppCompatActivity {
         getWindow().setAttributes(params);
     }
 
-    private void getData() {
+    private void getIntentData() {
         String data = getIntent().getStringExtra("data");
         if (StringUtil.isNotEmpty(data)) {
             styleBean = new Gson().fromJson(data, StyleBean.class);
             operatortype = Operatortype.update;
             setData();
+            getColorsData(styleBean.getiRecNo());
         } else {
             styleBean = new StyleBean();
             operatortype = Operatortype.add;
         }
     }
+
 
     private void setData() {
         seCode.setText(styleBean.getsStyleNo());
@@ -144,10 +157,83 @@ public class StyleDetailActivity extends AppCompatActivity {
         sePriceTag.setText(styleBean.getfCostPrice() + "");
     }
 
+    private void getColorsData(int id) {
+        new NetUtil(getColorsParams(id), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initColorData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_data));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initColorData(String string) throws JSONException {
+        JSONObject jsonObject = new JSONObject(string);
+        if (jsonObject.optBoolean("success")) {
+            setListData(jsonObject.optJSONObject("dataset").optString("vwBscDataStyleDColor"));
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private void setListData(String data) {
+        if (StringUtil.isNotEmpty(data)) {
+            styleColors.addAll(new Gson().fromJson(data, new TypeToken<List<StyleColor>>() {
+            }.getType()));
+            setColorView();
+        } else {
+            LoadingFinish(getString(R.string.error_empty));
+        }
+    }
+
+    private void setColorView() {
+        LoadingFinish(null);
+        if (styleColors.size() > 0) {
+            initColorChecked();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    colorGroup.setData(styleColors, getResources().getDimensionPixelSize(R.dimen.sp_10), 20, 5, 20, 5, 20, 20, 20, 20);
+                }
+            });
+        }
+    }
+
+    private void initColorChecked() {
+        for (int i = 0; i < styleColors.size(); i++) {
+            styleColors.get(i).setChecked(true);
+            styleColors.get(i).setiRecNo(styleColors.get(i).getiBscDataColorRecNo());
+        }
+    }
+
+    private List<NetParams> getColorsParams(int id) {
+        List<NetParams> list = new ArrayList<>();
+        list.add(new NetParams("sCompanyCode", companyCode));
+        list.add(new NetParams("otype", "GetTableData"));
+        list.add(new NetParams("sTableName", "vwBscDataStyleDColor"));
+        list.add(new NetParams("sFields", "iRecNo,sColorName"));
+        list.add(new NetParams("sFilters", "iMainRecNo=" + id));
+        return list;
+    }
+
     private void init() {
         initDefaultData();
         initList();
         initView();
+        getIntentData();
     }
 
     private void initDefaultData() {
@@ -159,9 +245,11 @@ public class StyleDetailActivity extends AppCompatActivity {
     private void initList() {
         styleSizes = new ArrayList<>();
         styleTypes = new ArrayList<>();
+        styleColors = new ArrayList<>();
     }
 
     private void initView() {
+        colorGroup.setCanClick(false);
         setTypeListener();
         setSizeListener();
         setYearListener();
@@ -444,6 +532,7 @@ public class StyleDetailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.bw_save:
+                save();
                 break;
             case R.id.bwi_add_color:
                 selectColor();
@@ -451,10 +540,88 @@ public class StyleDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void save() {
+        new NetUtil(getSave(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initSaveDate(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+//        if (operatortype.equals(Operatortype.add)) {
+//            saveAdd();
+//        } else if (operatortype.equals(Operatortype.update)) {
+//
+//        }
+    }
+    private void initSaveDate(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject(data);
+        if (jsonObject.optBoolean("success")) {
+            LoadingFinish(getString(R.string.success_save));
+            eixt();
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private List<NetParams> getSave() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", Otype.OperateData));
+        params.add(new NetParams("mainquery", getMainquery()));
+        return params;
+    }
+
+    private String getMainquery() {
+        MainQueryExtend mainQuery = new MainQueryExtend();
+        mainQuery.setFields(styleBean.paramsFields());
+        mainQuery.setFieldsValues(styleBean.paramsFieldsValues());
+        mainQuery.setFieldKeys(styleBean.paramsFieldKeys());
+        mainQuery.setFieldKeysValues(styleBean.paramsFieldKeysValues());
+        mainQuery.setFilterFields(styleBean.paramsFilterFields());
+        mainQuery.setFilterValues(styleBean.paramsFilterValues());
+        mainQuery.setFilterComOprts(styleBean.paramsFilterComOprts());
+        mainQuery.setTableName("BscDataColor");
+        mainQuery.setOperatortype(operatortype);
+        mainQuery.setData("[" + getChildquery() + "]");
+        return new Gson().toJson(mainQuery);
+    }
+
+    private String getChildquery() {
+        MainQueryChild mainQueryChild = new MainQueryChild();
+        mainQueryChild.setChildtype(StyleColorUpload.childtypeParams());
+        mainQueryChild.setFieldkey(StyleColorUpload.fieldkeyParams());
+        mainQueryChild.setLinkfield(StyleColorUpload.linkfieldParams());
+        mainQueryChild.setTablename(StyleColorUpload.tablenameParams());
+        mainQueryChild.setData(getColors());
+        return new Gson().toJson(mainQueryChild);
+    }
+
+    private String getColors() {
+        List<StyleColorUpload> colors = new ArrayList<>();
+        for (StyleColor color : styleColors) {
+            StyleColorUpload item = new StyleColorUpload();
+            item.setiBscDataColorRecNo(color.getiRecNo());
+            item.setsColorName(color.getsColorName());
+        }
+        return new Gson().toJson(colors);
+    }
+
     private void selectColor() {
         Intent intent = new Intent();
+        intent.putExtra("colors", new Gson().toJson(styleColors));
         intent.setClass(this, StyleColorActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, CodeUtil.STYLECOLOR);
     }
 
     private void LoadingFinish(String msg) {
@@ -511,5 +678,23 @@ public class StyleDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == CodeUtil.STYLECOLOR && data != null) {
+            String colors = data.getStringExtra("colors");
+            setStyleColors(colors);
+        }
+    }
+
+    private void setStyleColors(String data) {
+//        Log.e("colors", data);
+        styleColors.clear();
+        List<StyleColor> colors = new Gson().fromJson(data, new TypeToken<List<StyleColor>>() {
+        }.getType());
+        styleColors.addAll(colors);
+        colorGroup.setData(styleColors, getResources().getDimensionPixelSize(R.dimen.sp_10), 20, 5, 20, 5, 20, 20, 20, 20);
     }
 }

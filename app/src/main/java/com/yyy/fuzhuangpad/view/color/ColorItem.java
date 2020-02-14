@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
+import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.color.OnColorClick;
 import com.yyy.fuzhuangpad.style.StyleColor;
 
@@ -77,7 +78,7 @@ public class ColorItem extends LinearLayout {
         this.colors.clear();
         this.colors.addAll(colors);
         colorTitle.setTitle(title);
-        colorGroup.setData(colors, 12, 20, 5, 20, 5, 20, 20, 20, 20);
+        colorGroup.setData(colors,  getResources().getDimensionPixelSize(R.dimen.sp_10), 20, 5, 20, 5, 20, 20, 20, 20);
     }
 
 }

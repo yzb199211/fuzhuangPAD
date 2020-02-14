@@ -55,6 +55,7 @@
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_toRightOf="@id/iv_logo"
+            app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_add_price"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
@@ -66,6 +67,7 @@
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_toRightOf="@id/tv_style_no"
+            app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_add_name"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
@@ -78,6 +80,7 @@
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_toRightOf="@id/tv_style_no"
+            app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_add_sizes"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
@@ -90,6 +93,7 @@
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_toRightOf="@id/tv_style_no"
+            app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_add_storage"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
@@ -133,8 +137,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_5"
-        android:paddingLeft="@dimen/dp_20"
-        android:paddingRight="@dimen/dp_20" />
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_20" />
 
     <View
         android:layout_width="match_parent"
@@ -159,6 +163,7 @@
             android:text="@string/sale_billing_add_color"
             android:textColor="@color/default_title_color"
             android:textSize="@dimen/sp_10" />
+
         <TextView
             android:layout_width="@dimen/dp_0"
             android:layout_height="match_parent"
@@ -167,6 +172,7 @@
             android:text="@string/sale_billing_add_size"
             android:textColor="@color/default_title_color"
             android:textSize="@dimen/sp_10" />
+
         <TextView
             android:layout_width="@dimen/dp_0"
             android:layout_height="match_parent"
@@ -175,6 +181,7 @@
             android:text="@string/sale_billing_add_storage"
             android:textColor="@color/default_title_color"
             android:textSize="@dimen/sp_10" />
+
         <TextView
             android:layout_width="@dimen/dp_0"
             android:layout_height="match_parent"
