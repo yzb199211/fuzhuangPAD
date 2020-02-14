@@ -30,6 +30,7 @@ import com.yyy.fuzhuangpad.util.net.NetUtil;
 import com.yyy.fuzhuangpad.util.net.Operatortype;
 import com.yyy.fuzhuangpad.util.net.Otype;
 import com.yyy.fuzhuangpad.view.SelectView;
+import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.remark.RemarkEdit;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
 import com.yyy.yyylibrary.pick.builder.OptionsPickerBuilder;
@@ -77,6 +78,8 @@ public class CustomerDetailActivity extends AppCompatActivity {
     RemarkEdit reRemark;
     @BindView(R.id.se_name_short)
     SearchEdit seNameShort;
+    @BindView(R.id.bw_delete)
+    ButtonWithImg bwDelete;
 
     CustomerBeans customerBeans;
     SharedPreferencesHelper preferencesHelper;
@@ -118,6 +121,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
         } else {
             customerBeans = new CustomerBeans();
             operatortype = Operatortype.add;
+            bwDelete.setVisibility(View.GONE);
         }
     }
 
@@ -391,7 +395,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
         initDialogWindow(pvDate.getDialog().getWindow());
     }
 
-    @OnClick({R.id.bw_exit, R.id.bw_save})
+    @OnClick({R.id.bw_exit, R.id.bw_save, R.id.bw_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bw_exit:
@@ -401,9 +405,62 @@ public class CustomerDetailActivity extends AppCompatActivity {
                 setCustomerBeans();
                 save();
                 break;
+            case R.id.bw_delete:
+                delete();
+                break;
+        }
+    }
+    private void delete() {
+        new NetUtil(deteleParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initDeleteData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initDeleteData(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject(data);
+        if (jsonObject.optBoolean("success")) {
+            LoadingFinish(getString(R.string.success_delete));
+            eixt();
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
         }
     }
 
+    private List<NetParams> deteleParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", Otype.OperateData));
+        params.add(new NetParams("mainquery", getDeleltMainquery()));
+        return params;
+    }
+
+    private String getDeleltMainquery() {
+        MainQuery mainQuery = new MainQuery();
+        mainQuery.setFields("");
+        mainQuery.setFieldsValues("");
+        mainQuery.setFieldKeys(customerBeans.paramsFieldKeys());
+        mainQuery.setFieldKeysValues(customerBeans.paramsFieldKeysValues());
+        mainQuery.setFilterFields(customerBeans.paramsFilterFields());
+        mainQuery.setFilterValues(customerBeans.paramsFilterValues());
+        mainQuery.setFilterComOprts(customerBeans.paramsFilterComOprts());
+        mainQuery.setTableName("BscDataCustomer");
+        mainQuery.setOperatortype(Operatortype.delete);
+        return new Gson().toJson(mainQuery);
+    }
     private void setCustomerBeans() {
         customerBeans.setsCustID(seCode.getText());
         customerBeans.setsCustName(seName.getText());
@@ -446,6 +503,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
             }
         });
     }
+
     private void initSaveDate(String data) throws JSONException {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
@@ -455,6 +513,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
             LoadingFinish(jsonObject.optString("message"));
         }
     }
+
     private List<NetParams> saveParams() {
         List<NetParams> params = new ArrayList<>();
         params.add(new NetParams("sCompanyCode", companyCode));

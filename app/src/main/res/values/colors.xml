@@ -51,6 +51,7 @@
 
     <!--common-->
     <color name="common_btn_add">#FF0000</color>
+    <color name="common_btn_delete">#d81e06</color>
     <color name="common_btn_search">#4DB2B4</color>
     <color name="common_btn_select">#CCCCCC</color>
     <color name="common_btn_color_checked">#FAC012</color>

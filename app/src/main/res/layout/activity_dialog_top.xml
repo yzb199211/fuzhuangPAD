@@ -18,6 +18,18 @@
         app:bwiTitleSize="@dimen/sp_10" />
 
     <com.yyy.fuzhuangpad.view.button.ButtonWithImg
+        android:id="@+id/bw_delete"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_20"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_5"
+        android:layout_toLeftOf="@id/bw_save"
+        app:bwiSrc="@mipmap/common_delete"
+        app:bwiTilte="@string/common_delete"
+        app:bwiTitleColor="@color/common_btn_delete"
+        app:bwiTitleSize="@dimen/sp_10" />
+
+    <com.yyy.fuzhuangpad.view.button.ButtonWithImg
         android:id="@+id/bw_save"
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_20"
