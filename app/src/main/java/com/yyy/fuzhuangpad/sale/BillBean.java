@@ -8,23 +8,23 @@ import java.util.List;
 
 public class BillBean {
     private int iRecNo;
-    private String sOrderNo;
-    private String dDate;
+    private String sOrderNo="";
+    private String dDate="";
     private int iBscdataStockMRecNo;
-    private String sStockName;
+    private String sStockName="";
     private int iBscDataCustomerRecNo;
-    private String sCustShortName;
+    private String sCustShortName="";
     private int iOrderType;
-    private String sOrderType;
-    private String dOrderDate;
-    private String sSaleID;
-    private String sSaleName;
-    private String sRemark;
+    private String sOrderType="";
+    private String dOrderDate="";
+    private String sSaleID="";
+    private String sSaleName="";
+    private String sRemark="";
     private float fPayMomey;
-    private String sPaymethod;
+    private String sPaymethod="";
     private int iQty;
     private float fTotal;
-    private String sStatusName;
+    private String sStatusName="";
     private int row;
 
     public int getRow() {
@@ -198,6 +198,7 @@ public class BillBean {
                 "fTotal" + "," +
                 "sStatusName";
     }
+
     public List<FormColumn> getList() {
         List<FormColumn> list = new ArrayList<>();
         list.add(new FormColumn(row + 1 + "", 0.5f, true, 0, row));

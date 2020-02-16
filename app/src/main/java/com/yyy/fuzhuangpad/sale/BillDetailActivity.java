@@ -3,6 +3,7 @@ package com.yyy.fuzhuangpad.sale;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,14 @@ import android.widget.TimePicker;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.customer.CustomerDetailActivity;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
@@ -33,6 +38,7 @@ import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
 import com.yyy.fuzhuangpad.view.button.ButtonSelect;
 import com.yyy.fuzhuangpad.view.form.FormRow;
+import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
 import com.yyy.fuzhuangpad.view.search.SearchText;
 import com.yyy.yyylibrary.pick.builder.OptionsPickerBuilder;
@@ -83,6 +89,8 @@ public class BillDetailActivity extends AppCompatActivity {
     private String address;
     private String companyCode;
 
+    private BillBean bill;
+
     private String shop;
     private int shopId;
 
@@ -95,12 +103,15 @@ public class BillDetailActivity extends AppCompatActivity {
     private List<BillShop> shops;
     private List<BillCustomer> customers;
     private List<BillSaler> salers;
+    private List<BillDetailBean> billDetail;
     private OptionsPickerView pvShop;
     private OptionsPickerView pvCustomer;
     private OptionsPickerView pvSaler;
     private TimePickerView pvDate;
     private TimePickerView pvDateDelivery;
     FormRow formTitle;
+    RecyclerView recyclerView;
+    BillDetailAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +126,114 @@ public class BillDetailActivity extends AppCompatActivity {
         initDefaultData();
         initList();
         initView();
+        getIntentData();
+    }
+
+    private void getIntentData() {
+
+        if (StringUtil.isNotEmpty(getIntent().getStringExtra("data"))) {
+            String data = getIntent().getStringExtra("data");
+            bill = new Gson().fromJson(data, BillBean.class);
+            setViewData();
+            if (bill.getiRecNo() != 0) {
+                getData();
+            }
+        }
+
+//        Log.e("data", data);
+    }
+
+    private void setViewData() {
+        seCode.setText(bill.getsOrderNo());
+        shop = bill.getsStockName();
+        shopId = bill.getiBscdataStockMRecNo();
+        bsShop.setContext(shop);
+        customer = bill.getsCustShortName();
+        customerId = bill.getiBscDataCustomerRecNo();
+        bsCustomer.setContext(customer);
+        bsDate.setContext(StringUtil.getDate(bill.getdDate(), 2));
+        bsDateDelivery.setContext(StringUtil.getDate(bill.getdOrderDate(), 2));
+        saler = bill.getsSaleName();
+        salerId = bill.getsSaleID();
+        seRemark.setText(bill.getsRemark());
+        stNum.setText(bill.getiQty() + "");
+        stTotal.setText(bill.getfTotal() + "");
+    }
+
+    private void getData() {
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(getParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initDetailData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_data));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initDetailData(String string) throws JSONException, Exception {
+        JSONObject jsonObject = new JSONObject(string);
+        if (jsonObject.optBoolean("success")) {
+            setDetailData(jsonObject.optJSONObject("dataset").optString("vwSdContractD"));
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+
+    }
+
+    private void setDetailData(String optString) {
+        List<BillDetailBean> list = new Gson().fromJson(optString, new TypeToken<List<BillDetailBean>>() {
+        }.getType());
+        if (list == null || list.size() == 0) {
+            LoadingFinish(getString(R.string.error_empty));
+        } else {
+            billDetail.addAll(list);
+            refreshList();
+            LoadingFinish(null);
+//            setPickSaler();
+        }
+    }
+
+    private void refreshList() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mAdapter == null) {
+                    initAdapter();
+                } else {
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+    }
+
+    private void initAdapter() {
+        mAdapter = new BillDetailAdapter(this, billDetail);
+        recyclerView.setAdapter(mAdapter);
+    }
+
+    private List<NetParams> getParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", "GetTableData"));
+        params.add(new NetParams("sTableName", "vwSdContractD"));
+        params.add(new NetParams("sFields", "iRecNo,iMainRecNo,iBscDataStyleMRecNo,iBscDataColorRecNo,sSizeName,iSumQty,fPrice,fTotal,sRemark,sStyleNo,sColorName"));
+        params.add(new NetParams("sFilters", "iMainRecNo=" + bill.getiRecNo()));
+        return params;
     }
 
     private void initDefaultData() {
@@ -127,15 +246,30 @@ public class BillDetailActivity extends AppCompatActivity {
         shops = new ArrayList<>();
         customers = new ArrayList<>();
         salers = new ArrayList<>();
+        billDetail = new ArrayList<>();
     }
 
     private void initView() {
         initTitle();
+        initRecycle();
         setShopListener();
         setCustomerListener();
         setSalerListener();
         setDateListener();
         setDateDeliveryListener();
+    }
+
+    private void initRecycle() {
+        recyclerView = new RecyclerView(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new RecyclerViewDivider(this, LinearLayout.VERTICAL));
+        recyclerView.setLayoutParams(getRecycleParams());
+        llMain.addView(recyclerView);
+    }
+
+    private LinearLayout.LayoutParams getRecycleParams() {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
+        return params;
     }
 
     private void initTitle() {
@@ -547,7 +681,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
 
     private void go2AddCustomer() {
-        startActivity(new Intent().setClass(this, BillDetailActivity.class));
+        startActivity(new Intent().setClass(this, CustomerDetailActivity.class));
     }
 
     private void go2AddStyle() {

@@ -191,8 +191,10 @@ public class StyleDetailActivity extends AppCompatActivity {
 
     private void setListData(String data) {
         if (StringUtil.isNotEmpty(data)) {
+            Log.e("colors", data);
             styleColors.addAll(new Gson().fromJson(data, new TypeToken<List<StyleColor>>() {
             }.getType()));
+            Log.e("styleColors", new Gson().toJson(styleColors));
             setColorView();
         } else {
             LoadingFinish(getString(R.string.error_empty));
@@ -224,7 +226,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         list.add(new NetParams("sCompanyCode", companyCode));
         list.add(new NetParams("otype", "GetTableData"));
         list.add(new NetParams("sTableName", "vwBscDataStyleDColor"));
-        list.add(new NetParams("sFields", "iRecNo,sColorName"));
+        list.add(new NetParams("sFields", "iRecNo,sColorName,iBscDataColorRecNo"));
         list.add(new NetParams("sFilters", "iMainRecNo=" + id));
         return list;
     }
@@ -628,6 +630,7 @@ public class StyleDetailActivity extends AppCompatActivity {
             LoadingFinish(getString(R.string.success_save));
             eixt();
         } else {
+            Log.e("error", jsonObject.optString("message"));
             LoadingFinish(jsonObject.optString("message"));
         }
     }
@@ -637,11 +640,14 @@ public class StyleDetailActivity extends AppCompatActivity {
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", Otype.OperateData));
         params.add(new NetParams("mainquery", getMainquery()));
+        params.add(new NetParams("children", "[" + getChildquery() + "]"));
+        Log.e("child", "[" + getChildquery() + "]");
+        Log.e("main", getMainquery());
         return params;
     }
 
     private String getMainquery() {
-        MainQueryExtend mainQuery = new MainQueryExtend();
+        MainQuery mainQuery = new MainQuery();
         mainQuery.setFields(styleBean.paramsFields());
         mainQuery.setFieldsValues(styleBean.paramsFieldsValues());
         mainQuery.setFieldKeys(styleBean.paramsFieldKeys());
@@ -651,7 +657,6 @@ public class StyleDetailActivity extends AppCompatActivity {
         mainQuery.setFilterComOprts(styleBean.paramsFilterComOprts());
         mainQuery.setTableName("BscDataStyleM");
         mainQuery.setOperatortype(operatortype);
-        mainQuery.setData("[" + getChildquery() + "]");
         return new Gson().toJson(mainQuery);
     }
 
@@ -665,14 +670,15 @@ public class StyleDetailActivity extends AppCompatActivity {
         return new Gson().toJson(mainQueryChild);
     }
 
-    private String getColors() {
+    private List<StyleColorUpload> getColors() {
         List<StyleColorUpload> colors = new ArrayList<>();
         for (StyleColor color : styleColors) {
             StyleColorUpload item = new StyleColorUpload();
             item.setiBscDataColorRecNo(color.getiRecNo());
-            item.setsColorName(color.getsColorName());
+//            item.setsColorName(color.getsColorName());
+            colors.add(item);
         }
-        return new Gson().toJson(colors);
+        return colors;
     }
 
     private void selectColor() {

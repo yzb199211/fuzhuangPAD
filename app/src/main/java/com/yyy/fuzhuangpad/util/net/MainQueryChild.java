@@ -1,11 +1,15 @@
 package com.yyy.fuzhuangpad.util.net;
 
+import com.yyy.fuzhuangpad.style.StyleColorUpload;
+
+import java.util.List;
+
 public class MainQueryChild {
     private String childtype;
     private String tablename;
     private String linkfield;
     private String fieldkey;
-    private String data;
+    private List<StyleColorUpload> data;
     private int[] deleteKey;
 
     public String getChildtype() {
@@ -40,11 +44,11 @@ public class MainQueryChild {
         this.fieldkey = fieldkey;
     }
 
-    public String getData() {
+    public List<StyleColorUpload> getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(List<StyleColorUpload> data) {
         this.data = data;
     }
 

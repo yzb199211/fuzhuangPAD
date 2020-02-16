@@ -126,6 +126,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     }
 
     private void getColorData() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(getColorParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -156,15 +157,16 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     }
 
     private void setColorData(String optString) {
-//        Log.e("color", optString);
+        Log.e("color", optString);
         List<BillColor> list = new Gson().fromJson(optString, new TypeToken<List<BillColor>>() {
         }.getType());
         if (list == null || list.size() == 0) {
             LoadingFinish(getString(R.string.error_empty));
         } else {
             colors.addAll(list);
-            setColorGroup();
             LoadingFinish(null);
+            setColorGroup();
+
         }
     }
 
