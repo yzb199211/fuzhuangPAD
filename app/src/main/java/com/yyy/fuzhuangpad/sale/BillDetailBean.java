@@ -7,11 +7,27 @@ public class BillDetailBean {
     private int iBscDataColorRecNo;
     private String sSizeName;
     private int iSumQty;
-    private float fPrice;
-    private float fTotal;
+    private double fPrice;
+    private double fTotal;
     private String sRemark;
     private String sStyleNo;
     private String sColorName;
+
+    public BillDetailBean() {
+    }
+
+    public BillDetailBean(int iMainRecNo, int iBscDataStyleMRecNo, String sStyleNo, int iBscDataColorRecNo, String sColorName, String sSizeName, int iSumQty, double fPrice, double fTotal, String sRemark) {
+        this.iMainRecNo = iMainRecNo;
+        this.iBscDataStyleMRecNo = iBscDataStyleMRecNo;
+        this.iBscDataColorRecNo = iBscDataColorRecNo;
+        this.sSizeName = sSizeName;
+        this.iSumQty = iSumQty;
+        this.fPrice = fPrice;
+        this.fTotal = fTotal;
+        this.sRemark = sRemark;
+        this.sStyleNo = sStyleNo;
+        this.sColorName = sColorName;
+    }
 
     public int getiRecNo() {
         return iRecNo;
@@ -61,7 +77,7 @@ public class BillDetailBean {
         this.iSumQty = iSumQty;
     }
 
-    public float getfPrice() {
+    public double getfPrice() {
         return fPrice;
     }
 
@@ -69,7 +85,7 @@ public class BillDetailBean {
         this.fPrice = fPrice;
     }
 
-    public float getfTotal() {
+    public double getfTotal() {
         return fTotal;
     }
 

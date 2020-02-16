@@ -90,7 +90,7 @@ public class BillDetailActivity extends AppCompatActivity {
     private String companyCode;
 
     private BillBean bill;
-
+    private int iMainRecNo;
     private String shop;
     private int shopId;
 
@@ -100,10 +100,12 @@ public class BillDetailActivity extends AppCompatActivity {
     private String saler;
     private String salerId;
 
+
     private List<BillShop> shops;
     private List<BillCustomer> customers;
     private List<BillSaler> salers;
     private List<BillDetailBean> billDetail;
+    private List<BillStyleQtyBase> billCheckRepet;
     private OptionsPickerView pvShop;
     private OptionsPickerView pvCustomer;
     private OptionsPickerView pvSaler;
@@ -134,6 +136,7 @@ public class BillDetailActivity extends AppCompatActivity {
         if (StringUtil.isNotEmpty(getIntent().getStringExtra("data"))) {
             String data = getIntent().getStringExtra("data");
             bill = new Gson().fromJson(data, BillBean.class);
+            iMainRecNo = bill.getiRecNo();
             setViewData();
             if (bill.getiRecNo() != 0) {
                 getData();
@@ -201,9 +204,17 @@ public class BillDetailActivity extends AppCompatActivity {
             LoadingFinish(getString(R.string.error_empty));
         } else {
             billDetail.addAll(list);
+            setCheckRepet();
             refreshList();
             LoadingFinish(null);
 //            setPickSaler();
+        }
+    }
+
+    private void setCheckRepet() {
+        for (BillDetailBean item : billDetail) {
+            BillStyleQtyBase base = new BillStyleQtyBase(item.getsColorName(), item.getiBscDataColorRecNo(), item.getiBscDataStyleMRecNo(), item.getsSizeName(), item.getiSumQty());
+            billCheckRepet.add(base);
         }
     }
 
@@ -247,6 +258,7 @@ public class BillDetailActivity extends AppCompatActivity {
         customers = new ArrayList<>();
         salers = new ArrayList<>();
         billDetail = new ArrayList<>();
+        billCheckRepet = new ArrayList<>();
     }
 
     private void initView() {
@@ -762,14 +774,44 @@ public class BillDetailActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == CodeUtil.BILLINGSTYLE || data != null) {
+        if (resultCode == CodeUtil.BILLINGSTYLE && data != null) {
             go2StyleDetail(data);
+        } else if (resultCode == CodeUtil.BILLINGSTYLEQTY && data != null) {
+            addStyleQty(data.getStringExtra("style"), data.getStringExtra("styleQty"));
+        }
+    }
+
+    private void addStyleQty(String style, String styleQty) {
+        BillStyle item = new Gson().fromJson(style, BillStyle.class);
+        List<BillStyleQty> styles = new Gson().fromJson(styleQty, new TypeToken<List<BillStyleQty>>() {
+        }.getType());
+        getEffectiveStyle(styles);
+        if (styles.size() > 0) {
+            addStyleDetails(item, styles);
+        }
+    }
+
+    private void addStyleDetails(BillStyle item, List<BillStyleQty> styles) {
+        for (BillStyleQty style : styles) {
+            billDetail.add(new BillDetailBean(iMainRecNo, style.getiBscDataStyleMRecNo(), item.getsStyleName(), style.getiBscDataColorRecNo(), style.getsColorName(), style.getsSizeName(), style.getNum(), item.getfCostPrice(), item.getfCostPrice() * style.getNum(), ""));
+        }
+        refreshList();
+    }
+
+    private void getEffectiveStyle(List<BillStyleQty> styles) {
+        for (BillStyleQty styleQty : styles) {
+            if (billCheckRepet.contains(styleQty)) {
+                styles.remove(styleQty);
+            } else {
+                billCheckRepet.add(styleQty);
+            }
+            Log.e("style", new Gson().toJson(styleQty));
         }
     }
 
     private void go2StyleDetail(Intent data) {
         data.setClass(this, BillingStyleDetailActivity.class);
         data.putExtra("shopId", shopId + "");
-        startActivityForResult(data, CodeUtil.BILLINGSTYLEDETAIL);
+        startActivityForResult(data, CodeUtil.BILLINGSTYLEQTY);
     }
 }

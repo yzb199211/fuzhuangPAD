@@ -1,5 +1,6 @@
 package com.yyy.fuzhuangpad.sale;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.style.StyleColor;
+import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.ImageLoaderUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -69,6 +71,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     private String companyCode;
     private String styleId;
     private String shopId;
+    private String style;
     SharedPreferencesHelper preferencesHelper;
 
     List<BillColor> colors;
@@ -121,7 +124,8 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     private void getIntentData() {
 //        Log.e("tiem", getIntent().getStringExtra("style"));
         shopId = getIntent().getStringExtra("shopId");
-        BillStyle style = new Gson().fromJson(getIntent().getStringExtra("style"), BillStyle.class);
+        this.style = getIntent().getStringExtra("style");
+        BillStyle style = new Gson().fromJson(this.style, BillStyle.class);
         styleId = style.getiRecNo() + "";
         tvStyleNo.setText(style.getsStyleNo());
         tvStyleName.setText(style.getsStyleName());
@@ -193,7 +197,17 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
                 cgColor.setMarkClickListener(new ColorGroup.MarkClickListener() {
                     @Override
                     public void clickMark(int position, boolean isChecked) {
-                        getStyleQty(position);
+                        if (isChecked) {
+                            if (colors.get(position).getStyleQty().size() == 0) {
+                                getStyleQty(position);
+                            } else {
+                                styleQty.addAll(colors.get(position).getStyleQty());
+                                refreshList();
+                            }
+                        } else {
+                            styleQty.removeAll(colors.get(position).getStyleQty());
+                            refreshList();
+                        }
                     }
                 });
             }
@@ -216,7 +230,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         new NetUtil(getStyleQtyParams(colors.get(pos).getiBscDataColorRecNo()), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
-                Log.e("style", string);
+//                Log.e("style", string);
                 try {
                     initStyleQty(string, pos);
                 } catch (JSONException e) {
@@ -243,7 +257,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     }
 
     private void setStyleQty(String optString, int pos) {
-        Log.e("style", optString);
+//        Log.e("style", optString);
         List<BillStyleQty> list = new Gson().fromJson(optString, new TypeToken<List<BillStyleQty>>() {
         }.getType());
         if (list == null || list.size() == 0) {
@@ -279,7 +293,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", "GetTableData"));
         params.add(new NetParams("sTableName", "vwProductSizeStock"));
-        params.add(new NetParams("sFields", "sColorName,sSizeName,iQty"));
+        params.add(new NetParams("sFields", "sColorName,sSizeName,iQty,iBscDataStyleMRecNo,iBscDataColorRecNo"));
         params.add(new NetParams("sFilters", "iBscDataStyleMRecNo=" + styleId + " and iBscDataColorRecNo=" + colorId + " and iBscdataStockMRecNo=" + shopId));
         return params;
     }
@@ -291,8 +305,34 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.bw_save:
+                save();
                 break;
         }
+    }
+
+    private void save() {
+        List<BillStyleQty> list = getSaveStyle();
+        Log.e("size", list.size() + "");
+        if (list.size() == 0) {
+            finish();
+        } else {
+            Intent intent = new Intent();
+            intent.putExtra("style", style);
+            intent.putExtra("styleQty", new Gson().toJson(list));
+            setResult(CodeUtil.BILLINGSTYLEQTY, intent);
+            finish();
+        }
+    }
+
+    private List<BillStyleQty> getSaveStyle() {
+//        Log.e("styles", new Gson().toJson(styleQty));
+        List<BillStyleQty> list = new ArrayList<>();
+        for (BillStyleQty billStyleQty : styleQty) {
+            if (billStyleQty.getNum() > 0) {
+                list.add(billStyleQty);
+            }
+        }
+        return list;
     }
 
     private void LoadingFinish(String msg) {

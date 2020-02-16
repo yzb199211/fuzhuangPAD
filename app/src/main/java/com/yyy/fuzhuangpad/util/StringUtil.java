@@ -91,18 +91,18 @@ public class StringUtil {
      * @param type
      * @return
      */
-    public static String getDate(String date, int type)  {
-        if (!StringUtil.isNotEmpty(date)){
+    public static String getDate(String date, int type) {
+        if (!StringUtil.isNotEmpty(date)) {
             return date;
         }
-        if (type == 1&&date.length()>15) {
+        if (type == 1 && date.length() > 15) {
             date = date.substring(0, 16);
             date = date.replace("T", " ");
             return date;
-        }else if (type == 2&&date.length()>9){
+        } else if (type == 2 && date.length() > 9) {
             date = date.substring(0, 10);
             return date;
-        }else
+        } else
             return date;
     }
 
@@ -148,7 +148,9 @@ public class StringUtil {
             date = new Date(System.currentTimeMillis());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
-    }public static String getYear(@Nullable Date date) {//可根据需要自行截取数据显示
+    }
+
+    public static String getYear(@Nullable Date date) {//可根据需要自行截取数据显示
 //        Log.d("getTime()", "choice date millis: " + date.getTime());
         if (date == null)
             date = new Date(System.currentTimeMillis());
@@ -213,7 +215,6 @@ public class StringUtil {
         BigDecimal b1 = new BigDecimal(v1.toString());
 
         BigDecimal b2 = new BigDecimal(v2.toString());
-
         return b1.subtract(b2).doubleValue();
 
     }
