@@ -136,9 +136,9 @@
         android:id="@+id/cg_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginRight="@dimen/dp_20"
-        android:layout_marginLeft="@dimen/dp_20" />
+        android:layout_marginRight="@dimen/dp_20" />
 
     <View
         android:layout_width="match_parent"
@@ -192,17 +192,24 @@
             android:textSize="@dimen/sp_10" />
     </LinearLayout>
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_0"
         android:layout_weight="1"
         android:paddingLeft="@dimen/dp_20"
-        android:paddingRight="@dimen/dp_20">
+        android:paddingRight="@dimen/dp_20" />
+    <!--    <ScrollView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/dp_0"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:paddingLeft="@dimen/dp_20"-->
+    <!--        android:paddingRight="@dimen/dp_20">-->
 
-        <LinearLayout
-            android:id="@+id/ll_style"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
-    </ScrollView>
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/ll_style"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:orientation="vertical" />-->
+    <!--    </ScrollView>-->
 </LinearLayout>

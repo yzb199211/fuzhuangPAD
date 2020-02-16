@@ -26,6 +26,7 @@ public class NumSelectView extends LinearLayout {
     public void setOnQtyChange(OnQtyChange onQtyChange) {
         this.onQtyChange = onQtyChange;
     }
+
     public NumSelectView(Context context) {
         this(context, null);
     }
@@ -42,8 +43,8 @@ public class NumSelectView extends LinearLayout {
     }
 
     private void initBtn() {
-        initNum();
         initSubtract();
+        initNum();
         initAdd();
     }
 
@@ -54,7 +55,7 @@ public class NumSelectView extends LinearLayout {
         tvNum.setPadding(10, 0, 10, 0);
         tvNum.setGravity(Gravity.CENTER);
         tvNum.setText(num + "");
-        tvNum.setLayoutParams(getBtnParams());
+        tvNum.setLayoutParams(getNumParams());
         tvNum.setBackgroundColor(context.getResources().getColor(R.color.default_bg_color));
         addView(tvNum);
     }
@@ -74,7 +75,7 @@ public class NumSelectView extends LinearLayout {
                 if (num < max) {
                     num = num + 1;
                     tvNum.setText(num + "");
-                    if (onQtyChange!=null){
+                    if (onQtyChange != null) {
                         onQtyChange.onQty(num);
                     }
                 }
@@ -98,7 +99,7 @@ public class NumSelectView extends LinearLayout {
                 if (num > 0) {
                     num = num - 1;
                     tvNum.setText(num + "");
-                    if (onQtyChange!=null){
+                    if (onQtyChange != null) {
                         onQtyChange.onQty(num);
                     }
                 }
@@ -108,13 +109,15 @@ public class NumSelectView extends LinearLayout {
     }
 
     private ViewGroup.LayoutParams getBtnParams() {
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.dp_20), ViewGroup.LayoutParams.MATCH_PARENT);
         return params;
     }
+
     private LinearLayout.LayoutParams getNumParams() {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,1.0f);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f);
         return params;
     }
+
     private void initMain() {
         setOrientation(HORIZONTAL);
     }
@@ -125,6 +128,7 @@ public class NumSelectView extends LinearLayout {
 
     public void setNum(int num) {
         this.num = num;
+        tvNum.setText(num + "");
     }
 
     public int getMax() {

@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,7 +25,9 @@ import com.yyy.fuzhuangpad.util.Toasts;
 import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
+import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.color.ColorGroup;
+import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
 import com.yyy.fuzhuangpad.view.search.SearchText;
 
 import org.json.JSONException;
@@ -55,9 +59,10 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     SearchText tvStyleStorage;
     @BindView(R.id.cg_color)
     ColorGroup cgColor;
-    @BindView(R.id.ll_style)
-    LinearLayout llStyle;
-
+    @BindView(R.id.bw_delete)
+    ButtonWithImg bwDelete;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
     private String url;
     private String address;
@@ -67,6 +72,8 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     SharedPreferencesHelper preferencesHelper;
 
     List<BillColor> colors;
+    List<BillStyleQty> styleQty;
+    BillStyleQtyAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +101,15 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        bwDelete.setVisibility(View.INVISIBLE);
         ImageLoaderUtil.loadDrawableImg(ivLogo, R.mipmap.default_style);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new RecyclerViewDivider(this, LinearLayout.VERTICAL));
     }
 
     private void initList() {
         colors = new ArrayList<>();
+        styleQty = new ArrayList<>();
     }
 
     private void initDefaultData() {
@@ -182,7 +193,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
                 cgColor.setMarkClickListener(new ColorGroup.MarkClickListener() {
                     @Override
                     public void clickMark(int position, boolean isChecked) {
-                        getStyleQty(colors.get(position).getiBscDataColorRecNo());
+                        getStyleQty(position);
                     }
                 });
             }
@@ -200,12 +211,18 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         return list;
     }
 
-    private void getStyleQty(int colorId) {
-//        LoadingDialog.showDialogForLoading(this);
-        new NetUtil(getStyleQtyParams(colorId), url, new ResponseListener() {
+    private void getStyleQty(int pos) {
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(getStyleQtyParams(colors.get(pos).getiBscDataColorRecNo()), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
                 Log.e("style", string);
+                try {
+                    initStyleQty(string, pos);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
             }
 
             @Override
@@ -214,6 +231,47 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
                 LoadingFinish(e.getMessage());
             }
         });
+    }
+
+    private void initStyleQty(String string, int pos) throws JSONException {
+        JSONObject jsonObject = new JSONObject(string);
+        if (jsonObject.optBoolean("success")) {
+            setStyleQty(jsonObject.optJSONObject("dataset").optString("vwProductSizeStock"), pos);
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private void setStyleQty(String optString, int pos) {
+        Log.e("style", optString);
+        List<BillStyleQty> list = new Gson().fromJson(optString, new TypeToken<List<BillStyleQty>>() {
+        }.getType());
+        if (list == null || list.size() == 0) {
+            LoadingFinish(getString(R.string.error_empty));
+        } else {
+            colors.get(pos).setStyleQty(list);
+            styleQty.addAll(list);
+            refreshList();
+            LoadingFinish(null);
+        }
+    }
+
+    private void refreshList() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mAdapter == null) {
+                    initAdapter();
+                } else {
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private void initAdapter() {
+        mAdapter = new BillStyleQtyAdapter(this, styleQty);
+        recyclerView.setAdapter(mAdapter);
     }
 
     private List<NetParams> getStyleQtyParams(int colorId) {

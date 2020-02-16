@@ -39,6 +39,7 @@ public class BillStyleAdapter extends RecyclerView.Adapter<BillStyleAdapter.VH> 
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
+        holder.setIsRecyclable(false);
         BillStyle style = list.get(position);
         holder.tvNo.setText(style.getsStyleNo());
         holder.tvClass.setText(style.getsClassName());
