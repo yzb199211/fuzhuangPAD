@@ -70,7 +70,7 @@
 
         <com.yyy.fuzhuangpad.view.search.SearchText
             android:id="@+id/se_code"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             app:seEditColor="@color/default_text_color"
@@ -92,7 +92,7 @@
         <!--            app:bsTitleSize="@dimen/sp_10" />-->
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
             android:id="@+id/bs_shop"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/se_code"
@@ -134,14 +134,14 @@
     <LinearLayout
         android:id="@+id/rl_two"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_20"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_5"
+        android:paddingLeft="@dimen/dp_5"  android:layout_marginTop="@dimen/dp_3"
         android:paddingRight="@dimen/dp_5">
 
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
             android:id="@+id/bs_date"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             app:bsContentColor="@color/white"
@@ -153,7 +153,7 @@
 
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
             android:id="@+id/bs_date_delivery"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             app:bsContentColor="@color/white"
@@ -165,7 +165,7 @@
 
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
             android:id="@+id/bs_sale"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             app:bsContentColor="@color/white"
@@ -175,31 +175,51 @@
             app:bsTitleColor="@color/default_text_color"
             app:bsTitleSize="@dimen/sp_10" />
 
-        <com.yyy.fuzhuangpad.view.search.SearchEdit
-            android:id="@+id/se_remark"
-            android:layout_width="@dimen/dp_0"
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rl_three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_5"
+        android:layout_marginTop="@dimen/dp_3"
+        android:paddingRight="@dimen/dp_5">
+        <com.yyy.fuzhuangpad.view.button.ButtonSelect
+            android:id="@+id/bs_class"
+            android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_weight="1"
+            app:bsContentColor="@color/white"
+            app:bsContentSize="@dimen/sp_10"
+            app:bsSrc="@mipmap/icon_arrow_down"
+            app:bsTitle="@string/sale_billing_add_class"
+            app:bsTitleColor="@color/default_text_color"
+            app:bsTitleSize="@dimen/sp_10" />
+        <com.yyy.fuzhuangpad.view.search.SearchEdit
+            android:id="@+id/se_remark"
+            android:layout_width="@dimen/dp_260"
+            android:layout_height="wrap_content"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_detail_remark"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
-
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_three"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_20"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"  android:layout_marginTop="@dimen/dp_3"
         android:paddingLeft="@dimen/dp_5"
         android:paddingRight="@dimen/dp_5">
 
         <com.yyy.fuzhuangpad.view.search.SearchText
             android:id="@+id/st_num"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             app:seEditColor="@color/default_text_color"
@@ -210,7 +230,7 @@
 
         <com.yyy.fuzhuangpad.view.search.SearchText
             android:id="@+id/st_total"
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             app:seEditColor="@color/default_text_color"

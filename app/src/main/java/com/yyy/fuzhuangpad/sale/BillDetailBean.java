@@ -116,4 +116,20 @@ public class BillDetailBean {
     public void setsColorName(String sColorName) {
         this.sColorName = sColorName;
     }
+
+    public static String childtypeParams() {
+        return "son";
+    }
+
+    public static String tablenameParams() {
+        return "BscDataStyleDColor";
+    }
+
+    public static String linkfieldParams() {
+        return "iRecNo=iMainRecNo";
+    }
+
+    public static String fieldkeyParams() {
+        return "iRecNo";
+    }
 }

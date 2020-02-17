@@ -84,6 +84,8 @@ public class BillDetailActivity extends AppCompatActivity {
     SearchText stTotal;
     @BindView(R.id.ll_main)
     LinearLayout llMain;
+    @BindView(R.id.bs_class)
+    ButtonSelect bsClass;
 
     SharedPreferencesHelper preferencesHelper;
     private String url;
@@ -101,17 +103,22 @@ public class BillDetailActivity extends AppCompatActivity {
     private String saler;
     private String salerId;
 
+    private String classId;
+    private String className;
+
 
     private List<BillShop> shops;
     private List<BillCustomer> customers;
     private List<BillSaler> salers;
     private List<BillDetailBean> billDetail;
     private List<BillStyleQtyBase> billCheckRepet;
+    private List<BillClass> billClass;
     private OptionsPickerView pvShop;
     private OptionsPickerView pvCustomer;
     private OptionsPickerView pvSaler;
     private TimePickerView pvDate;
     private TimePickerView pvDateDelivery;
+    private OptionsPickerView pvClass;
     FormRow formTitle;
     RecyclerView recyclerView;
     BillDetailAdapter mAdapter;
@@ -223,6 +230,7 @@ public class BillDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                setTotal();
                 if (mAdapter == null) {
                     initAdapter();
                 } else {
@@ -231,6 +239,19 @@ public class BillDetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setTotal() {
+        int qty = 0;
+        double total = 0;
+        for (BillDetailBean item : billDetail) {
+            qty = qty + item.getiSumQty();
+            total = total + item.getfTotal();
+        }
+        bill.setiQty(qty);
+        bill.setfTotal(total);
+        stNum.setText(bill.getiQty() + "");
+        stTotal.setText(bill.getfTotal() + "");
     }
 
     private void initAdapter() {
@@ -267,6 +288,7 @@ public class BillDetailActivity extends AppCompatActivity {
         salers = new ArrayList<>();
         billDetail = new ArrayList<>();
         billCheckRepet = new ArrayList<>();
+        billClass = new ArrayList<>();
     }
 
     private void initView() {
@@ -275,9 +297,11 @@ public class BillDetailActivity extends AppCompatActivity {
         setShopListener();
         setCustomerListener();
         setSalerListener();
+        setClassListener();
         setDateListener();
         setDateDeliveryListener();
     }
+
 
     private void initRecycle() {
         recyclerView = new RecyclerView(this);
@@ -493,13 +517,115 @@ public class BillDetailActivity extends AppCompatActivity {
         bsShop.setOnSelectClickListener(new OnSelectClickListener() {
             @Override
             public void onClick(View view) {
-                if (shops.size() == 0) {
-                    getShops();
+                if (shopId == 0 || billDetail.size() == 0)
+                    if (shops.size() == 0) {
+                        getShops();
+                    } else {
+                        pvShop.show();
+                    }
+            }
+        });
+    }
+
+    private void setClassListener() {
+        bsClass.setOnSelectClickListener(new OnSelectClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (billClass.size() == 0) {
+                    getClassData();
                 } else {
-                    pvShop.show();
+                    pvClass.show();
                 }
             }
         });
+    }
+
+    private void getClassData() {
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(getClassParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initClassData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_data));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initClassData(String string) throws JSONException, Exception {
+        Log.e("class",string);
+        JSONObject jsonObject = new JSONObject(string);
+        if (jsonObject.optBoolean("success")) {
+            setClassData(jsonObject.optJSONObject("dataset").optString("bscdatalistd"));
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private void setClassData(String optString) {
+        List<BillClass> list = new Gson().fromJson(optString, new TypeToken<List<BillClass>>() {
+        }.getType());
+        if (list == null || list.size() == 0) {
+            LoadingFinish(getString(R.string.error_empty));
+        } else {
+            billClass.addAll(list);
+            LoadingFinish(null);
+            setPickClass();
+        }
+    }
+
+    private void setPickClass() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                initPickClass();
+            }
+        });
+    }
+
+    private void initPickClass() {
+        pvClass = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                String type = billClass.get(options1).getPickerViewText();
+                if (!type.equals(className)) {
+                    className = type.equals(getString(R.string.common_empty)) ? "" : billClass.get(options1).getPickerViewText();
+                    classId = billClass.get(options1).getsCode();
+                    bsClass.setContext(className);
+                }
+            }
+        })
+                .setTitleText("类型选择")
+                .setContentTextSize(18)//设置滚轮文字大小
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setLabels("", "", "")
+                .isDialog(true)
+                .build();
+        pvClass.setPicker(billClass);//一级选择器
+        setDialog(pvClass);
+        pvClass.show();
+    }
+
+    private List<NetParams> getClassParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", "GetTableData"));
+        params.add(new NetParams("sTableName", "bscdatalistd"));
+        params.add(new NetParams("sFields", "sCode,sName"));
+        params.add(new NetParams("sFilters", "sClassId='StyleDWater'"));
+        return params;
     }
 
     private void getCustomers() {
@@ -685,6 +811,7 @@ public class BillDetailActivity extends AppCompatActivity {
             case R.id.bw_submit:
                 break;
             case R.id.bw_save:
+                save();
                 break;
             case R.id.bwi_add_customer:
                 go2AddCustomer();
@@ -699,6 +826,15 @@ public class BillDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void save() {
+
+    }
+
+    private List<NetParams> saveParams() {
+        List<NetParams> params = new ArrayList<>();
+
+        return params;
+    }
 
     private void go2AddCustomer() {
         startActivity(new Intent().setClass(this, CustomerDetailActivity.class));

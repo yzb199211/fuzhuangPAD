@@ -8,23 +8,23 @@ import java.util.List;
 
 public class BillBean {
     private int iRecNo;
-    private String sOrderNo="";
-    private String dDate="";
+    private String sOrderNo = "";
+    private String dDate = "";
     private int iBscdataStockMRecNo;
-    private String sStockName="";
+    private String sStockName = "";
     private int iBscDataCustomerRecNo;
-    private String sCustShortName="";
+    private String sCustShortName = "";
     private int iOrderType;
-    private String sOrderType="";
-    private String dOrderDate="";
-    private String sSaleID="";
-    private String sSaleName="";
-    private String sRemark="";
+    private String sOrderType = "";
+    private String dOrderDate = "";
+    private String sSaleID = "";
+    private String sSaleName = "";
+    private String sRemark = "";
     private float fPayMomey;
-    private String sPaymethod="";
+    private String sPaymethod = "";
     private int iQty;
-    private float fTotal;
-    private String sStatusName="";
+    private double fTotal;
+    private String sStatusName = "";
     private int row;
 
     public int getRow() {
@@ -163,11 +163,11 @@ public class BillBean {
         this.iQty = iQty;
     }
 
-    public float getfTotal() {
+    public double getfTotal() {
         return fTotal;
     }
 
-    public void setfTotal(float fTotal) {
+    public void setfTotal(double fTotal) {
         this.fTotal = fTotal;
     }
 
@@ -178,7 +178,8 @@ public class BillBean {
     public void setsStatusName(String sStatusName) {
         this.sStatusName = sStatusName;
     }
-    public static String getFields(){
+
+    public static String getFields() {
         return "iRecNo" + "," +
                 "sOrderNo" + "," +
                 "dDate" + "," +
@@ -205,11 +206,63 @@ public class BillBean {
         list.add(new FormColumn(sStatusName + "", 1.0f, true, 1, row));
         list.add(new FormColumn(sOrderNo + "", 1.0f, true, 2, row));
         list.add(new FormColumn(sStockName + "", 1.0f, true, 3, row));
-        list.add(new FormColumn(StringUtil.getDate(dDate,2) + "", 1.0f, true, 4, row));
+        list.add(new FormColumn(StringUtil.getDate(dDate, 2) + "", 1.0f, true, 4, row));
         list.add(new FormColumn(sCustShortName + "", 1.0f, true, 5, row));
         list.add(new FormColumn(sSaleName + "", 1.0f, true, 6, row));
         list.add(new FormColumn(iQty + "", 1.0f, true, 7, row));
         list.add(new FormColumn(fTotal + "", 1.0f, true, 8, row));
         return list;
+    }
+
+    public String paramsFields() {
+        return "iRecNo" + "," +
+                "sOrderNo" + "," +
+                "dDate" + "," +
+                "iBscdataStockMRecNo" + "," +
+                "iBscDataCustomerRecNo" + "," +
+                "iOrderType" + "," +
+                "dOrderDate" + "," +
+                "sSaleID" + "," +
+                "sRemark" + "," +
+                "fPayMomey" + "," +
+                "sPaymethod" + "," +
+                "iQty" + "," +
+                "fTotal";
+    }
+
+    public String paramsFieldsValues() {
+        return iRecNo + "," +
+                sOrderNo + "," +
+                dDate + "," +
+                iBscdataStockMRecNo + "," +
+                iBscDataCustomerRecNo + "," +
+                iOrderType + "," +
+                dOrderDate + "," +
+                sSaleID + "," +
+                sRemark + "," +
+                fPayMomey + "," +
+                sPaymethod + "," +
+                iQty + "," +
+                fTotal;
+    }
+
+    public String paramsFilterFields() {
+        return "iRecNo";
+    }
+
+    public String paramsFilterComOprts() {
+        return "=";
+    }
+
+    public String paramsFilterValues() {
+        return iRecNo == 0 ? "" : iRecNo + "";
+    }
+
+    public String paramsFieldKeys() {
+        return "iRecNo";
+    }
+
+    public String paramsFieldKeysValues() {
+        return iRecNo == 0 ? "" : iRecNo + "";
     }
 }
