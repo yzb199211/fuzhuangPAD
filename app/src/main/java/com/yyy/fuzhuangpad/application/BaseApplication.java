@@ -172,7 +172,7 @@ public class BaseApplication extends Application {
     static class ProxyOnclickListener implements View.OnClickListener {
         private View.OnClickListener onclick;
 
-        private int MIN_CLICK_DELAY_TIME = 500;
+        private int MIN_CLICK_DELAY_TIME = 200;
 
         private long lastClickTime = 0;
 

@@ -10,7 +10,7 @@
         android:id="@+id/rl_content"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginLeft="@dimen/dp_3"
         android:layout_weight="1"
         android:background="@drawable/common_btn_select">
 

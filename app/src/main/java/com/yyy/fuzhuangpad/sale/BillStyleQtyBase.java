@@ -62,13 +62,13 @@ public class BillStyleQtyBase {
         this.iQty = iQty;
     }
 
-//    @Override
-//    public boolean equals(@Nullable Object obj) {
-//        if (this == obj) return true;
-//        if (obj == null || getClass() != obj.getClass()) return false;
-//        BillStyleQtyBase billStyleQtyBase = (BillStyleQtyBase) obj;
-//        return iBscDataColorRecNo == billStyleQtyBase.iBscDataColorRecNo &&
-//                iBscDataStyleMRecNo == billStyleQtyBase.iBscDataStyleMRecNo &&
-//                sSizeName.equals(billStyleQtyBase.sSizeName);
-//    }
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        BillStyleQtyBase billStyleQtyBase = (BillStyleQtyBase) obj;
+        return iBscDataColorRecNo == billStyleQtyBase.iBscDataColorRecNo &&
+                iBscDataStyleMRecNo == billStyleQtyBase.iBscDataStyleMRecNo &&
+                sSizeName.equals(billStyleQtyBase.sSizeName);
+    }
 }

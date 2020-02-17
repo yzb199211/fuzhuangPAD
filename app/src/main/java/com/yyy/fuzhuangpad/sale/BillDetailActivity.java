@@ -25,6 +25,7 @@ import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.customer.CustomerDetailActivity;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
+import com.yyy.fuzhuangpad.interfaces.OnDeleteListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.util.CodeUtil;
@@ -234,6 +235,13 @@ public class BillDetailActivity extends AppCompatActivity {
 
     private void initAdapter() {
         mAdapter = new BillDetailAdapter(this, billDetail);
+        mAdapter.setOnDeleteListener(new OnDeleteListener() {
+            @Override
+            public void onDelete(int pos) {
+                billDetail.remove(pos);
+                refreshList();
+            }
+        });
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -799,14 +807,17 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void getEffectiveStyle(List<BillStyleQty> styles) {
+        List<BillStyleQty> repets = new ArrayList<>();
+
         for (BillStyleQty styleQty : styles) {
             if (billCheckRepet.contains(styleQty)) {
-                styles.remove(styleQty);
+                repets.add(styleQty);
             } else {
                 billCheckRepet.add(styleQty);
             }
             Log.e("style", new Gson().toJson(styleQty));
         }
+        styles.removeAll(repets);
     }
 
     private void go2StyleDetail(Intent data) {

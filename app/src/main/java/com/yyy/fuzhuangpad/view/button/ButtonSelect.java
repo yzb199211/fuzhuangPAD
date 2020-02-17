@@ -33,6 +33,7 @@ public class ButtonSelect extends LinearLayout {
     private int contentColor;
     private int src;
     private int srcPadding;
+    private boolean isMust;
 
     OnSelectClickListener onSelectClickListener;
 
@@ -82,6 +83,7 @@ public class ButtonSelect extends LinearLayout {
 
     private void initMain() {
         LayoutInflater.from(context).inflate(R.layout.button_select, this, true);
+        setOrientation(HORIZONTAL);
     }
 
     private void initTitle() {
@@ -91,11 +93,25 @@ public class ButtonSelect extends LinearLayout {
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         tvTitle.setLayoutParams(titleParams());
         tvTitle.setGravity(Gravity.RIGHT);
+        addMust();
+
     }
+
+    private void addMust() {
+        TextView textView = new TextView(context);
+        textView.setText("*");
+        textView.setTextColor(context.getResources().getColor(R.color.red));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
+        if (!isMust)
+            textView.setVisibility(INVISIBLE);
+        addView(textView,0);
+    }
+
     private LayoutParams titleParams() {
         LayoutParams params = new LayoutParams(context.getResources().getDimensionPixelSize(R.dimen.sp_10) * 4 + 1, ViewGroup.LayoutParams.WRAP_CONTENT);
         return params;
     }
+
     private void initContent() {
         tvContent = findViewById(R.id.tv_content);
         tvContent.setText(content);

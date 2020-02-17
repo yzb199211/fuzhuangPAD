@@ -82,6 +82,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:textColor="@color/default_text_color"
+        android:textColor="@color/red"
         android:textSize="@dimen/sp_8" />
 </LinearLayout>
