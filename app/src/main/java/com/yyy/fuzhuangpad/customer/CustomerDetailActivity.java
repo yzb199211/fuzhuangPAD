@@ -175,6 +175,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
     }
 
     private void getTypesData() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(getTypeParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -274,6 +275,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
     }
 
     private void getSalerData() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(getSalerParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -411,6 +413,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
         }
     }
     private void delete() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(deteleParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -484,7 +487,8 @@ public class CustomerDetailActivity extends AppCompatActivity {
         if (!StringUtil.isNotEmpty(customerBeans.getsClassName())) {
             Toast(getString(R.string.customer_empty_type));
             return;
-        }
+        }      LoadingDialog.showDialogForLoading(this);
+
         new NetUtil(saveParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {

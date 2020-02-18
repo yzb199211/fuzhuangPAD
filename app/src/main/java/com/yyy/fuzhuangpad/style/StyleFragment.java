@@ -71,8 +71,6 @@ public class StyleFragment extends Fragment {
     ButtonWithImg bwiSearch;
     @BindView(R.id.ll_search)
     RelativeLayout llSearch;
-    @BindView(R.id.ll_btn)
-    LinearLayout llBtn;
     @BindView(R.id.rl_main)
     RelativeLayout rlMain;
     @BindView(R.id.bs_type)

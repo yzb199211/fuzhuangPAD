@@ -122,6 +122,9 @@
     <string name="sale_billing_detail_add">+新增</string>
     <string name="sale_billing_detail_add_style">添加款式</string>
     <string name="sale_billing_empty_shop">请选择门店</string>
+    <string name="sale_billing_empty_customer">请选择客户</string>
+    <string name="sale_billing_empty_saler">请选择员工</string>
+    <string name="sale_billing_empty_class">请选择类别</string>
 
     <string name="sale_billing_add_code">款号</string>
     <string name="sale_billing_add_name">款式名称</string>

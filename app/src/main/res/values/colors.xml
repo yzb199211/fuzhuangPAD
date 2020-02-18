@@ -55,7 +55,8 @@
     <color name="common_btn_search">#4DB2B4</color>
     <color name="common_btn_select">#CCCCCC</color>
     <color name="common_btn_color_checked">#FAC012</color>
-
+    <color name="common_menu_checked">#A6C8CA</color>
     <!--form-->
     <color name="form_bg_title">#4DB2B4</color>
+
 </resources>

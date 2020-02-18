@@ -45,7 +45,8 @@
                     app:imgSrc="@mipmap/menu_customer"
                     app:text="@string/main_menu_base_customer"
                     app:tvSize="@dimen/sp_10"
-                    app:tvolor="@color/default_text_color" />
+                    app:tvolor="@color/default_text_color"
+                    android:background="@color/white"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -56,7 +57,7 @@
                     android:id="@+id/mm_base_style"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_20"
-                    app:imgSrc="@mipmap/menu_style"
+                    app:imgSrc="@mipmap/menu_style" android:background="@color/white"
                     app:text="@string/main_menu_base_style"
                     app:tvSize="@dimen/sp_10"
                     app:tvolor="@color/default_text_color" />
@@ -70,7 +71,7 @@
                     android:id="@+id/mm_base_color"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_20"
-                    app:imgSrc="@mipmap/menu_color"
+                    app:imgSrc="@mipmap/menu_color" android:background="@color/white"
                     app:text="@string/main_menu_base_color"
                     app:tvSize="@dimen/sp_10"
                     app:tvolor="@color/default_text_color" />
@@ -87,7 +88,7 @@
                 <com.yyy.fuzhuangpad.view.main.MainMenu
                     android:id="@+id/mm_sale_order"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20" android:background="@color/white"
                     app:imgSrc="@mipmap/menu_billing"
                     app:text="@string/main_menu_sale_order"
                     app:tvSize="@dimen/sp_10"
@@ -106,7 +107,7 @@
                     android:id="@+id/mm_center_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_20"
-                    app:imgSrc="@mipmap/menu_edit_pwd"
+                    app:imgSrc="@mipmap/menu_edit_pwd" android:background="@color/white"
                     app:text="@string/main_menu_center_pwd"
                     app:tvSize="@dimen/sp_10"
                     app:tvolor="@color/default_text_color" />
@@ -119,7 +120,7 @@
                 <com.yyy.fuzhuangpad.view.main.MainMenu
                     android:id="@+id/mm_center_exit"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20" android:background="@color/white"
                     app:imgSrc="@mipmap/menu_exit"
                     app:text="@string/main_menu_center_exit"
                     app:tvSize="@dimen/sp_10"

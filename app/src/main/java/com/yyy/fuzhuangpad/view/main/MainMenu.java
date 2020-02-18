@@ -35,6 +35,7 @@ public class MainMenu extends LinearLayout {
 
     public void setTextColor(int textColor) {
         this.textColor = textColor;
+        tvContent.setTextColor(textColor);
     }
 
     public void setTextSize(int textSize) {

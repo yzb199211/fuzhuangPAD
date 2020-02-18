@@ -36,6 +36,7 @@ import com.yyy.fuzhuangpad.util.net.NetUtil;
 import com.yyy.fuzhuangpad.util.net.Operatortype;
 import com.yyy.fuzhuangpad.util.net.Otype;
 import com.yyy.fuzhuangpad.view.SelectView;
+import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.color.ColorGroup;
 import com.yyy.fuzhuangpad.view.color.ColorList;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
@@ -92,6 +93,8 @@ public class StyleDetailActivity extends AppCompatActivity {
     SearchEdit sePriceTag;
     @BindView(R.id.cg_color)
     ColorGroup colorGroup;
+    @BindView(R.id.bw_delete)
+    ButtonWithImg bwDelete;
 
     StyleBean styleBean;
 
@@ -103,7 +106,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     private String address;
     private String companyCode;
 
-    String operatortype = "";
+    private String operatortype = "";
     private OptionsPickerView pvType;
     private OptionsPickerView pvSize;
     private TimePickerView pvDate;
@@ -137,6 +140,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         } else {
             styleBean = new StyleBean();
             operatortype = Operatortype.add;
+            bwDelete.setVisibility(View.GONE);
         }
     }
 
@@ -153,11 +157,12 @@ public class StyleDetailActivity extends AppCompatActivity {
         svDateStop.setText(styleBean.getdStopDate());
         seRemark.setText(styleBean.getsReMark());
         sePriceTrade.setText(styleBean.getfBulkTotal1() + "");
-        sePriceRetail.setText(styleBean.getfSalePrice() + "");
-        sePriceTag.setText(styleBean.getfCostPrice() + "");
+        sePriceRetail.setText(styleBean.getfCostPrice() + "");
+        sePriceTag.setText(styleBean.getfSalePrice() + "");
     }
 
     private void getColorsData(int id) {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(getColorsParams(id), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -272,6 +277,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     }
 
     private void getTypesData() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(getTypeParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -371,6 +377,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     }
 
     private void getSizeData() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(getSizeParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -479,6 +486,7 @@ public class StyleDetailActivity extends AppCompatActivity {
             @Override
             public void onTimeSelect(Date date, View v) {
                 svYear.setText(StringUtil.getYear(date));
+                styleBean.setiYear(StringUtil.getYear(date));
             }
         }).setRangDate(TimeUtil.str2calendar(getString(R.string.common_pickdate_start)), TimeUtil.str2calendar(getString(R.string.common_pickdate_end)))
                 .setDate(Calendar.getInstance())
@@ -534,6 +542,7 @@ public class StyleDetailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.bw_save:
+                setSaveData();
                 save();
                 break;
             case R.id.bwi_add_color:
@@ -547,7 +556,20 @@ public class StyleDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void setSaveData() {
+        styleBean.setfBulkTotal1(Double.parseDouble(sePriceTrade.getText()));
+        styleBean.setfCostPrice(Double.parseDouble(sePriceRetail.getText()));
+        styleBean.setfSalePrice(Double.parseDouble(sePriceTag.getText()));
+        styleBean.setsStyleNo(seCode.getText());
+        styleBean.setsStyleName(seName.getText());
+        styleBean.setsCustShortName(seCustomer.getText());
+        styleBean.setsCustStyleNo(seCustomerStyle.getText());
+        styleBean.setsWaterElents(seComposition.getText());
+        styleBean.setsReMark(seRemark.getText());
+    }
+
     private void delete() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(deteleParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -600,6 +622,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     }
 
     private void save() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(getSave(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {

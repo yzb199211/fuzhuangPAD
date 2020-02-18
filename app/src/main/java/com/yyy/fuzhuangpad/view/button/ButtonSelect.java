@@ -28,7 +28,7 @@ public class ButtonSelect extends LinearLayout {
     private String title;
     private int titleSize;
     private int titleColor;
-    private String content;
+    private String content="";
     private int contentSize;
     private int contentColor;
     private int src;

@@ -81,8 +81,6 @@ public class BillingFragment extends Fragment {
     ButtonWithImg bwiSearch;
     @BindView(R.id.ll_search)
     RelativeLayout llSearch;
-    @BindView(R.id.ll_btn)
-    LinearLayout llBtn;
     @BindView(R.id.rl_main)
     RelativeLayout rlMain;
     @BindView(R.id.bs_date_start)
@@ -272,7 +270,7 @@ public class BillingFragment extends Fragment {
         formTitle = new FormRow(getActivity()).isTitle(true).setColumns(BillingUtil.getTitles(getActivity())).build();
         formTitle.setId(formTitleId);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getActivity().getResources().getDimensionPixelSize(R.dimen.dp_20));
-        params.addRule(RelativeLayout.BELOW, R.id.ll_btn);
+        params.addRule(RelativeLayout.BELOW, R.id.ll_search2);
         params.topMargin = getActivity().getResources().getDimensionPixelSize(R.dimen.dp_5);
         rlMain.addView(formTitle, params);
     }

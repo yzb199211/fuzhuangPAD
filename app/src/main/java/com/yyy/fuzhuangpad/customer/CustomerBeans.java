@@ -7,18 +7,18 @@ import java.util.List;
 
 public class CustomerBeans {
     private int iRecNo;
-    private String sCustID;
-    private String sCustName;
-    private String sCustShortName;
-    private String sClassID;
-    private String sClassName;
-    private String sSaleID;
-    private String sSaleName;
-    private String sPerson;
-    private String sTel;
-    private String sAddress;
-    private String dStopDate;
-    private String sRemark;
+    private String sCustID="";
+    private String sCustName="";
+    private String sCustShortName="";
+    private String sClassID="";
+    private String sClassName="";
+    private String sSaleID="";
+    private String sSaleName="";
+    private String sPerson="";
+    private String sTel="";
+    private String sAddress="";
+    private String dStopDate="";
+    private String sRemark="";
     private int iCustType;
     private int row;
 
@@ -151,13 +151,13 @@ public class CustomerBeans {
     }
 
     public String paramsFields() {
-        return "sCustName" + ",sCustID" + ",sCustShortName" + ",sClassID"  + ",sSaleID" + ",sPerson" + ",sTel" + ",sAddress" + ",dStopDate" + ",sRemark";
+        return "sCustName" + ",sCustID" + ",sCustShortName" + ",sClassID"  + ",sSaleID" + ",sPerson" + ",sTel" + ",sAddress" + ",dStopDate" + ",sRemark"+",iCustType";
     }
 
     public String paramsFieldsValues() {
         return sCustName + "," + sCustID + "," + sCustShortName + ","
                 + sClassID + "," + sSaleID + ","
-                + sPerson + "," + sTel + "," + sAddress + "," + dStopDate + "," + sRemark;
+                + sPerson + "," + sTel + "," + sAddress + "," + dStopDate + "," + sRemark+",0";
     }
 
     public String paramsFilterFields() {

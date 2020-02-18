@@ -64,8 +64,8 @@
                     android:id="@+id/sv_type"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
                     android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
                     app:svContentColor="@color/default_text_color"
                     app:svContentSize="@dimen/sp_10"
                     app:svMust="true"
@@ -109,8 +109,8 @@
                     android:id="@+id/se_customer_style"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
                     android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
                     app:seEditColor="@color/default_text_color"
                     app:seEditSize="@dimen/sp_10"
                     app:seTilte="@string/style_detail_customer_style"
@@ -228,6 +228,7 @@
                     android:layout_weight="1"
                     app:seEditColor="@color/default_text_color"
                     app:seEditSize="@dimen/sp_10"
+                    app:seInputType="floats"
                     app:seTilte="@string/style_detail_price_trade"
                     app:seTitleColor="@color/default_text_color"
                     app:seTitleSize="@dimen/sp_10" />
@@ -240,6 +241,7 @@
                     android:layout_weight="1"
                     app:seEditColor="@color/default_text_color"
                     app:seEditSize="@dimen/sp_10"
+                    app:seInputType="floats"
                     app:seTilte="@string/style_detail_price_retail"
                     app:seTitleColor="@color/default_text_color"
                     app:seTitleSize="@dimen/sp_10" />
@@ -248,13 +250,15 @@
                     android:id="@+id/se_price_tag"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
                     android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
                     app:seEditColor="@color/default_text_color"
                     app:seEditSize="@dimen/sp_10"
+                    app:seInputType="floats"
                     app:seTilte="@string/style_detail_price_tag"
                     app:seTitleColor="@color/default_text_color"
                     app:seTitleSize="@dimen/sp_10" />
+
             </LinearLayout>
 
             <View

@@ -147,7 +147,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
         list.add(new NetParams("otype", "GetTableData"));
         list.add(new NetParams("sTableName", "vwBscDataStyleM"));
         list.add(new NetParams("sFields", "iRecNo,sStyleNo,sStyleName,sClassID,sClassName,fCostPrice,sReMark,sGroupName"));
-        list.add(new NetParams("sFilters", ""));
+        list.add(new NetParams("sFilters", "isnull(dStopDate,'2199-01-01')>getdate()"));
         return list;
     }
 

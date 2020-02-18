@@ -4,12 +4,12 @@ import com.yyy.fuzhuangpad.style.StyleColorUpload;
 
 import java.util.List;
 
-public class MainQueryChild {
+public class MainQueryChild<T> {
     private String childtype;
     private String tablename;
     private String linkfield;
     private String fieldkey;
-    private List<StyleColorUpload> data;
+    private List<T> data;
     private int[] deleteKey;
 
     public String getChildtype() {
@@ -44,11 +44,11 @@ public class MainQueryChild {
         this.fieldkey = fieldkey;
     }
 
-    public List<StyleColorUpload> getData() {
+    public List<T> getData() {
         return data;
     }
 
-    public void setData(List<StyleColorUpload> data) {
+    public void setData(List<T> data) {
         this.data = data;
     }
 

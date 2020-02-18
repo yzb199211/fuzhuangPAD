@@ -7,22 +7,22 @@ import java.util.List;
 
 public class StyleBean {
     private int iRecNo;
-    private String sStyleNo;
-    private String sStyleName;
-    private String sClassID;
-    private String sClassName;
-    private String sSizeGroupID;
-    private String sGroupName;
+    private String sStyleNo="";
+    private String sStyleName="";
+    private String sClassID="";
+    private String sClassName="";
+    private String sSizeGroupID="";
+    private String sGroupName="";
     private int iBscDataCustomerRecNo;
-    private String sCustShortName;
-    private String iYear;
+    private String sCustShortName="";
+    private String iYear="";
     private double fCostPrice;
     private double fBulkTotal1;
     private double fSalePrice;
-    private String sCustStyleNo;
-    private String sWaterElents;
-    private String sReMark;
-    private String dStopDate;
+    private String sCustStyleNo="";
+    private String sWaterElents="";
+    private String sReMark="";
+    private String dStopDate="";
     private int row;
 
 

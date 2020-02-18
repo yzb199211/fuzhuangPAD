@@ -1,8 +1,8 @@
 package com.yyy.fuzhuangpad.sale;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -11,8 +11,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TimePicker;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.customer.CustomerDetailActivity;
@@ -34,9 +31,13 @@ import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
 import com.yyy.fuzhuangpad.util.StringUtil;
 import com.yyy.fuzhuangpad.util.TimeUtil;
 import com.yyy.fuzhuangpad.util.Toasts;
+import com.yyy.fuzhuangpad.util.net.MainQuery;
+import com.yyy.fuzhuangpad.util.net.MainQueryChild;
 import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
+import com.yyy.fuzhuangpad.util.net.Operatortype;
+import com.yyy.fuzhuangpad.util.net.Otype;
 import com.yyy.fuzhuangpad.view.button.ButtonSelect;
 import com.yyy.fuzhuangpad.view.form.FormRow;
 import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
@@ -103,7 +104,7 @@ public class BillDetailActivity extends AppCompatActivity {
     private String saler;
     private String salerId;
 
-    private String classId;
+    private String classId = "0";
     private String className;
 
 
@@ -122,6 +123,7 @@ public class BillDetailActivity extends AppCompatActivity {
     FormRow formTitle;
     RecyclerView recyclerView;
     BillDetailAdapter mAdapter;
+    private String operatortype = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,16 +147,20 @@ public class BillDetailActivity extends AppCompatActivity {
             String data = getIntent().getStringExtra("data");
             bill = new Gson().fromJson(data, BillBean.class);
             iMainRecNo = bill.getiRecNo();
+            operatortype = Operatortype.update;
             setViewData();
-            if (bill.getiRecNo() != 0) {
-                getData();
-            }
+            getData();
+        } else {
+            bill = new BillBean();
+            operatortype = Operatortype.add;
         }
 
 //        Log.e("data", data);
     }
 
     private void setViewData() {
+        classId = bill.getiOrderType() + "";
+        className = bill.getsOrderType();
         seCode.setText(bill.getsOrderNo());
         shop = bill.getsStockName();
         shopId = bill.getiBscdataStockMRecNo();
@@ -565,7 +571,7 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void initClassData(String string) throws JSONException, Exception {
-        Log.e("class",string);
+        Log.e("class", string);
         JSONObject jsonObject = new JSONObject(string);
         if (jsonObject.optBoolean("success")) {
             setClassData(jsonObject.optJSONObject("dataset").optString("bscdatalistd"));
@@ -711,7 +717,7 @@ public class BillDetailActivity extends AppCompatActivity {
         params.add(new NetParams("otype", "GetTableData"));
         params.add(new NetParams("sTableName", "BscDataCustomer"));
         params.add(new NetParams("sFields", "irecno,sCustShortName"));
-        params.add(new NetParams("sFilters", "iCustType=0"));
+        params.add(new NetParams("sFilters", "iCustType=0 and isnull(dStopDate,'2199-01-01')>getdate()"));
         return params;
     }
 
@@ -827,13 +833,99 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void save() {
+        initSaveDate();
+        if (shopId == 0) {
+            Toast(getString(R.string.sale_billing_empty_shop));
+            return;
+        }
+        if (customerId == 0) {
+            Toast(getString(R.string.sale_billing_empty_customer));
+            return;
+        }
+        if (TextUtils.isEmpty(saler)) {
+            Toast(getString(R.string.sale_billing_empty_saler));
+            return;
+        }
+        if (TextUtils.isEmpty(className)) {
+            Toast(getString(R.string.sale_billing_empty_class));
+            return;
+        }
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(saveParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                Log.e("data", string);
+            }
 
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initSaveDate() {
+        bill.setsRemark(seRemark.getText().toString());
+        bill.setiBscDataCustomerRecNo(customerId);
+        bill.setsCustShortName(customer);
+        bill.setdDate(TextUtils.isEmpty(bsDate.getContent()) ? "" : bsDate.getContent());
+        bill.setdOrderDate(TextUtils.isEmpty(bsDateDelivery.getContent()) ? "" : bsDateDelivery.getContent());
+        bill.setiBscdataStockMRecNo(shopId);
+        bill.setsStockName(shop);
+        bill.setiOrderType(Integer.parseInt(classId));
+        bill.setsOrderType(className);
+        bill.setsSaleID(salerId);
+        bill.setsSaleName(saler);
     }
 
     private List<NetParams> saveParams() {
         List<NetParams> params = new ArrayList<>();
-
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", Otype.OperateData));
+        params.add(new NetParams("mainquery", getMainquery()));
+        params.add(new NetParams("children", "[" + getChildquery() + "]"));
+        Log.e("child", "[" + getChildquery() + "]");
+        Log.e("main", getMainquery());
         return params;
+    }
+
+    private String getChildquery() {
+        MainQueryChild mainQueryChild = new MainQueryChild();
+        mainQueryChild.setChildtype(BillDetailBean.childtypeParams());
+        mainQueryChild.setFieldkey(BillDetailBean.fieldkeyParams());
+        mainQueryChild.setLinkfield(BillDetailBean.linkfieldParams());
+        mainQueryChild.setTablename(BillDetailBean.tablenameParams());
+        mainQueryChild.setData(getBillDetail());
+        return new Gson().toJson(mainQueryChild);
+    }
+
+    private List<BillDetailBase> getBillDetail() {
+        List<BillDetailBase> list = new ArrayList<>();
+        for (BillDetailBean item : billDetail) {
+            BillDetailBase billDetailBase = new BillDetailBase(item.getiMainRecNo(),
+                    item.getiBscDataStyleMRecNo(),
+                    item.getsStyleNo(),
+                    item.getiBscDataColorRecNo()
+                    , item.getsColorName(),
+                    item.getsSizeName(), item.getiSumQty(), item.getfTotal());
+            list.add(billDetailBase);
+        }
+        return list;
+    }
+
+    private String getMainquery() {
+        MainQuery mainQuery = new MainQuery();
+        mainQuery.setFields(bill.paramsFields());
+        mainQuery.setFieldsValues(bill.paramsFieldsValues());
+        mainQuery.setFieldKeys(bill.paramsFieldKeys());
+        mainQuery.setFieldKeysValues(bill.paramsFieldKeysValues());
+        mainQuery.setFilterFields(bill.paramsFilterFields());
+        mainQuery.setFilterValues(bill.paramsFilterValues());
+        mainQuery.setFilterComOprts(bill.paramsFilterComOprts());
+        mainQuery.setTableName("SdContractM");
+        mainQuery.setOperatortype(operatortype);
+        return new Gson().toJson(mainQuery);
     }
 
     private void go2AddCustomer() {

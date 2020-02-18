@@ -70,25 +70,25 @@ public class MainActivity extends AppCompatActivity {
                 if (customerFragment == null) {
                     customerFragment = new CustomerFragment();
                 }
-                switchFragment(customerFragment);
+                switchFragment(customerFragment, mmBaseCustomer);
                 break;
             case R.id.mm_base_style:
                 if (styleFragment == null) {
                     styleFragment = new StyleFragment();
                 }
-                switchFragment(styleFragment);
+                switchFragment(styleFragment, mmBaseStyle);
                 break;
             case R.id.mm_base_color:
                 if (colorFragment == null) {
                     colorFragment = new ColorFragment();
                 }
-                switchFragment(colorFragment);
+                switchFragment(colorFragment, mmBaseColor);
                 break;
             case R.id.mm_sale_order:
                 if (billingFragment == null) {
                     billingFragment = new BillingFragment();
                 }
-                switchFragment(billingFragment);
+                switchFragment(billingFragment, mmSaleOrder);
                 break;
             case R.id.mm_center_pwd:
                 break;
@@ -100,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void firstShow() {
+        mmBaseCustomer.setBackgroundColor(getResources().getColor(R.color.common_menu_checked));
+        mmBaseCustomer.setTextColor(getResources().getColor(R.color.white));
+        currentMenu = mmBaseCustomer;
         customerFragment = new CustomerFragment();
         currentFragment = customerFragment;
         FragmentTransaction transaction = getSupportFragmentManager()
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void switchFragment(Fragment targetFragment) {
+    private void switchFragment(Fragment targetFragment, MainMenu menu) {
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
         if (!targetFragment.isAdded()) {
@@ -125,5 +128,10 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
         currentFragment = targetFragment;
+        currentMenu.setBackgroundColor(getResources().getColor(R.color.white));
+        currentMenu.setTextColor(getResources().getColor(R.color.default_text_color));
+        menu.setBackgroundColor(getResources().getColor(R.color.common_menu_checked));
+        menu.setTextColor(getResources().getColor(R.color.white));
+        currentMenu = menu;
     }
 }

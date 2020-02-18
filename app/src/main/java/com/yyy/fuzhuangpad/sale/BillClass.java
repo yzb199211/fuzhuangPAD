@@ -3,8 +3,8 @@ package com.yyy.fuzhuangpad.sale;
 import com.yyy.yyylibrary.wheel.interfaces.IPickerViewData;
 
 public class BillClass implements IPickerViewData {
-    private String sCode;
-    private String sName;
+    private String sCode = "0";
+    private String sName = "";
 
     public String getsCode() {
         return sCode;

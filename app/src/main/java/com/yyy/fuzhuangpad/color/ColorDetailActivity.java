@@ -154,6 +154,7 @@ public class ColorDetailActivity extends AppCompatActivity {
     }
 
     private void getColorTypesData() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(getColorTypeParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -291,6 +292,7 @@ public class ColorDetailActivity extends AppCompatActivity {
     }
 
     private void delete() {
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(deteleParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -358,6 +360,7 @@ public class ColorDetailActivity extends AppCompatActivity {
             Toast(getString(R.string.color_empty_type));
             return;
         }
+        LoadingDialog.showDialogForLoading(this);
         new NetUtil(getSaveParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
