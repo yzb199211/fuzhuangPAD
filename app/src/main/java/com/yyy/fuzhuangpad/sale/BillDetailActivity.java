@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,8 +22,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.customer.CustomerDetailActivity;
+import com.yyy.fuzhuangpad.dialog.EditDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnDeleteListener;
+import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.util.CodeUtil;
@@ -39,6 +42,7 @@ import com.yyy.fuzhuangpad.util.net.NetUtil;
 import com.yyy.fuzhuangpad.util.net.Operatortype;
 import com.yyy.fuzhuangpad.util.net.Otype;
 import com.yyy.fuzhuangpad.view.button.ButtonSelect;
+import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.form.FormRow;
 import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
@@ -87,7 +91,8 @@ public class BillDetailActivity extends AppCompatActivity {
     LinearLayout llMain;
     @BindView(R.id.bs_class)
     ButtonSelect bsClass;
-
+    @BindView(R.id.bw_delete)
+    ButtonWithImg bwDelete;
     SharedPreferencesHelper preferencesHelper;
     private String url;
     private String address;
@@ -124,6 +129,8 @@ public class BillDetailActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     BillDetailAdapter mAdapter;
     private String operatortype = "";
+    private int[] deletekey;
+    private int keyPos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +160,7 @@ public class BillDetailActivity extends AppCompatActivity {
         } else {
             bill = new BillBean();
             operatortype = Operatortype.add;
+            bwDelete.setVisibility(View.GONE);
         }
 
 //        Log.e("data", data);
@@ -212,15 +220,17 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void setDetailData(String optString) {
+        LoadingFinish(null);
         List<BillDetailBean> list = new Gson().fromJson(optString, new TypeToken<List<BillDetailBean>>() {
         }.getType());
         if (list == null || list.size() == 0) {
-            LoadingFinish(getString(R.string.error_empty));
+//            LoadingFinish(getString(R.string.error_empty));
         } else {
+            deletekey = new int[list.size()];
             billDetail.addAll(list);
             setCheckRepet();
             refreshList();
-            LoadingFinish(null);
+
 //            setPickSaler();
         }
     }
@@ -260,13 +270,42 @@ public class BillDetailActivity extends AppCompatActivity {
         stTotal.setText(bill.getfTotal() + "");
     }
 
+    EditDialog editDialog;
+
+    private void showEditDialog(int position) {
+        if (editDialog == null) {
+            editDialog = new EditDialog(this).max(billDetail.get(position).getiSumQty());
+        } else {
+            editDialog.setMax(billDetail.get(position).getiSumQty());
+        }
+        editDialog.setOnCloseListener(new EditDialog.OnCloseListener() {
+            @Override
+            public void onClick(boolean confirm, @NonNull String data) {
+                if (confirm) {
+                    billDetail.get(position).setiSumQty(Integer.parseInt(data));
+                    billDetail.get(position).setfTotal(billDetail.get(position).getiSumQty() * billDetail.get(position).getfPrice());
+                   refreshList();
+                }
+            }
+        });
+        editDialog.show();
+    }
+
     private void initAdapter() {
         mAdapter = new BillDetailAdapter(this, billDetail);
         mAdapter.setOnDeleteListener(new OnDeleteListener() {
             @Override
             public void onDelete(int pos) {
+                deletekey[keyPos] = billDetail.get(pos).getiRecNo();
+                keyPos = keyPos + 1;
                 billDetail.remove(pos);
                 refreshList();
+            }
+        });
+        mAdapter.setOnEditQtyListener(new OnEditQtyListener() {
+            @Override
+            public void onEdit(int pos) {
+                showEditDialog(pos);
             }
         });
         recyclerView.setAdapter(mAdapter);
@@ -670,13 +709,13 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void setCustomerData(String optString) {
+        LoadingFinish(null);
         List<BillCustomer> list = new Gson().fromJson(optString, new TypeToken<List<BillCustomer>>() {
         }.getType());
         if (list == null || list.size() == 0) {
-            LoadingFinish(getString(R.string.error_empty));
+//            LoadingFinish(getString(R.string.error_empty));
         } else {
             customers.addAll(list);
-            LoadingFinish(null);
             setPickCustomer();
         }
     }
@@ -810,13 +849,17 @@ public class BillDetailActivity extends AppCompatActivity {
         return params;
     }
 
-    @OnClick({R.id.bw_exit, R.id.bw_submit, R.id.bw_save, R.id.bwi_add_customer, R.id.bwi_add_style})
+    @OnClick({R.id.bw_exit, R.id.bw_submit, R.id.bw_save, R.id.bwi_add_customer, R.id.bwi_add_style, R.id.bw_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bw_exit:
                 finish();
                 break;
+            case R.id.bw_delete:
+                delete();
+                break;
             case R.id.bw_submit:
+//                submit();
                 break;
             case R.id.bw_save:
                 if (shopId == 0) {
@@ -856,6 +899,101 @@ public class BillDetailActivity extends AppCompatActivity {
                 go2AddStyle();
                 break;
         }
+    }
+
+    private void submit(int irecno) {
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(submitParams(irecno), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initSubmitData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+
+    }
+
+    private void initSubmitData(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject(data);
+        if (jsonObject.optBoolean("success")) {
+            LoadingFinish(getString(R.string.success_submit));
+            eixt();
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private List<NetParams> submitParams(int irecno) {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", Otype.MobileSubmit));
+        params.add(new NetParams("iFormID", "2002"));
+        params.add(new NetParams("userid", (String) preferencesHelper.getSharedPreference("userid", "")));
+        params.add(new NetParams("iRecNo", irecno + ""));
+        return params;
+    }
+
+    private void delete() {
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(deteleParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initDeleteData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initDeleteData(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject(data);
+        if (jsonObject.optBoolean("success")) {
+            LoadingFinish(getString(R.string.success_delete));
+            eixt();
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private List<NetParams> deteleParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", Otype.OperateData));
+        params.add(new NetParams("mainquery", getDeleltMainquery()));
+        return params;
+    }
+
+    private String getDeleltMainquery() {
+        MainQuery mainQuery = new MainQuery();
+        mainQuery.setFields("");
+        mainQuery.setFieldsValues("");
+        mainQuery.setFieldKeys(bill.paramsFieldKeys());
+        mainQuery.setFieldKeysValues(bill.paramsFieldKeysValues());
+        mainQuery.setFilterFields(bill.paramsFilterFields());
+        mainQuery.setFilterValues(bill.paramsFilterValues());
+        mainQuery.setFilterComOprts(bill.paramsFilterComOprts());
+        mainQuery.setTableName("SdContractM");
+        mainQuery.setOperatortype(Operatortype.delete);
+        return new Gson().toJson(mainQuery);
     }
 
     private void getOrderNo() {
@@ -908,6 +1046,7 @@ public class BillDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String string) {
                 try {
+                    Log.e("data", string);
                     initSaveDate(string);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -966,6 +1105,7 @@ public class BillDetailActivity extends AppCompatActivity {
         mainQueryChild.setLinkfield(BillDetailBean.linkfieldParams());
         mainQueryChild.setTablename(BillDetailBean.tablenameParams());
         mainQueryChild.setData(getBillDetail());
+        mainQueryChild.setDeleteKey(deletekey);
         return new Gson().toJson(mainQueryChild);
     }
 
@@ -975,9 +1115,10 @@ public class BillDetailActivity extends AppCompatActivity {
             BillDetailBase billDetailBase = new BillDetailBase(item.getiMainRecNo(),
                     item.getiBscDataStyleMRecNo(),
                     item.getsStyleNo(),
-                    item.getiBscDataColorRecNo()
-                    , item.getsColorName(),
-                    item.getsSizeName(), item.getiSumQty(), item.getfTotal());
+                    item.getiBscDataColorRecNo(),
+                    item.getsColorName(), item.getsSizeName(),
+                    item.getiSumQty(), item.getfPrice(),
+                    item.getiSumQty() * item.getfPrice(), item.getsRemark());
             list.add(billDetailBase);
         }
         return list;

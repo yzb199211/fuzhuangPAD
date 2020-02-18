@@ -117,7 +117,7 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
             case 3:
                 return InputType.TYPE_CLASS_NUMBER;
             case 2:
-                return InputType.TYPE_NUMBER_FLAG_DECIMAL;
+                return EditorInfo.TYPE_CLASS_NUMBER|EditorInfo.TYPE_NUMBER_FLAG_DECIMAL;
             case 1:
                 return InputType.TYPE_TEXT_FLAG_MULTI_LINE;
             default:

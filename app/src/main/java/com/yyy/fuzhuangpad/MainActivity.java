@@ -1,5 +1,6 @@
 package com.yyy.fuzhuangpad;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.yyy.fuzhuangpad.color.ColorFragment;
 import com.yyy.fuzhuangpad.customer.CustomerFragment;
+import com.yyy.fuzhuangpad.login.LoginActivity;
 import com.yyy.fuzhuangpad.sale.BillingFragment;
 import com.yyy.fuzhuangpad.style.StyleFragment;
 import com.yyy.fuzhuangpad.view.main.MainMenu;
@@ -93,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.mm_center_pwd:
                 break;
             case R.id.mm_center_exit:
+                startActivity(new Intent().setClass(MainActivity.this, LoginActivity.class));
+                finish();
                 break;
             default:
                 break;

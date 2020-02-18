@@ -14,7 +14,7 @@ public class BillDetailBase {
     public BillDetailBase() {
     }
 
-    public BillDetailBase(int iMainRecNo, int iBscDataStyleMRecNo, String sStyleNo, int iBscDataColorRecNo, String sColorName, String sSizeName, int iSumQty, double fPrice) {
+    public BillDetailBase(int iMainRecNo, int iBscDataStyleMRecNo, String sStyleNo, int iBscDataColorRecNo, String sColorName, String sSizeName, int iSumQty, double fPrice,double fTotal,String sRemark) {
         this.iMainRecNo = iMainRecNo;
         this.iBscDataStyleMRecNo = iBscDataStyleMRecNo;
         this.iBscDataColorRecNo = iBscDataColorRecNo;

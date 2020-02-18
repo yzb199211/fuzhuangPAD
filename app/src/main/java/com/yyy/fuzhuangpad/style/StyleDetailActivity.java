@@ -105,6 +105,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     private String url;
     private String address;
     private String companyCode;
+    private int[] deleteKey;
 
     private String operatortype = "";
     private OptionsPickerView pvType;
@@ -195,6 +196,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     }
 
     private void setListData(String data) {
+        LoadingFinish(null);
         if (StringUtil.isNotEmpty(data)) {
             Log.e("colors", data);
             styleColors.addAll(new Gson().fromJson(data, new TypeToken<List<StyleColor>>() {
@@ -202,12 +204,12 @@ public class StyleDetailActivity extends AppCompatActivity {
             Log.e("styleColors", new Gson().toJson(styleColors));
             setColorView();
         } else {
-            LoadingFinish(getString(R.string.error_empty));
+//            LoadingFinish(getString(R.string.error_empty));
         }
     }
 
     private void setColorView() {
-        LoadingFinish(null);
+
         if (styleColors.size() > 0) {
             initColorChecked();
             runOnUiThread(new Runnable() {
@@ -220,9 +222,11 @@ public class StyleDetailActivity extends AppCompatActivity {
     }
 
     private void initColorChecked() {
+        deleteKey = new int[styleColors.size()];
         for (int i = 0; i < styleColors.size(); i++) {
             styleColors.get(i).setChecked(true);
             styleColors.get(i).setiRecNo(styleColors.get(i).getiBscDataColorRecNo());
+            deleteKey[i] = styleColors.get(i).getiRecNo();
         }
     }
 
@@ -690,6 +694,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         mainQueryChild.setLinkfield(StyleColorUpload.linkfieldParams());
         mainQueryChild.setTablename(StyleColorUpload.tablenameParams());
         mainQueryChild.setData(getColors());
+        mainQueryChild.setDeleteKey(deleteKey);
         return new Gson().toJson(mainQueryChild);
     }
 
