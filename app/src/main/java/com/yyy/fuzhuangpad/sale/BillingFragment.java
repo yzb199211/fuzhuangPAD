@@ -73,8 +73,8 @@ import butterknife.OnClick;
 public class BillingFragment extends Fragment {
     @BindView(R.id.se_code)
     SearchEdit seCode;
-    @BindView(R.id.se_name)
-    SearchEdit seName;
+    @BindView(R.id.bs_customer)
+    ButtonSelect bsCustomer;
     @BindView(R.id.bwi_remove)
     ButtonWithImg bwiRemove;
     @BindView(R.id.bwi_search)
@@ -95,18 +95,25 @@ public class BillingFragment extends Fragment {
     List<FormColumn> titles;
     private List<List<FormColumn>> formDatas;
     private List<BillBean> billDatas;
-    List<BillShop> shops;
+    private List<BillShop> shops;
+    private List<BillCustomer> customers;
     private TimePickerView pvDateStart;
     private TimePickerView pvDateEnd;
     private OptionsPickerView pvShop;
+    private OptionsPickerView pvCustomer;
     private String url;
     private String address;
     private String companyCode;
     private String filter = "";
     private String shop = "";
+    private int shopid;
+    private String code;
+    private String customer;
+    private int customerId;
     private SharedPreferencesHelper preferencesHelper;
     private FormAdapter formAdapter;
     private RecyclerView recyclerView;
+    private boolean isFrist = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -235,7 +242,27 @@ public class BillingFragment extends Fragment {
 
     private String getFilter() {
         filter = "";
-
+        if (!isFrist) {
+            code = seCode.getText();
+//            customerId = seName.getText();
+            if (shopid != 0) {
+                filter = "iBscdataStockMRecNo=" + "\'" + shopid + "\'";
+            }
+            if (StringUtil.isNotEmpty(code)) {
+                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "sOrderNo like" + "\'|" + code + "|\'";
+            }
+            if (customerId != 0) {
+                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "iBscDataCustomerRecNo =" + "\'" + customerId + "\'";
+            }
+            if (StringUtil.isNotEmpty(bsDateStart.getContent())) {
+                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "dDate>=convert(datetime,'" + bsDateStart.getContent() + "')";
+            }
+            if (StringUtil.isNotEmpty(bsDataEnd.getContent())) {
+                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "dDate<=convert(datetime,'" + bsDataEnd.getContent() + "')";
+            }
+        } else {
+            isFrist = false;
+        }
         return filter;
     }
 
@@ -264,6 +291,7 @@ public class BillingFragment extends Fragment {
         shops = new ArrayList<>();
         formDatas = new ArrayList<>();
         billDatas = new ArrayList<>();
+        customers = new ArrayList<>();
     }
 
     private void initTitle() {
@@ -279,8 +307,111 @@ public class BillingFragment extends Fragment {
         initStartDate();
         initEndDate();
         initShopView();
+        initCustomerView();
     }
 
+    private void initCustomerView() {
+        bsCustomer.setOnSelectClickListener(new OnSelectClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (customers.size() == 0) {
+                    getCustomers();
+                } else {
+                    pvCustomer.show();
+                }
+            }
+        });
+    }
+
+    private void getCustomers() {
+        LoadingDialog.showDialogForLoading(getActivity());
+        new NetUtil(getCustomerParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initCustomerData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_data));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initCustomerData(String string) throws JSONException, Exception {
+        JSONObject jsonObject = new JSONObject(string);
+        if (jsonObject.optBoolean("success")) {
+            setCustomerData(jsonObject.optJSONObject("dataset").optString("BscDataCustomer"));
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private void setCustomerData(String optString) {
+        List<BillCustomer> list = new Gson().fromJson(optString, new TypeToken<List<BillCustomer>>() {
+        }.getType());
+        if (list == null || list.size() == 0) {
+            LoadingFinish(getString(R.string.error_empty));
+        } else {
+            BillCustomer billCustomer = new BillCustomer();
+            billCustomer.setsCustShortName(getString(R.string.common_empty));
+            customers.add(billCustomer);
+            customers.addAll(list);
+            LoadingFinish(null);
+            setPickCustomer();
+        }
+    }
+
+    private void setPickCustomer() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                initPickCustomer();
+            }
+        });
+    }
+
+    private void initPickCustomer() {
+        pvCustomer = new OptionsPickerBuilder(getActivity(), new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                String type = customers.get(options1).getPickerViewText();
+                if (!type.equals(customer)) {
+                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(options1).getPickerViewText();
+                    customerId = customers.get(options1).getIrecno();
+                    bsCustomer.setContext(customer);
+                }
+            }
+        })
+                .setTitleText("客户选择")
+                .setContentTextSize(18)//设置滚轮文字大小
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setLabels("", "", "")
+                .isDialog(true)
+                .build();
+        pvCustomer.setPicker(customers);//一级选择器
+        setDialog(pvCustomer);
+        pvCustomer.show();
+    }
+
+    private List<NetParams> getCustomerParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", "GetTableData"));
+        params.add(new NetParams("sTableName", "BscDataCustomer"));
+        params.add(new NetParams("sFields", "irecno,sCustShortName"));
+        params.add(new NetParams("sFilters", "iCustType=0"));
+        return params;
+    }
 
     private void initStartDate() {
         bsDateStart.setOnSelectClickListener(new OnSelectClickListener() {
@@ -387,6 +518,7 @@ public class BillingFragment extends Fragment {
                 String type = shops.get(options1).getPickerViewText();
                 if (!type.equals(shop)) {
                     shop = type.equals(getString(R.string.common_empty)) ? "" : shops.get(options1).getPickerViewText();
+                    shopid = shops.get(options1).getiRecNo();
                     bsShop.setContext(shop);
                 }
             }
@@ -409,6 +541,7 @@ public class BillingFragment extends Fragment {
                 clearFilter();
                 break;
             case R.id.bwi_search:
+                refreshData();
                 break;
             case R.id.bwi_add:
                 go2Detail(null);
@@ -420,11 +553,13 @@ public class BillingFragment extends Fragment {
 
     private void clearFilter() {
         seCode.clear();
-        seName.clear();
+        bsCustomer.setContext("");
         bsShop.setContext("");
         bsDateStart.setContext("");
         bsDataEnd.setContext("");
         shop = "";
+        shopid = 0;
+        customerId = 0;
         refreshData();
     }
 
@@ -562,5 +697,12 @@ public class BillingFragment extends Fragment {
         params.leftMargin = 0;
         params.rightMargin = 0;
         return params;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == CodeUtil.REFRESH)
+            refreshData();
     }
 }

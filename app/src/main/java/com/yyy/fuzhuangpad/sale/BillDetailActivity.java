@@ -388,6 +388,7 @@ public class BillDetailActivity extends AppCompatActivity {
             @Override
             public void onTimeSelect(Date date, View v) {
                 bsDate.setContext(StringUtil.getDate(date));
+                bill.setdDate(StringUtil.getDate(date));
             }
         }).setRangDate(TimeUtil.str2calendar(getString(R.string.common_pickdate_start)), TimeUtil.str2calendar(getString(R.string.common_pickdate_end)))
                 .setDate(Calendar.getInstance())
@@ -610,10 +611,11 @@ public class BillDetailActivity extends AppCompatActivity {
                     className = type.equals(getString(R.string.common_empty)) ? "" : billClass.get(options1).getPickerViewText();
                     classId = billClass.get(options1).getsCode();
                     bsClass.setContext(className);
+
                 }
             }
         })
-                .setTitleText("类型选择")
+                .setTitleText("类别选择")
                 .setContentTextSize(18)//设置滚轮文字大小
                 .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
                 .setLabels("", "", "")
@@ -817,7 +819,31 @@ public class BillDetailActivity extends AppCompatActivity {
             case R.id.bw_submit:
                 break;
             case R.id.bw_save:
-                save();
+                if (shopId == 0) {
+                    Toast(getString(R.string.sale_billing_empty_shop));
+                    return;
+                }
+                if (customerId == 0) {
+                    Toast(getString(R.string.sale_billing_empty_customer));
+                    return;
+                }
+                if (TextUtils.isEmpty(bill.getdDate())) {
+                    Toast(getString(R.string.sale_billing_empty_date));
+                    return;
+                }
+                if (TextUtils.isEmpty(saler)) {
+                    Toast(getString(R.string.sale_billing_empty_saler));
+                    return;
+                }
+                if (TextUtils.isEmpty(className)) {
+                    Toast(getString(R.string.sale_billing_empty_class));
+                    return;
+                }
+                if (TextUtils.isEmpty(bill.getsOrderNo())) {
+                    getOrderNo();
+                } else {
+                    save();
+                }
                 break;
             case R.id.bwi_add_customer:
                 go2AddCustomer();
@@ -832,29 +858,26 @@ public class BillDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void save() {
-        initSaveDate();
-        if (shopId == 0) {
-            Toast(getString(R.string.sale_billing_empty_shop));
-            return;
-        }
-        if (customerId == 0) {
-            Toast(getString(R.string.sale_billing_empty_customer));
-            return;
-        }
-        if (TextUtils.isEmpty(saler)) {
-            Toast(getString(R.string.sale_billing_empty_saler));
-            return;
-        }
-        if (TextUtils.isEmpty(className)) {
-            Toast(getString(R.string.sale_billing_empty_class));
-            return;
-        }
+    private void getOrderNo() {
         LoadingDialog.showDialogForLoading(this);
-        new NetUtil(saveParams(), url, new ResponseListener() {
+        new NetUtil(getOrderParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
                 Log.e("data", string);
+                try {
+                    JSONObject jsonObject = new JSONObject(string);
+                    if (jsonObject.optBoolean("success")) {
+                        bill.setsOrderNo(jsonObject.optString("message"));
+                        LoadingFinish(null);
+                        save();
+                    } else {
+                        LoadingFinish(jsonObject.optString("message"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
+
             }
 
             @Override
@@ -865,7 +888,53 @@ public class BillDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initSaveDate() {
+    private List<NetParams> getOrderParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", Otype.GetFormBillNo));
+        params.add(new NetParams("iFormID", "2002"));
+        return params;
+    }
+
+    private void save() {
+        setSaveDate();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LoadingDialog.showDialogForLoading(BillDetailActivity.this);
+            }
+        });
+        new NetUtil(saveParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initSaveDate(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
+
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initSaveDate(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject(data);
+        if (jsonObject.optBoolean("success")) {
+            LoadingFinish(getString(R.string.success_save));
+            eixt();
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private void setSaveDate() {
         bill.setsRemark(seRemark.getText().toString());
         bill.setiBscDataCustomerRecNo(customerId);
         bill.setsCustShortName(customer);
@@ -1052,5 +1121,15 @@ public class BillDetailActivity extends AppCompatActivity {
         data.setClass(this, BillingStyleDetailActivity.class);
         data.putExtra("shopId", shopId + "");
         startActivityForResult(data, CodeUtil.BILLINGSTYLEQTY);
+    }
+
+    private void eixt() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setResult(CodeUtil.REFRESH);
+                finish();
+            }
+        });
     }
 }

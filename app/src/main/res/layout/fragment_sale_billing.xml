@@ -99,32 +99,45 @@
             android:layout_height="wrap_content"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_8"
-            app:seTilte="@string/color_search_value"
+            app:seTilte="@string/sale_billing_search_value"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_8" />
 
-        <com.yyy.fuzhuangpad.view.search.SearchEdit
-            android:id="@+id/se_name"
+        <com.yyy.fuzhuangpad.view.button.ButtonSelect
+            android:id="@+id/bs_customer"
             android:layout_width="@dimen/dp_110"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_toRightOf="@id/se_code"
-            app:seEditColor="@color/default_text_color"
-            app:seEditSize="@dimen/sp_8"
-            app:seTilte="@string/color_search_name"
-            app:seTitleColor="@color/default_text_color"
-            app:seTitleSize="@dimen/sp_8" />
+            app:bsContentColor="@color/white"
+            app:bsContentSize="@dimen/sp_8"
+            app:bsSrc="@mipmap/icon_arrow_down"
+            app:bsTitle="@string/sale_billing_search_customer"
+            app:bsTitleColor="@color/default_text_color"
+            app:bsTitleSize="@dimen/sp_8" />
+        <!--        <com.yyy.fuzhuangpad.view.search.SearchEdit-->
+        <!--            android:id="@+id/se_name"-->
+        <!--            android:layout_width="@dimen/dp_110"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginLeft="@dimen/dp_5"-->
+        <!--            android:layout_toRightOf="@id/se_code"-->
+        <!--            app:seEditColor="@color/default_text_color"-->
+        <!--            app:seEditSize="@dimen/sp_8"-->
+        <!--            app:seTilte="@string/sale_billing_search_customer"-->
+        <!--            app:seTitleColor="@color/default_text_color"-->
+        <!--            app:seTitleSize="@dimen/sp_8" />-->
 
         <com.yyy.fuzhuangpad.view.button.ButtonWithImg
             android:id="@+id/bwi_add"
             android:layout_width="@dimen/dp_50"
             android:layout_height="@dimen/dp_15"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_5"
             android:background="@drawable/common_btn_add"
             app:bwiSrc="@mipmap/common_btn_add"
             app:bwiTilte="@string/common_add"
             app:bwiTitleColor="@color/common_btn_add"
-            android:layout_marginRight="@dimen/dp_5"
             app:bwiTitleSize="@dimen/sp_8" />
     </RelativeLayout>
 

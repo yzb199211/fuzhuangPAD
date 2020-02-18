@@ -232,7 +232,7 @@ public class BillBean {
 
     public String paramsFieldsValues() {
         return iRecNo + "," +
-                "\"8887\"" + "," +
+                sOrderNo + "," +
                 dDate + "," +
                 iBscdataStockMRecNo + "," +
                 iBscDataCustomerRecNo + "," +

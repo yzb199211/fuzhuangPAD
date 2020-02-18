@@ -1,169 +1,170 @@
 <resources>
-    <string name="app_name">fuzhuangPAD</string>
+<string name="app_name">fuzhuangPAD</string>
 
-    <string name="preferenceCache">fuzhuangPADCache</string>
+<string name="preferenceCache">fuzhuangPADCache</string>
 
-    <!--登录提示-->
-    <string name="login_url_empty">请扫描获取登录信息</string>
-    <string name="login_address_empty">未扫描到登录地址</string>
-    <string name="login_enter">登录</string>
-    <string name="login_sweep">扫描二维码</string>
-    <!--b版本更新dialog提示-->
-    <string name="update_latest">确认是否更新到最新版本</string>
-    <string name="update_older">确认是否退回到旧版本</string>
-    <!--JudgeDialog-->
-    <string name="judge_dialog_btn_yes">是</string>
-    <string name="judge_dialog_btn_no">否</string>
+<!--登录提示-->
+<string name="login_url_empty">请扫描获取登录信息</string>
+<string name="login_address_empty">未扫描到登录地址</string>
+<string name="login_enter">登录</string>
+<string name="login_sweep">扫描二维码</string>
+<!--b版本更新dialog提示-->
+<string name="update_latest">确认是否更新到最新版本</string>
+<string name="update_older">确认是否退回到旧版本</string>
+<!--JudgeDialog-->
+<string name="judge_dialog_btn_yes">是</string>
+<string name="judge_dialog_btn_no">否</string>
 
-    <!--error-->
-    <string name="error_data">数据解析错误</string>
-    <string name="error_json">JSON数据解析错误</string>
-    <string name="error_fail">网络请求失败</string>
-    <string name="error_empty">无数据</string>
-    <string name="error_pcik">选择初始化错误</string>
-    <string name="error_empty_address">请求地址为空</string>
-    <!--error-->
-    <string name="success_save">保存成功</string>
-    <string name="success_delete">删除成功</string>
-    <!--main-->
-    <string name="main_menu_base_title">基础资料</string>
-    <string name="main_menu_base_customer">客户档案</string>
-    <string name="main_menu_base_style">款式资料</string>
-    <string name="main_menu_base_color">颜色信息</string>
-    <string name="main_menu_sale_title">销售管理</string>
-    <string name="main_menu_sale_order">订单管理</string>
-    <string name="main_menu_center_title">个人中心</string>
-    <string name="main_menu_center_pwd">修改密码</string>
-    <string name="main_menu_center_exit">退出登录</string>
-    <!--customer-->
-    <string name="customer_search_code">客户编码</string>
-    <string name="customer_search_name">客户名称</string>
-    <string name="customer_form_num">序号</string>
-    <string name="customer_form_code">编码</string>
-    <string name="customer_form_cus_name">客户简称</string>
-    <string name="customer_form_cus_saler">业务员</string>
-    <string name="customer_form_type">类别</string>
-    <string name="customer_form_phone">电话</string>
-    <string name="customer_detail_title">客户信息</string>
-    <string name="customer_detail_code">客户编码</string>
-    <string name="customer_detail_name">客户名称</string>
-    <string name="customer_detail_name_short">客户简称</string>
-    <string name="customer_detail_type">类        别</string>
-    <string name="customer_detail_saler">业  务  员</string>
-    <string name="customer_detail_phone">电        话</string>
-    <string name="customer_detail_contacts">联  系  人</string>
-    <string name="customer_detail_address">地        址</string>
-    <string name="customer_empty_code">客户编号不能为空</string>
-    <string name="customer_empty_name">客户名称不能为空</string>
-    <string name="customer_empty_type">类别不能为空</string>
-    <!--color-->
-    <string name="color_search_value">色        号</string>
-    <string name="color_search_name">颜色名称</string>
-    <string name="color_form_num">序号</string>
-    <string name="color_form_value">色号</string>
-    <string name="color_form_name">颜色名称</string>
-    <string name="color_form_type">类别</string>
-    <string name="color_form_remark">备注</string>
-    <string name="color_detail_title">颜色信息</string>
-    <string name="color_detail_value">色        号</string>
-    <string name="color_detail_name">颜色名称</string>
-    <string name="color_detail_type">类        别</string>
-    <string name="color_detail_remark">备        注</string>
-    <string name="color_empty_name">颜色名称不能为空</string>
-    <string name="color_empty_type">类别不能为空</string>
+<!--error-->
+<string name="error_data">数据解析错误</string>
+<string name="error_json">JSON数据解析错误</string>
+<string name="error_fail">网络请求失败</string>
+<string name="error_empty">无数据</string>
+<string name="error_pcik">选择初始化错误</string>
+<string name="error_empty_address">请求地址为空</string>
+<!--error-->
+<string name="success_save">保存成功</string>
+<string name="success_delete">删除成功</string>
+<!--main-->
+<string name="main_menu_base_title">基础资料</string>
+<string name="main_menu_base_customer">客户档案</string>
+<string name="main_menu_base_style">款式资料</string>
+<string name="main_menu_base_color">颜色信息</string>
+<string name="main_menu_sale_title">销售管理</string>
+<string name="main_menu_sale_order">订单管理</string>
+<string name="main_menu_center_title">个人中心</string>
+<string name="main_menu_center_pwd">修改密码</string>
+<string name="main_menu_center_exit">退出登录</string>
+<!--customer-->
+<string name="customer_search_code">客户编码</string>
+<string name="customer_search_name">客户名称</string>
+<string name="customer_form_num">序号</string>
+<string name="customer_form_code">编码</string>
+<string name="customer_form_cus_name">客户简称</string>
+<string name="customer_form_cus_saler">业务员</string>
+<string name="customer_form_type">类别</string>
+<string name="customer_form_phone">电话</string>
+<string name="customer_detail_title">客户信息</string>
+<string name="customer_detail_code">客户编码</string>
+<string name="customer_detail_name">客户名称</string>
+<string name="customer_detail_name_short">客户简称</string>
+<string name="customer_detail_type">类别</string>
+<string name="customer_detail_saler">业  务  员</string>
+<string name="customer_detail_phone">电话</string>
+<string name="customer_detail_contacts">联  系  人</string>
+<string name="customer_detail_address">地址</string>
+<string name="customer_empty_code">客户编号不能为空</string>
+<string name="customer_empty_name">客户名称不能为空</string>
+<string name="customer_empty_type">类别不能为空</string>
+<!--color-->
+<string name="color_search_value">色号</string>
+<string name="color_search_name">颜色名称</string>
+<string name="color_form_num">序号</string>
+<string name="color_form_value">色号</string>
+<string name="color_form_name">颜色名称</string>
+<string name="color_form_type">类别</string>
+<string name="color_form_remark">备注</string>
+<string name="color_detail_title">颜色信息</string>
+<string name="color_detail_value">色号</string>
+<string name="color_detail_name">颜色名称</string>
+<string name="color_detail_type">类别</string>
+<string name="color_detail_remark">备注</string>
+<string name="color_empty_name">颜色名称不能为空</string>
+<string name="color_empty_type">类别不能为空</string>
 
-    <!--style-->
-    <string name="style_search_value">款        号</string>
-    <string name="style_search_name">款式名称</string>
-    <string name="style_form_num">序号</string>
-    <string name="style_form_code">款号</string>
-    <string name="style_form_name">名称</string>
-    <string name="style_form_color">颜色</string>
-    <string name="style_form_type">类别</string>
-    <string name="style_form_sizes">尺码组</string>
-    <string name="style_form_size">尺码</string>
-    <string name="style_form_customer">客户</string>
-    <string name="style_form_saler">业务员</string>
-    <string name="style_form_year">年份</string>
-    <string name="style_form_sale_price">销售价</string>
-    <string name="style_form_wholesale_price">批发价</string>
-    <string name="style_detail_title">款式详情</string>
-    <string name="style_detail_code">款        号</string>
-    <string name="style_detail_name">款式名称</string>
-    <string name="style_detail_type">类        别</string>
-    <string name="style_detail_size">尺  码  组</string>
-    <string name="style_detail_customer">款式客户</string>
-    <string name="style_detail_customer_style">客户款式</string>
-    <string name="style_detail_year">上市年份</string>
-    <string name="style_detail_composition">面料成分</string>
-    <string name="style_detail_remark">款式描述</string>
-    <string name="style_detail_setting_price">价格设置</string>
-    <string name="style_detail_setting_color">颜        色</string>
-    <string name="style_detail_price_trade">批  发  价</string>
-    <string name="style_detail_price_retail">零  售  价</string>
-    <string name="style_detail_price_tag">吊  牌  价</string>
-
-
-    <!--sale_billing-->
-    <string name="sale_billing_search_value">单        号</string>
-    <string name="sale_billing_search_customer">客        户</string>
-    <string name="sale_billing_form_num">序号</string>
-    <string name="sale_billing_form_code">单号</string>
-    <string name="sale_billing_form_shop">门店</string>
-    <string name="sale_billing_form_type">状态</string>
-    <string name="sale_billing_form_date">日期</string>
-    <string name="sale_billing_form_customer">客户</string>
-    <string name="sale_billing_form_saler">店员</string>
-    <string name="sale_billing_form_qty">数量</string>
-    <string name="sale_billing_form_sum">金额</string>
-    <string name="sale_billing_detail_title">客户订单</string>
-    <string name="sale_billing_detail_delivery">计划交期</string>
-    <string name="sale_billing_detail_remark">备注</string>
-    <string name="sale_billing_detail_add">+新增</string>
-    <string name="sale_billing_detail_add_style">添加款式</string>
-    <string name="sale_billing_empty_shop">请选择门店</string>
-    <string name="sale_billing_empty_customer">请选择客户</string>
-    <string name="sale_billing_empty_saler">请选择员工</string>
-    <string name="sale_billing_empty_class">请选择类别</string>
-
-    <string name="sale_billing_add_code">款号</string>
-    <string name="sale_billing_add_name">款式名称</string>
-    <string name="sale_billing_add_color">色号</string>
-    <string name="sale_billing_add_class">类别</string>
-    <string name="sale_billing_add_size">尺码</string>
-    <string name="sale_billing_add_sizes">尺码组</string>
-    <string name="sale_billing_add_qty">数量</string>
-    <string name="sale_billing_add_storage">可用库存</string>
-    <string name="sale_billing_add_price">单价</string>
-    <string name="sale_billing_add_total">小计</string>
-    <string name="sale_billing_add_remark">备注</string>
-    <string name="sale_billing_add_operate">操作</string>
-    <string name="sale_billing_add_select_color">选择颜色</string>
+<!--style-->
+<string name="style_search_value">款号</string>
+<string name="style_search_name">款式名称</string>
+<string name="style_form_num">序号</string>
+<string name="style_form_code">款号</string>
+<string name="style_form_name">名称</string>
+<string name="style_form_color">颜色</string>
+<string name="style_form_type">类别</string>
+<string name="style_form_sizes">尺码组</string>
+<string name="style_form_size">尺码</string>
+<string name="style_form_customer">客户</string>
+<string name="style_form_saler">业务员</string>
+<string name="style_form_year">年份</string>
+<string name="style_form_sale_price">销售价</string>
+<string name="style_form_wholesale_price">批发价</string>
+<string name="style_detail_title">款式详情</string>
+<string name="style_detail_code">款号</string>
+<string name="style_detail_name">款式名称</string>
+<string name="style_detail_type">类别</string>
+<string name="style_detail_size">尺  码  组</string>
+<string name="style_detail_customer">款式客户</string>
+<string name="style_detail_customer_style">客户款式</string>
+<string name="style_detail_year">上市年份</string>
+<string name="style_detail_composition">面料成分</string>
+<string name="style_detail_remark">款式描述</string>
+<string name="style_detail_setting_price">价格设置</string>
+<string name="style_detail_setting_color">颜色</string>
+<string name="style_detail_price_trade">批  发  价</string>
+<string name="style_detail_price_retail">零  售  价</string>
+<string name="style_detail_price_tag">吊  牌  价</string>
 
 
-    <!--commonBtn-->
-    <string name="common_add">新增</string>
-    <string name="common_search">查询</string>
-    <string name="common_remove">清除</string>
-    <string name="common_exit">退出</string>
-    <string name="common_save">保存</string>
-    <string name="common_delete">删除</string>
-    <string name="common_submit">提交</string>
-    <string name="common_enable">启用</string>
-    <string name="common_unable">停用</string>
-    <string name="common_date_start">开始日期</string>
-    <string name="common_date_end">结束日期</string>
-    <string name="common_date_stop">停用日期</string>
-    <string name="common_pickdate_start">2015-01-01</string>
-    <string name="common_pickdate_end">2030-12-31</string>
-    <string name="common_empty">无</string>
-    <string name="common_open">-</string>
-    <string name="common_close">+</string>
-    <!--icon-->
-    <string name="icon_man">&#xe71b;</string>
-    <string name="icon_lock">&#xe644;</string>
+<!--sale_billing-->
+<string name="sale_billing_search_value">单号</string>
+<string name="sale_billing_search_customer">客户</string>
+<string name="sale_billing_form_num">序号</string>
+<string name="sale_billing_form_code">单号</string>
+<string name="sale_billing_form_shop">门店</string>
+<string name="sale_billing_form_type">状态</string>
+<string name="sale_billing_form_date">日期</string>
+<string name="sale_billing_form_customer">客户</string>
+<string name="sale_billing_form_saler">店员</string>
+<string name="sale_billing_form_qty">数量</string>
+<string name="sale_billing_form_sum">金额</string>
+<string name="sale_billing_detail_title">客户订单</string>
+<string name="sale_billing_detail_delivery">计划交期</string>
+<string name="sale_billing_detail_remark">备注</string>
+<string name="sale_billing_detail_add">+新增</string>
+<string name="sale_billing_detail_add_style">添加款式</string>
+<string name="sale_billing_empty_shop">请选择门店</string>
+<string name="sale_billing_empty_customer">请选择客户</string>
+<string name="sale_billing_empty_date">请选择日期</string>
+<string name="sale_billing_empty_saler">请选择员工</string>
+<string name="sale_billing_empty_class">请选择类别</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+<string name="sale_billing_add_code">款号</string>
+<string name="sale_billing_add_name">款式名称</string>
+<string name="sale_billing_add_color">色号</string>
+<string name="sale_billing_add_class">类别</string>
+<string name="sale_billing_add_size">尺码</string>
+<string name="sale_billing_add_sizes">尺码组</string>
+<string name="sale_billing_add_qty">数量</string>
+<string name="sale_billing_add_storage">可用库存</string>
+<string name="sale_billing_add_price">单价</string>
+<string name="sale_billing_add_total">小计</string>
+<string name="sale_billing_add_remark">备注</string>
+<string name="sale_billing_add_operate">操作</string>
+<string name="sale_billing_add_select_color">选择颜色</string>
+
+
+<!--commonBtn-->
+<string name="common_add">新增</string>
+<string name="common_search">查询</string>
+<string name="common_remove">清除</string>
+<string name="common_exit">退出</string>
+<string name="common_save">保存</string>
+<string name="common_delete">删除</string>
+<string name="common_submit">提交</string>
+<string name="common_enable">启用</string>
+<string name="common_unable">停用</string>
+<string name="common_date_start">开始日期</string>
+<string name="common_date_end">结束日期</string>
+<string name="common_date_stop">停用日期</string>
+<string name="common_pickdate_start">2015-01-01</string>
+<string name="common_pickdate_end">2030-12-31</string>
+<string name="common_empty">无</string>
+<string name="common_open">-</string>
+<string name="common_close">+</string>
+<!--icon-->
+<string name="icon_man">&#xe71b;</string>
+<string name="icon_lock">&#xe644;</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+<string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
