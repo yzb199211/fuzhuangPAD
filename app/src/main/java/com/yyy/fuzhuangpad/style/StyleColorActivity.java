@@ -23,6 +23,7 @@ import com.yyy.fuzhuangpad.util.Toasts;
 import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
+import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.color.ColorGroup;
 import com.yyy.fuzhuangpad.view.color.ColorItem;
 import com.yyy.fuzhuangpad.view.color.ColorList;
@@ -45,6 +46,9 @@ public class StyleColorActivity extends AppCompatActivity {
     LinearLayout llColor;
     @BindView(R.id.scroll)
     ScrollView scrollView;
+    @BindView(R.id.bw_delete)
+    ButtonWithImg bwDelete;
+
     ColorList colorList;
 
     List<StyleColor> colors;
@@ -67,6 +71,7 @@ public class StyleColorActivity extends AppCompatActivity {
     }
 
     private void init() {
+        bwDelete.setVisibility(View.INVISIBLE);
         initList();
         initIntentData();
         initDefaultData();

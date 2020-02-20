@@ -44,6 +44,8 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
     RecyclerView rvStyle;
     @BindView(R.id.bw_delete)
     ButtonWithImg bwDelete;
+    @BindView(R.id.bw_save)
+    ButtonWithImg bwSave;
 
     private String url;
     private String address;
@@ -171,6 +173,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
     private void initView() {
         rvStyle.setLayoutManager(new GridLayoutManager(this, 6));
         bwDelete.setVisibility(View.INVISIBLE);
+        bwSave.setVisibility(View.INVISIBLE);
     }
 
     @OnClick({R.id.bw_exit, R.id.bw_save})
