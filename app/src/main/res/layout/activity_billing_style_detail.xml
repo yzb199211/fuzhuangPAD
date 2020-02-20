@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/iv_logo"
-            android:layout_width="@dimen/dp_70"
-            android:layout_height="@dimen/dp_70"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
             android:layout_centerVertical="true" />
 
         <com.yyy.fuzhuangpad.view.search.SearchText
@@ -51,10 +51,10 @@
             android:id="@+id/tv_style_price"
             android:layout_width="@dimen/dp_120"
             android:layout_height="@dimen/dp_20"
-            android:layout_below="@id/tv_style_class"
+            android:layout_below="@id/tv_style_no"
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_5"
-            android:layout_toRightOf="@id/iv_logo"
+            android:layout_toRightOf="@id/tv_style_no"
             app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_add_price"
             app:seTitleColor="@color/default_text_color"
@@ -82,6 +82,7 @@
             android:layout_toRightOf="@id/tv_style_no"
             app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_add_sizes"
+            android:visibility="gone"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
 
@@ -96,7 +97,8 @@
             app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_add_storage"
             app:seTitleColor="@color/default_text_color"
-            app:seTitleSize="@dimen/sp_10" />
+            app:seTitleSize="@dimen/sp_10"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <View

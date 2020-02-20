@@ -1,5 +1,8 @@
 package com.yyy.fuzhuangpad.color;
 
+import android.text.TextUtils;
+
+import com.yyy.fuzhuangpad.util.StringUtil;
 import com.yyy.fuzhuangpad.view.form.FormColumn;
 
 import java.util.ArrayList;
@@ -61,7 +64,7 @@ public class ColorBeans {
     }
 
     public String getdStopDate() {
-        return dStopDate;
+        return StringUtil.getDate(dStopDate, 2);
     }
 
     public void setdStopDate(String dStopDate) {

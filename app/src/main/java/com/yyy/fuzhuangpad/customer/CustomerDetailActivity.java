@@ -1,6 +1,8 @@
 package com.yyy.fuzhuangpad.customer;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ import com.yyy.fuzhuangpad.view.SelectView;
 import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.remark.RemarkEdit;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
+import com.yyy.fuzhuangpad.view.search.SearchText;
 import com.yyy.yyylibrary.pick.builder.OptionsPickerBuilder;
 import com.yyy.yyylibrary.pick.builder.TimePickerBuilder;
 import com.yyy.yyylibrary.pick.listener.OnOptionsSelectListener;
@@ -59,7 +62,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.se_code)
-    SearchEdit seCode;
+    SearchText seCode;
     @BindView(R.id.se_name)
     SearchEdit seName;
     @BindView(R.id.sv_type)
@@ -404,14 +407,36 @@ public class CustomerDetailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.bw_save:
+//                if (!StringUtil.isNotEmpty(customerBeans.getsCustID())) {
+//                    Toast(getString(R.string.customer_empty_code));
+//                    return;
+//                }
                 setCustomerBeans();
-                save();
+                if (!StringUtil.isNotEmpty(customerBeans.getsCustName())) {
+                    Toast(getString(R.string.customer_empty_name));
+                    return;
+                }
+                if (!StringUtil.isNotEmpty(customerBeans.getsClassName())) {
+                    Toast(getString(R.string.customer_empty_type));
+                    return;
+                }
+                if (!StringUtil.isNotEmpty(customerBeans.getsCustShortName())) {
+                    Toast(getString(R.string.customer_empty_name_short));
+                    return;
+                }
+                if (TextUtils.isEmpty(customerBeans.getsCustID())) {
+                    getOrderNo();
+                } else {
+                    save();
+                }
+//                save();
                 break;
             case R.id.bw_delete:
                 delete();
                 break;
         }
     }
+
     private void delete() {
         LoadingDialog.showDialogForLoading(this);
         new NetUtil(deteleParams(), url, new ResponseListener() {
@@ -464,8 +489,9 @@ public class CustomerDetailActivity extends AppCompatActivity {
         mainQuery.setOperatortype(Operatortype.delete);
         return new Gson().toJson(mainQuery);
     }
+
     private void setCustomerBeans() {
-        customerBeans.setsCustID(seCode.getText());
+//        customerBeans.setsCustID(seCode.getText());
         customerBeans.setsCustName(seName.getText());
         customerBeans.setsCustShortName(seNameShort.getText());
         customerBeans.setsPerson(seContacts.getText());
@@ -475,19 +501,47 @@ public class CustomerDetailActivity extends AppCompatActivity {
         customerBeans.setsRemark(reRemark.getText());
     }
 
+    private void getOrderNo() {
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(getOrderParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                Log.e("data", string);
+                try {
+                    JSONObject jsonObject = new JSONObject(string);
+                    if (jsonObject.optBoolean("success")) {
+                        customerBeans.setsCustID(jsonObject.optString("message"));
+                        LoadingFinish(null);
+                        save();
+                    } else {
+                        LoadingFinish(jsonObject.optString("message"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                }
+
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private List<NetParams> getOrderParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", Otype.GetFormBillNo));
+        params.add(new NetParams("iFormID", "5030"));
+        return params;
+    }
+
     private void save() {
-        if (!StringUtil.isNotEmpty(customerBeans.getsCustID())) {
-            Toast(getString(R.string.customer_empty_code));
-            return;
-        }
-        if (!StringUtil.isNotEmpty(customerBeans.getsCustName())) {
-            Toast(getString(R.string.customer_empty_name));
-            return;
-        }
-        if (!StringUtil.isNotEmpty(customerBeans.getsClassName())) {
-            Toast(getString(R.string.customer_empty_type));
-            return;
-        }      LoadingDialog.showDialogForLoading(this);
+
+        LoadingDialog.showDialogForLoading(this);
 
         new NetUtil(saveParams(), url, new ResponseListener() {
             @Override
@@ -523,8 +577,8 @@ public class CustomerDetailActivity extends AppCompatActivity {
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", Otype.OperateData));
         params.add(new NetParams("mainquery", getMainquery()));
+        Log.e("main", getMainquery());
         return params;
-
     }
 
     private String getMainquery() {
@@ -586,6 +640,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
         params.rightMargin = 0;
         return params;
     }
+
 
     private void eixt() {
         runOnUiThread(new Runnable() {

@@ -49,7 +49,7 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
     public void onBindViewHolder(@NonNull VH holder, int position) {
         holder.setIsRecyclable(false);
         BillDetailBean item = list.get(position);
-        holder.tvNum.setText(position + 1+"");
+        holder.tvNum.setText(position + 1 + "");
         holder.tvStyleNo.setText(item.getsStyleNo());
         holder.tvStyleColor.setText(item.getsColorName());
         holder.tvStyleSize.setText(item.getsSizeName());

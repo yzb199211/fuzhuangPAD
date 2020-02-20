@@ -50,12 +50,13 @@
 <string name="customer_detail_name">客户名称</string>
 <string name="customer_detail_name_short">客户简称</string>
 <string name="customer_detail_type">类别</string>
-<string name="customer_detail_saler">业  务  员</string>
+<string name="customer_detail_saler">业务员</string>
 <string name="customer_detail_phone">电话</string>
-<string name="customer_detail_contacts">联  系  人</string>
+<string name="customer_detail_contacts">联系人</string>
 <string name="customer_detail_address">地址</string>
 <string name="customer_empty_code">客户编号不能为空</string>
 <string name="customer_empty_name">客户名称不能为空</string>
+<string name="customer_empty_name_short">客户简称不能为空</string>
 <string name="customer_empty_type">类别不能为空</string>
 <!--color-->
 <string name="color_search_value">色号</string>
@@ -92,7 +93,7 @@
 <string name="style_detail_code">款号</string>
 <string name="style_detail_name">款式名称</string>
 <string name="style_detail_type">类别</string>
-<string name="style_detail_size">尺  码  组</string>
+<string name="style_detail_size">尺码组</string>
 <string name="style_detail_customer">款式客户</string>
 <string name="style_detail_customer_style">客户款式</string>
 <string name="style_detail_year">上市年份</string>
@@ -100,9 +101,9 @@
 <string name="style_detail_remark">款式描述</string>
 <string name="style_detail_setting_price">价格设置</string>
 <string name="style_detail_setting_color">颜色</string>
-<string name="style_detail_price_trade">批  发  价</string>
-<string name="style_detail_price_retail">零  售  价</string>
-<string name="style_detail_price_tag">吊  牌  价</string>
+<string name="style_detail_price_trade">批发价</string>
+<string name="style_detail_price_retail">零售价</string>
+<string name="style_detail_price_tag">吊牌价</string>
 
 
 <!--sale_billing-->

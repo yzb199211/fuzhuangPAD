@@ -25,7 +25,7 @@
         android:layout_marginTop="@dimen/dp_10"
         android:orientation="horizontal">
 
-        <com.yyy.fuzhuangpad.view.search.SearchEdit
+        <com.yyy.fuzhuangpad.view.search.SearchText
             android:id="@+id/se_code"
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
@@ -33,7 +33,6 @@
             android:layout_weight="1"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
-            app:seMust="true"
             app:seTilte="@string/customer_detail_code"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
@@ -71,17 +70,19 @@
             app:svTitleColor="@color/default_text_color"
             app:svTitleSize="@dimen/sp_10" />
 
-        <com.yyy.fuzhuangpad.view.SelectView
-            android:id="@+id/sv_sale"
+        <com.yyy.fuzhuangpad.view.search.SearchEdit
+            android:id="@+id/se_name_short"
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_weight="1"
-            app:svContentColor="@color/default_text_color"
-            app:svContentSize="@dimen/sp_10"
-            app:svTilte="@string/customer_detail_saler"
-            app:svTitleColor="@color/default_text_color"
-            app:svTitleSize="@dimen/sp_10" />
+            app:seEditColor="@color/default_text_color"
+            app:seEditSize="@dimen/sp_10"
+            app:seMust="true"
+            app:seTilte="@string/customer_detail_name_short"
+            app:seTitleColor="@color/default_text_color"
+            app:seTitleSize="@dimen/sp_10" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -90,11 +91,23 @@
         android:layout_marginTop="@dimen/dp_10"
         android:orientation="horizontal">
 
+        <com.yyy.fuzhuangpad.view.SelectView
+            android:id="@+id/sv_sale"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_weight="1"
+            app:svContentColor="@color/default_text_color"
+            app:svContentSize="@dimen/sp_10"
+            app:svTilte="@string/customer_detail_saler"
+            app:svTitleColor="@color/default_text_color"
+            app:svTitleSize="@dimen/sp_10" />
+
         <com.yyy.fuzhuangpad.view.search.SearchEdit
             android:id="@+id/se_contacts"
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_10"
             android:layout_weight="1"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
@@ -102,19 +115,6 @@
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
 
-        <com.yyy.fuzhuangpad.view.search.SearchEdit
-            android:id="@+id/se_phone"
-            android:layout_width="@dimen/dp_0"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_weight="1"
-            app:seEditColor="@color/default_text_color"
-            app:seEditSize="@dimen/sp_10"
-            app:seTilte="@string/customer_detail_phone"
-            app:seTitleColor="@color/default_text_color"
-            app:seInputType="number"
-            app:seMaxLength="11"
-            app:seTitleSize="@dimen/sp_10" />
     </LinearLayout>
 
     <LinearLayout
@@ -135,18 +135,20 @@
             app:svTitleColor="@color/default_text_color"
             app:svTitleSize="@dimen/sp_10" />
 
-
         <com.yyy.fuzhuangpad.view.search.SearchEdit
-            android:id="@+id/se_name_short"
+            android:id="@+id/se_phone"
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_weight="1"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
-            app:seTilte="@string/customer_detail_name_short"
+            app:seInputType="number"
+            app:seMaxLength="11"
+            app:seTilte="@string/customer_detail_phone"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
+
     </LinearLayout>
 
     <com.yyy.fuzhuangpad.view.search.SearchEdit

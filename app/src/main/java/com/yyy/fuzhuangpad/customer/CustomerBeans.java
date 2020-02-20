@@ -1,5 +1,6 @@
 package com.yyy.fuzhuangpad.customer;
 
+import com.yyy.fuzhuangpad.util.StringUtil;
 import com.yyy.fuzhuangpad.view.form.FormColumn;
 
 import java.util.ArrayList;
@@ -111,7 +112,7 @@ public class CustomerBeans {
     }
 
     public String getdStopDate() {
-        return dStopDate;
+        return StringUtil.getDate(dStopDate, 2);
     }
 
     public void setdStopDate(String dStopDate) {

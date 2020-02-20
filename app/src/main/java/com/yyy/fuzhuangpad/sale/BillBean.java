@@ -52,7 +52,7 @@ public class BillBean {
     }
 
     public String getdDate() {
-        return dDate;
+        return StringUtil.getDate(dDate, 2);
     }
 
     public void setdDate(String dDate) {
@@ -108,7 +108,7 @@ public class BillBean {
     }
 
     public String getdOrderDate() {
-        return dOrderDate;
+        return StringUtil.getDate(dOrderDate, 2);
     }
 
     public void setdOrderDate(String dOrderDate) {

@@ -162,13 +162,12 @@ public class BillDetailActivity extends AppCompatActivity {
             operatortype = Operatortype.add;
             bwDelete.setVisibility(View.GONE);
         }
-
-//        Log.e("data", data);
     }
 
     private void setViewData() {
         classId = bill.getiOrderType() + "";
         className = bill.getsOrderType();
+        bsClass.setContext(className);
         seCode.setText(bill.getsOrderNo());
         shop = bill.getsStockName();
         shopId = bill.getiBscdataStockMRecNo();
@@ -180,6 +179,7 @@ public class BillDetailActivity extends AppCompatActivity {
         bsDateDelivery.setContext(StringUtil.getDate(bill.getdOrderDate(), 2));
         saler = bill.getsSaleName();
         salerId = bill.getsSaleID();
+        bsSale.setContext(saler);
         seRemark.setText(bill.getsRemark());
         stNum.setText(bill.getiQty() + "");
         stTotal.setText(bill.getfTotal() + "");
@@ -216,7 +216,6 @@ public class BillDetailActivity extends AppCompatActivity {
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
-
     }
 
     private void setDetailData(String optString) {
@@ -284,7 +283,7 @@ public class BillDetailActivity extends AppCompatActivity {
                 if (confirm) {
                     billDetail.get(position).setiSumQty(Integer.parseInt(data));
                     billDetail.get(position).setfTotal(billDetail.get(position).getiSumQty() * billDetail.get(position).getfPrice());
-                   refreshList();
+                    refreshList();
                 }
             }
         });
@@ -296,8 +295,10 @@ public class BillDetailActivity extends AppCompatActivity {
         mAdapter.setOnDeleteListener(new OnDeleteListener() {
             @Override
             public void onDelete(int pos) {
-                deletekey[keyPos] = billDetail.get(pos).getiRecNo();
-                keyPos = keyPos + 1;
+                if (billDetail.get(pos).getiRecNo() != 0) {
+                    deletekey[keyPos] = billDetail.get(pos).getiRecNo();
+                    keyPos = keyPos + 1;
+                }
                 billDetail.remove(pos);
                 refreshList();
             }
@@ -1064,6 +1065,7 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void initSaveDate(String data) throws JSONException {
+        Log.e("data", data);
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
             LoadingFinish(getString(R.string.success_save));

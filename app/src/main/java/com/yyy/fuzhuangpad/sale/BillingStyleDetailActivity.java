@@ -220,7 +220,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         list.add(new NetParams("otype", "GetTableData"));
         list.add(new NetParams("sTableName", "vwBscDataStyleDColor"));
         list.add(new NetParams("sFields", "iRecNo,sColorName,iBscDataColorRecNo"));
-        list.add(new NetParams("sFilters", "iMainRecNo=" + styleId+" and isnull(dStopDate,'2199-01-01')>getdate()"));
+        list.add(new NetParams("sFilters", "iMainRecNo=" + styleId + " and isnull(dStopDate,'2199-01-01')>getdate()"));
 //        Log.e("fileter", "iMainRecNo=" + styleId);
         return list;
     }
