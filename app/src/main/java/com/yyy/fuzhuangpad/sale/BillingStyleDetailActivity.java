@@ -72,6 +72,8 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     private String styleId;
     private String shopId;
     private String style;
+    private int currentPos = -1;
+
     SharedPreferencesHelper preferencesHelper;
 
     List<BillColor> colors;
@@ -181,7 +183,6 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
             colors.addAll(list);
             LoadingFinish(null);
             setColorGroup();
-
         }
     }
 
@@ -193,25 +194,43 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
 //                for (StyleColor color : colors) {
 //                    list.add(color);
 //                }
+                cgColor.setSingle(true);
                 cgColor.setData(colors, getResources().getDimensionPixelSize(R.dimen.sp_10), 20, 5, 20, 5, 20, 20, 20, 20);
                 cgColor.setMarkClickListener(new ColorGroup.MarkClickListener() {
                     @Override
                     public void clickMark(int position, boolean isChecked) {
-                        if (isChecked) {
-                            if (colors.get(position).getStyleQty().size() == 0) {
-                                getStyleQty(position);
-                            } else {
-                                styleQty.addAll(colors.get(position).getStyleQty());
-                                refreshList();
-                            }
-                        } else {
-                            styleQty.removeAll(colors.get(position).getStyleQty());
-                            refreshList();
-                        }
+//                       setGroupChecked(position,isChecked);
+                        setSingleChecked(position);
                     }
                 });
             }
         });
+    }
+
+    private void setSingleChecked(int position) {
+        if (position != currentPos) {
+            styleQty.clear();
+            if (colors.get(position).getStyleQty().size() == 0) {
+                getStyleQty(position);
+            } else {
+                styleQty.addAll(colors.get(position).getStyleQty());
+                refreshList();
+            }
+        }
+    }
+
+    private void setGroupChecked(int position, boolean isChecked) {
+        if (isChecked) {
+            if (colors.get(position).getStyleQty().size() == 0) {
+                getStyleQty(position);
+            } else {
+                styleQty.addAll(colors.get(position).getStyleQty());
+                refreshList();
+            }
+        } else {
+            styleQty.removeAll(colors.get(position).getStyleQty());
+            refreshList();
+        }
     }
 
     private List<NetParams> getColorParams() {
@@ -221,16 +240,19 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         list.add(new NetParams("sTableName", "vwBscDataStyleDColor"));
         list.add(new NetParams("sFields", "iRecNo,sColorName,iBscDataColorRecNo"));
         list.add(new NetParams("sFilters", "iMainRecNo=" + styleId + " and isnull(dStopDate,'2199-01-01')>getdate()"));
-//        Log.e("fileter", "iMainRecNo=" + styleId);
         return list;
     }
 
     private void getStyleQty(int pos) {
-        LoadingDialog.showDialogForLoading(this);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LoadingDialog.showDialogForLoading(BillingStyleDetailActivity.this);
+            }
+        });
         new NetUtil(getStyleQtyParams(colors.get(pos).getiBscDataColorRecNo()), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
-//                Log.e("style", string);
                 try {
                     initStyleQty(string, pos);
                 } catch (JSONException e) {
@@ -257,7 +279,6 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     }
 
     private void setStyleQty(String optString, int pos) {
-//        Log.e("style", optString);
         List<BillStyleQty> list = new Gson().fromJson(optString, new TypeToken<List<BillStyleQty>>() {
         }.getType());
         if (list == null || list.size() == 0) {
@@ -312,7 +333,6 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
 
     private void save() {
         List<BillStyleQty> list = getSaveStyle();
-        Log.e("size", list.size() + "");
         if (list.size() == 0) {
             finish();
         } else {

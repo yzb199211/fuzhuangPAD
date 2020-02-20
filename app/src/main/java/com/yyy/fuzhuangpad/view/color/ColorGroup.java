@@ -21,6 +21,13 @@ public class ColorGroup<T extends StyleColor> extends ViewGroup {
     private Context context;
     private List<T> colors;
     private boolean canClick = true;
+    private boolean isSingle = false;
+    private TextView currentBtn;
+    private int currentPos = -1;
+
+    public void setSingle(boolean single) {
+        isSingle = single;
+    }
 
     public void setCanClick(boolean canClick) {
         this.canClick = canClick;
@@ -64,18 +71,11 @@ public class ColorGroup<T extends StyleColor> extends ViewGroup {
         for (int i = 0; i < size; i++) {
             String text = data.get(i).getsColorName();
             boolean isChecked = data.get(i).isChecked();
-            //通过判断style是TextView还是Button进行不同的操作，还可以继续添加不同的view
-//            if (style == TEXTVIEW_STYLE) {
+
             TextView btn = new TextView(context);
             btn.setGravity(Gravity.CENTER);
             btn.setText(text);
             btn.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-//            } else if (style == BUTTON_STYLE) {
-//                btn = new Button(context);
-//                ((Button) btn).setGravity(Gravity.CENTER);
-//                ((Button) btn).setText(text);
-//                ((Button) btn).setTextSize(textSize);
-//            }
             btn.setClickable(true);
 
             btn.setPadding(dip2px(context, pl), dip2px(context, pt), dip2px(context, pr), dip2px(context, pb));
@@ -83,11 +83,12 @@ public class ColorGroup<T extends StyleColor> extends ViewGroup {
             params.setMargins(ml, mt, mr, mb);
 
             btn.setLayoutParams(params);
-            if (isChecked) {
-                setChecked(btn);
-            } else {
+            if (isSingle) {
                 setNormal(btn);
+            } else {
+                setBtnGroup(btn, isChecked);
             }
+
             final int finalI = i;
             //给每个view添加点击事件
             btn.setOnClickListener(new OnClickListener() {
@@ -96,18 +97,44 @@ public class ColorGroup<T extends StyleColor> extends ViewGroup {
                     if (!canClick) {
                         return;
                     }
-                    if (colors.get(finalI).isChecked()) {
-                        setNormal(btn);
-                        colors.get(finalI).setChecked(false);
-                    } else {
-                        setChecked(btn);
-                        colors.get(finalI).setChecked(true);
-                    }
+                    setGroupClick(btn, finalI);
+                    setSingleClick(btn, finalI);
                     if (markClickListener != null)
                         markClickListener.clickMark(finalI, colors.get(finalI).isChecked());
                 }
             });
             this.addView(btn);
+        }
+    }
+
+    private void setBtnGroup(TextView btn, boolean isChecked) {
+        if (isChecked) {
+            setChecked(btn);
+        } else {
+            setNormal(btn);
+        }
+    }
+
+    private void setSingleClick(TextView btn, int finalI) {
+        if (finalI != currentPos) {
+            if (currentPos != -1) {
+                colors.get(currentPos).setChecked(false);
+                setNormal(currentBtn);
+            }
+            currentPos = finalI;
+            setChecked(btn);
+            currentBtn = btn;
+            colors.get(currentPos).setChecked(true);
+        }
+    }
+
+    private void setGroupClick(TextView btn, int finalI) {
+        if (colors.get(finalI).isChecked()) {
+            setNormal(btn);
+            colors.get(finalI).setChecked(false);
+        } else {
+            setChecked(btn);
+            colors.get(finalI).setChecked(true);
         }
     }
 
@@ -165,7 +192,7 @@ public class ColorGroup<T extends StyleColor> extends ViewGroup {
             MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
             int childWidth = child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
             int childHeight = child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
-//            Log.e(TAG, "onMeasure: lineHeight = "+lineHeight+" childHeight = "+childHeight );
+
             if (lineWidth + childWidth > widthSize) {
                 width = Math.max(lineWidth, childWidth);//这种情况就是排除单个标签很长的情况
                 lineWidth = childWidth;//开启新行
@@ -173,7 +200,6 @@ public class ColorGroup<T extends StyleColor> extends ViewGroup {
                 lineHeight = childHeight;//因为开了新行，所以这行的高度要记录一下
             } else {
                 lineWidth += childWidth;
-//                lineHeight = Math.max(lineHeight, childHeight); //记录行高
                 lineHeight = Math.max(height, childHeight); //记录行高
             }
             // 如果是最后一个，则将当前记录的最大宽度和当前lineWidth做比较
@@ -186,11 +212,6 @@ public class ColorGroup<T extends StyleColor> extends ViewGroup {
         setMeasuredDimension((widthMode == MeasureSpec.EXACTLY) ? widthSize
                 : width, (heightMode == MeasureSpec.EXACTLY) ? heightSize
                 : height);
-     /*   int width1 = (widthMode == MeasureSpec.EXACTLY)? widthSize:width;
-        int height1 = (heightMode == MeasureSpec.EXACTLY)? heightSize:height;
-        Log.e(TAG, "onMeasure: widthSize ="+widthSize+" heightSize = "+heightSize );
-        Log.e(TAG, "onMeasure: width ="+width+" height = "+height );
-        Log.e(TAG, "onMeasure: widthEnd ="+width1+" heightEnd = "+height1 );*/
     }
 
     /**

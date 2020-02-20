@@ -34,7 +34,7 @@ public class BillStyleQtyAdapter extends RecyclerView.Adapter<BillStyleQtyAdapte
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         holder.setIsRecyclable(false);
-        BillStyleQty item = list.get(position );
+        BillStyleQty item = list.get(position);
         holder.tvColor.setText(item.getsColorName());
         holder.tvSize.setText(item.getsSizeName());
         holder.tvStorage.setText(item.getiQty() + "");
@@ -45,6 +45,9 @@ public class BillStyleQtyAdapter extends RecyclerView.Adapter<BillStyleQtyAdapte
                 item.setNum(qty);
             }
         });
+        if (position % 2 != 0) {
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.default_bg_color));
+        }
     }
 
     @Override
