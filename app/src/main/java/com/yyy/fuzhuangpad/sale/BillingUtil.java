@@ -32,7 +32,7 @@ public class BillingUtil {
         list.add(new FormColumn(context.getString(R.string.sale_billing_add_qty), true));
         list.add(new FormColumn(context.getString(R.string.sale_billing_add_price), true));
         list.add(new FormColumn(context.getString(R.string.sale_billing_add_total), true));
-        list.add(new FormColumn(context.getString(R.string.sale_billing_add_remark), true));
+//        list.add(new FormColumn(context.getString(R.string.sale_billing_add_remark), true));
         list.add(new FormColumn(context.getString(R.string.sale_billing_add_operate), true));
         return list;
     }

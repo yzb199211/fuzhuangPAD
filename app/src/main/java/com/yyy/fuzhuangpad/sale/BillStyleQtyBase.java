@@ -4,14 +4,23 @@ import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
-public class BillStyleQtyBase {
+public class BillStyleQtyBase implements Comparable<BillStyleQtyBase> {
     private String sColorName;
     private int iBscDataStyleMRecNo;
     private int iBscDataColorRecNo;
     private String sSizeName;
     private int iQty;
+    private int iSerial;
 
     public BillStyleQtyBase() {
+    }
+
+    public int getiSerial() {
+        return iSerial;
+    }
+
+    public void setiSerial(int iSerial) {
+        this.iSerial = iSerial;
     }
 
     public int getiBscDataStyleMRecNo() {
@@ -70,5 +79,10 @@ public class BillStyleQtyBase {
         return iBscDataColorRecNo == billStyleQtyBase.iBscDataColorRecNo &&
                 iBscDataStyleMRecNo == billStyleQtyBase.iBscDataStyleMRecNo &&
                 sSizeName.equals(billStyleQtyBase.sSizeName);
+    }
+
+    @Override
+    public int compareTo(BillStyleQtyBase o) {
+        return iSerial - o.getiSerial();
     }
 }

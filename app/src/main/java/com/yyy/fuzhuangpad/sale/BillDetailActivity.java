@@ -28,6 +28,9 @@ import com.yyy.fuzhuangpad.interfaces.OnDeleteListener;
 import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.sale.upload.BillChildQuery;
+import com.yyy.fuzhuangpad.sale.upload.BillSizeUpload;
+import com.yyy.fuzhuangpad.sale.upload.BillStyleUpload;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -60,6 +63,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -117,7 +121,6 @@ public class BillDetailActivity extends AppCompatActivity {
     private List<BillCustomer> customers;
     private List<BillSaler> salers;
     private List<BillDetailBean> billDetail;
-    private List<BillStyleQtyBase> billCheckRepet;
     private List<BillClass> billClass;
     private OptionsPickerView pvShop;
     private OptionsPickerView pvCustomer;
@@ -212,13 +215,14 @@ public class BillDetailActivity extends AppCompatActivity {
     private void initDetailData(String string) throws JSONException, Exception {
         JSONObject jsonObject = new JSONObject(string);
         if (jsonObject.optBoolean("success")) {
-            setDetailData(jsonObject.optJSONObject("dataset").optString("vwSdContractD"));
+            setDetailData(jsonObject.optJSONObject("dataset").optString("vwSDContractDDPad"));
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
     }
 
     private void setDetailData(String optString) {
+        Log.e("data", optString);
         LoadingFinish(null);
         List<BillDetailBean> list = new Gson().fromJson(optString, new TypeToken<List<BillDetailBean>>() {
         }.getType());
@@ -227,25 +231,18 @@ public class BillDetailActivity extends AppCompatActivity {
         } else {
             deletekey = new int[list.size()];
             billDetail.addAll(list);
-            setCheckRepet();
             refreshList();
 
-//            setPickSaler();
         }
     }
 
-    private void setCheckRepet() {
-        for (BillDetailBean item : billDetail) {
-            BillStyleQtyBase base = new BillStyleQtyBase(item.getsColorName(), item.getiBscDataColorRecNo(), item.getiBscDataStyleMRecNo(), item.getsSizeName(), item.getiSumQty());
-            billCheckRepet.add(base);
-        }
-    }
 
     private void refreshList() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 setTotal();
+                Collections.sort(billDetail);
                 if (mAdapter == null) {
                     initAdapter();
                 } else {
@@ -282,7 +279,7 @@ public class BillDetailActivity extends AppCompatActivity {
             public void onClick(boolean confirm, @NonNull String data) {
                 if (confirm) {
                     billDetail.get(position).setiSumQty(Integer.parseInt(data));
-                    billDetail.get(position).setfTotal(billDetail.get(position).getiSumQty() * billDetail.get(position).getfPrice());
+                    billDetail.get(position).setfTotal(StringUtil.multiply(billDetail.get(position).getiSumQty(), billDetail.get(position).getfPrice()));
                     refreshList();
                 }
             }
@@ -316,8 +313,8 @@ public class BillDetailActivity extends AppCompatActivity {
         List<NetParams> params = new ArrayList<>();
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", "GetTableData"));
-        params.add(new NetParams("sTableName", "vwSdContractD"));
-        params.add(new NetParams("sFields", "iRecNo,iMainRecNo,iBscDataStyleMRecNo,iBscDataColorRecNo,sSizeName,iSumQty,fPrice,fTotal,sRemark,sStyleNo,sColorName"));
+        params.add(new NetParams("sTableName", "vwSDContractDDPad"));
+        params.add(new NetParams("sFields", "iRecNo,iMainRecNo,iBscDataStyleMRecNo,iBscDataColorRecNo,sSizeName,iSumQty,fPrice,fTotal,sStyleNo,sColorName,iSerial"));
         params.add(new NetParams("sFilters", "iMainRecNo=" + bill.getiRecNo()));
         return params;
     }
@@ -333,7 +330,6 @@ public class BillDetailActivity extends AppCompatActivity {
         customers = new ArrayList<>();
         salers = new ArrayList<>();
         billDetail = new ArrayList<>();
-        billCheckRepet = new ArrayList<>();
         billClass = new ArrayList<>();
     }
 
@@ -883,6 +879,8 @@ public class BillDetailActivity extends AppCompatActivity {
                     Toast(getString(R.string.sale_billing_empty_class));
                     return;
                 }
+
+
                 if (TextUtils.isEmpty(bill.getsOrderNo())) {
                     getOrderNo();
                 } else {
@@ -1101,14 +1099,42 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private String getChildquery() {
-        MainQueryChild mainQueryChild = new MainQueryChild();
+        List<BillStyleUpload> styleUploads = new ArrayList<>();
+        List<List<BillSizeUpload>> sizeList = new ArrayList<>();
+        setUpload(styleUploads, sizeList);
+        Log.e("styles", new Gson().toJson(styleUploads));
+        Log.e("sizes", new Gson().toJson(sizeList));
+        BillChildQuery mainQueryChild = new BillChildQuery();
         mainQueryChild.setChildtype(BillDetailBean.childtypeParams());
         mainQueryChild.setFieldkey(BillDetailBean.fieldkeyParams());
         mainQueryChild.setLinkfield(BillDetailBean.linkfieldParams());
         mainQueryChild.setTablename(BillDetailBean.tablenameParams());
-        mainQueryChild.setData(getBillDetail());
+        mainQueryChild.setData(styleUploads);
         mainQueryChild.setDeleteKey(deletekey);
+        mainQueryChild.setGrandsondata(sizeList);
         return new Gson().toJson(mainQueryChild);
+    }
+
+    private void setUpload(List<BillStyleUpload> styleUploads, List<List<BillSizeUpload>> billSizeList) {
+        BillStyleUpload oldStyle = null;
+        for (BillDetailBean item : billDetail) {
+            BillStyleUpload style = new BillStyleUpload(item.getiMainRecNo(),
+                    item.getiBscDataStyleMRecNo(),
+                    item.getiBscDataColorRecNo(),
+                    item.getiSumQty(),
+                    item.getfPrice(),
+                    StringUtil.multiply(item.getiSumQty(), item.getfPrice()));
+            BillSizeUpload sizes = new BillSizeUpload(item.getsSizeName(), item.getiSumQty());
+            if (!style.equals(oldStyle)) {
+                oldStyle = style;
+                List<BillSizeUpload> list = new ArrayList<>();
+                list.add(sizes);
+                billSizeList.add(list);
+                styleUploads.add(style);
+            } else {
+                billSizeList.get(styleUploads.indexOf(oldStyle)).add(sizes);
+            }
+        }
     }
 
     private List<BillDetailBase> getBillDetail() {
@@ -1120,7 +1146,7 @@ public class BillDetailActivity extends AppCompatActivity {
                     item.getiBscDataColorRecNo(),
                     item.getsColorName(), item.getsSizeName(),
                     item.getiSumQty(), item.getfPrice(),
-                    item.getiSumQty() * item.getfPrice(), item.getsRemark());
+                    StringUtil.multiply(item.getiSumQty(), item.getfPrice()), item.getsRemark());
             list.add(billDetailBase);
         }
         return list;
@@ -1233,31 +1259,30 @@ public class BillDetailActivity extends AppCompatActivity {
         BillStyle item = new Gson().fromJson(style, BillStyle.class);
         List<BillStyleQty> styles = new Gson().fromJson(styleQty, new TypeToken<List<BillStyleQty>>() {
         }.getType());
-        getEffectiveStyle(styles);
-        if (styles.size() > 0) {
-            addStyleDetails(item, styles);
-        }
+        if (styles.size() > 0)
+            addStyleDetails(switch2StyleDetails(item, styles));
     }
 
-    private void addStyleDetails(BillStyle item, List<BillStyleQty> styles) {
-        for (BillStyleQty style : styles) {
-            billDetail.add(new BillDetailBean(iMainRecNo, style.getiBscDataStyleMRecNo(), item.getsStyleName(), style.getiBscDataColorRecNo(), style.getsColorName(), style.getsSizeName(), style.getNum(), item.getfCostPrice(), item.getfCostPrice() * style.getNum(), ""));
+    private void addStyleDetails(List<BillDetailBean> newStyles) {
+        for (BillDetailBean item : newStyles) {
+            Log.e("stylePos", billDetail.indexOf(item) + "");
+            if (billDetail.contains(item)) {
+                BillDetailBean oldItem = billDetail.get(billDetail.indexOf(item));
+                oldItem.setiSumQty(oldItem.getiSumQty() + item.getiSumQty());
+                oldItem.setfTotal(StringUtil.add(oldItem.getfTotal(), item.getfTotal()));
+            } else {
+                billDetail.add(item);
+            }
         }
         refreshList();
     }
 
-    private void getEffectiveStyle(List<BillStyleQty> styles) {
-        List<BillStyleQty> repets = new ArrayList<>();
-
-        for (BillStyleQty styleQty : styles) {
-            if (billCheckRepet.contains(styleQty)) {
-                repets.add(styleQty);
-            } else {
-                billCheckRepet.add(styleQty);
-            }
-            Log.e("style", new Gson().toJson(styleQty));
+    private List<BillDetailBean> switch2StyleDetails(BillStyle item, List<BillStyleQty> styles) {
+        List<BillDetailBean> list = new ArrayList<>();
+        for (BillStyleQty style : styles) {
+            list.add(new BillDetailBean(iMainRecNo, style.getiBscDataStyleMRecNo(), item.getsStyleName(), style.getiBscDataColorRecNo(), style.getsColorName(), style.getsSizeName(), style.getNum(), item.getfCostPrice(), StringUtil.multiply(style.getNum(), item.getfCostPrice()), "", style.getiSerial()));
         }
-        styles.removeAll(repets);
+        return list;
     }
 
     private void go2StyleDetail(Intent data) {

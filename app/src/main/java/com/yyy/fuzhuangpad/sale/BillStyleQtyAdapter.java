@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.interfaces.OnEditListener;
+import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
 import com.yyy.fuzhuangpad.view.NumSelectView;
 import com.yyy.fuzhuangpad.view.sale.OnQtyChange;
 
@@ -18,6 +20,11 @@ import java.util.List;
 public class BillStyleQtyAdapter extends RecyclerView.Adapter<BillStyleQtyAdapter.VH> {
     private Context context;
     private List<BillStyleQty> list;
+    private OnEditQtyListener onEditQtyListener;
+
+    public void setOnEditQtyListener(OnEditQtyListener onEditQtyListener) {
+        this.onEditQtyListener = onEditQtyListener;
+    }
 
     public BillStyleQtyAdapter(Context context, List<BillStyleQty> list) {
         this.context = context;
@@ -48,6 +55,14 @@ public class BillStyleQtyAdapter extends RecyclerView.Adapter<BillStyleQtyAdapte
         if (position % 2 != 0) {
             holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.default_bg_color));
         }
+        holder.nsvQty.setOnEditListener(new OnEditListener() {
+            @Override
+            public void onEdit(View v) {
+                if (onEditQtyListener != null) {
+                    onEditQtyListener.onEdit(position);
+                }
+            }
+        });
     }
 
     @Override

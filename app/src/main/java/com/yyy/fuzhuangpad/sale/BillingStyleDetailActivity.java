@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.dialog.EditDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
+import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.style.StyleColor;
 import com.yyy.fuzhuangpad.util.CodeUtil;
@@ -37,6 +40,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -174,7 +178,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     }
 
     private void setColorData(String optString) {
-        Log.e("color", optString);
+//        Log.e("color", optString);
         List<BillColor> list = new Gson().fromJson(optString, new TypeToken<List<BillColor>>() {
         }.getType());
         if (list == null || list.size() == 0) {
@@ -190,10 +194,6 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                List<StyleColor> list = new ArrayList<>();
-//                for (StyleColor color : colors) {
-//                    list.add(color);
-//                }
                 cgColor.setSingle(true);
                 cgColor.setData(colors, getResources().getDimensionPixelSize(R.dimen.sp_10), 20, 5, 20, 5, 20, 20, 20, 20);
                 cgColor.setMarkClickListener(new ColorGroup.MarkClickListener() {
@@ -253,6 +253,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         new NetUtil(getStyleQtyParams(colors.get(pos).getiBscDataColorRecNo()), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
+                Log.e("data", string);
                 try {
                     initStyleQty(string, pos);
                 } catch (JSONException e) {
@@ -284,6 +285,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         if (list == null || list.size() == 0) {
             LoadingFinish(getString(R.string.error_empty));
         } else {
+            Collections.sort(list);
             colors.get(pos).setStyleQty(list);
             styleQty.addAll(list);
             refreshList();
@@ -304,8 +306,34 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         });
     }
 
+    EditDialog editDialog;
+
+    private void showEditDialog(int position) {
+        if (editDialog == null) {
+            editDialog = new EditDialog(this).max(styleQty.get(position).getNum());
+        } else {
+            editDialog.setMax(styleQty.get(position).getNum());
+        }
+        editDialog.setOnCloseListener(new EditDialog.OnCloseListener() {
+            @Override
+            public void onClick(boolean confirm, @NonNull String data) {
+                if (confirm) {
+                    styleQty.get(position).setNum(Integer.parseInt(data));
+                    refreshList();
+                }
+            }
+        });
+        editDialog.show();
+    }
+
     private void initAdapter() {
         mAdapter = new BillStyleQtyAdapter(this, styleQty);
+        mAdapter.setOnEditQtyListener(new OnEditQtyListener() {
+            @Override
+            public void onEdit(int pos) {
+                showEditDialog(pos);
+            }
+        });
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -314,7 +342,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", "GetTableData"));
         params.add(new NetParams("sTableName", "vwProductSizeStock"));
-        params.add(new NetParams("sFields", "sColorName,sSizeName,iQty,iBscDataStyleMRecNo,iBscDataColorRecNo"));
+        params.add(new NetParams("sFields", "sColorName,sSizeName,iQty,iBscDataStyleMRecNo,iBscDataColorRecNo,iSerial"));
         params.add(new NetParams("sFilters", "iBscDataStyleMRecNo=" + styleId + " and iBscDataColorRecNo=" + colorId + " and iBscdataStockMRecNo=" + shopId));
         return params;
     }
@@ -347,11 +375,18 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     private List<BillStyleQty> getSaveStyle() {
 //        Log.e("styles", new Gson().toJson(styleQty));
         List<BillStyleQty> list = new ArrayList<>();
-        for (BillStyleQty billStyleQty : styleQty) {
-            if (billStyleQty.getNum() > 0) {
-                list.add(billStyleQty);
+        for (BillColor color : colors) {
+            for (BillStyleQty item : color.getStyleQty()) {
+                if (item.getNum() > 0) {
+                    list.add(item);
+                }
             }
         }
+//        for (BillStyleQty billStyleQty : styleQty) {
+//            if (billStyleQty.getNum() > 0) {
+//                list.add(billStyleQty);
+//            }
+//        }
         return list;
     }
 

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.interfaces.OnEditListener;
+import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
 import com.yyy.fuzhuangpad.view.sale.OnQtyChange;
 
 public class NumSelectView extends LinearLayout {
@@ -22,6 +24,11 @@ public class NumSelectView extends LinearLayout {
     int num = 0;
     int max = 10000;
     OnQtyChange onQtyChange;
+    OnEditListener onEditListener;
+
+    public void setOnEditListener(OnEditListener onEditListener) {
+        this.onEditListener = onEditListener;
+    }
 
     public void setOnQtyChange(OnQtyChange onQtyChange) {
         this.onQtyChange = onQtyChange;
@@ -57,6 +64,13 @@ public class NumSelectView extends LinearLayout {
         tvNum.setText(num + "");
         tvNum.setLayoutParams(getNumParams());
         tvNum.setBackgroundColor(context.getResources().getColor(R.color.default_bg_color));
+        tvNum.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onEditListener != null)
+                    onEditListener.onEdit(v);
+            }
+        });
         addView(tvNum);
     }
 

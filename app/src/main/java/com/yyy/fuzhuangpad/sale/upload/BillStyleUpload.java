@@ -1,33 +1,37 @@
-package com.yyy.fuzhuangpad.sale;
+package com.yyy.fuzhuangpad.sale.upload;
 
 import androidx.annotation.Nullable;
 
-public class BillDetailBase {
-    private int iRecNo;
-    private int iMainRecNo;
-    private int iBscDataStyleMRecNo;
-    private int iBscDataColorRecNo;
-    private String sSizeName;
-    private int iSumQty;
-    private double fPrice;
-    private double fTotal;
-    private String sRemark;
+import com.yyy.fuzhuangpad.util.StringUtil;
 
-    public BillDetailBase() {
+public class BillStyleUpload {
+    private int iRecNo = 0;
+    private int iMainRecNo = 0;
+    private int iBscDataStyleMRecNo = 0;
+    private int iBscDataColorRecNo = 0;
+    private int iSumQty = 0;
+    private double fPrice = 0;
+    private double fTotal = 0;
+
+    public BillStyleUpload() {
     }
 
-    public BillDetailBase(int iMainRecNo, int iBscDataStyleMRecNo, String sStyleNo, int iBscDataColorRecNo, String sColorName, String sSizeName, int iSumQty, double fPrice, double fTotal, String sRemark) {
+    public BillStyleUpload(int iMainRecNo, int iBscDataStyleMRecNo, int iBscDataColorRecNo, int iSumQty, double fPrice, double fTotal) {
         this.iMainRecNo = iMainRecNo;
         this.iBscDataStyleMRecNo = iBscDataStyleMRecNo;
         this.iBscDataColorRecNo = iBscDataColorRecNo;
-        this.sSizeName = sSizeName;
         this.iSumQty = iSumQty;
-        this.fPrice = fPrice;
         this.fTotal = fTotal;
-        this.sRemark = sRemark;
-
+        this.fPrice = fPrice;
     }
 
+    public double getfPrice() {
+        return fPrice;
+    }
+
+    public void setfPrice(double fPrice) {
+        this.fPrice = fPrice;
+    }
 
     public int getiRecNo() {
         return iRecNo;
@@ -61,28 +65,12 @@ public class BillDetailBase {
         this.iBscDataColorRecNo = iBscDataColorRecNo;
     }
 
-    public String getsSizeName() {
-        return sSizeName;
-    }
-
-    public void setsSizeName(String sSizeName) {
-        this.sSizeName = sSizeName;
-    }
-
     public int getiSumQty() {
         return iSumQty;
     }
 
     public void setiSumQty(int iSumQty) {
         this.iSumQty = iSumQty;
-    }
-
-    public double getfPrice() {
-        return fPrice;
-    }
-
-    public void setfPrice(double fPrice) {
-        this.fPrice = fPrice;
     }
 
     public double getfTotal() {
@@ -93,24 +81,17 @@ public class BillDetailBase {
         this.fTotal = fTotal;
     }
 
-    public String getsRemark() {
-        return sRemark;
+    private void sum(int iSumQty, double fTotal) {
+        this.iSumQty = this.iSumQty + iSumQty;
+        this.fTotal = StringUtil.add(this.fTotal, fTotal);
     }
-
-    public void setsRemark(String sRemark) {
-        this.sRemark = sRemark;
-    }
-
 
     @Override
     public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        BillDetailBase billDetailBase = (BillDetailBase) obj;
-        return iBscDataColorRecNo == billDetailBase.iBscDataColorRecNo &&
-                iBscDataStyleMRecNo == billDetailBase.iBscDataStyleMRecNo &&
-                sSizeName.equals(billDetailBase.sSizeName);
+        BillStyleUpload billStyleUpload = (BillStyleUpload) obj;
+        return iBscDataColorRecNo == billStyleUpload.iBscDataColorRecNo &&
+                iBscDataStyleMRecNo == billStyleUpload.iBscDataStyleMRecNo;
     }
-
-
 }

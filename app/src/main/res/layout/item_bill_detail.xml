@@ -74,7 +74,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:textColor="@color/default_text_color"
-        android:textSize="@dimen/sp_8" />
+        android:textSize="@dimen/sp_8"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_style_operate"

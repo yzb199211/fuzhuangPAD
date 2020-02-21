@@ -33,6 +33,7 @@ public class SelectView extends LinearLayout {
     TextView tvContent;
     ImageView iv;
     RelativeLayout rl;
+
     OnSelectClickListener onSelectClickListener;
 
     public void setOnSelectClickListener(OnSelectClickListener onSelectClickListener) {

@@ -1,13 +1,18 @@
 package com.yyy.fuzhuangpad.sale;
 
-public class BillDetailBean extends BillDetailBase {
+import androidx.annotation.Nullable;
+
+import java.io.Serializable;
+
+public class BillDetailBean extends BillDetailBase implements Comparable<BillDetailBean> {
     private String sStyleNo;
     private String sColorName;
+    private int iSerial;
 
     public BillDetailBean() {
     }
 
-    public BillDetailBean(int iMainRecNo, int iBscDataStyleMRecNo, String sStyleNo, int iBscDataColorRecNo, String sColorName, String sSizeName, int iSumQty, double fPrice, double fTotal, String sRemark) {
+    public BillDetailBean(int iMainRecNo, int iBscDataStyleMRecNo, String sStyleNo, int iBscDataColorRecNo, String sColorName, String sSizeName, int iSumQty, double fPrice, double fTotal, String sRemark, int iSerial) {
         setiMainRecNo(iMainRecNo);
         setiBscDataStyleMRecNo(iBscDataStyleMRecNo);
         setiBscDataColorRecNo(iBscDataColorRecNo);
@@ -16,10 +21,18 @@ public class BillDetailBean extends BillDetailBase {
         setfPrice(fPrice);
         setfTotal(fTotal);
         setsRemark(sRemark);
+        this.iSerial = iSerial;
         this.sStyleNo = sStyleNo;
         this.sColorName = sColorName;
     }
 
+    public int getiSerial() {
+        return iSerial;
+    }
+
+    public void setiSerial(int iSerial) {
+        this.iSerial = iSerial;
+    }
 
     public String getsStyleNo() {
         return sStyleNo;
@@ -51,5 +64,16 @@ public class BillDetailBean extends BillDetailBase {
 
     public static String fieldkeyParams() {
         return "iRecNo";
+    }
+
+    @Override
+    public int compareTo(BillDetailBean o) {
+        if (o.getiBscDataStyleMRecNo() - getiBscDataStyleMRecNo() != 0) {
+            return getiBscDataStyleMRecNo() - o.getiBscDataStyleMRecNo();
+        } else if (getiBscDataColorRecNo() - o.getiBscDataColorRecNo() != 0) {
+            return getiBscDataColorRecNo() - o.getiBscDataColorRecNo();
+        } else {
+            return iSerial - o.iSerial;
+        }
     }
 }
