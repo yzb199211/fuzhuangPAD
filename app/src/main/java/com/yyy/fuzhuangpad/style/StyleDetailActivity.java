@@ -21,6 +21,7 @@ import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.sale.BillCustomer;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -101,17 +102,23 @@ public class StyleDetailActivity extends AppCompatActivity {
     private List<StyleType> styleTypes;
     private List<StyleSize> styleSizes;
     private List<StyleColor> styleColors;
+    private List<BillCustomer> customers;
     SharedPreferencesHelper preferencesHelper;
+
     private String url;
     private String address;
     private String companyCode;
+    private String customer;
+    private int customerId;
     private int[] deleteKey;
 
     private String operatortype = "";
     private OptionsPickerView pvType;
     private OptionsPickerView pvSize;
+    private OptionsPickerView pvCustomer;
     private TimePickerView pvDate;
     private TimePickerView pvYear;
+    private int listPos = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -468,6 +475,93 @@ public class StyleDetailActivity extends AppCompatActivity {
         return params;
     }
 
+    private void getCustomers() {
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(getCustomerParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initCustomerData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_data));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initCustomerData(String string) throws JSONException, Exception {
+        JSONObject jsonObject = new JSONObject(string);
+        if (jsonObject.optBoolean("success")) {
+            setCustomerData(jsonObject.optJSONObject("dataset").optString("BscDataCustomer"));
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private void setCustomerData(String optString) {
+        LoadingFinish(null);
+        List<BillCustomer> list = new Gson().fromJson(optString, new TypeToken<List<BillCustomer>>() {
+        }.getType());
+        if (list == null || list.size() == 0) {
+//            LoadingFinish(getString(R.string.error_empty));
+        } else {
+            customers.addAll(list);
+            setPickCustomer();
+        }
+    }
+
+    private void setPickCustomer() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                initPickCustomer();
+            }
+        });
+    }
+
+    private void initPickCustomer() {
+        pvCustomer = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                String type = customers.get(options1).getPickerViewText();
+                if (!type.equals(customer)) {
+                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(options1).getPickerViewText();
+                    customerId = customers.get(options1).getIrecno();
+                    bsCustomer.setContext(customer);
+                }
+            }
+        })
+                .setTitleText("客户选择")
+                .setContentTextSize(18)//设置滚轮文字大小
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setLabels("", "", "")
+                .isDialog(true)
+                .build();
+        pvCustomer.setPicker(customers);//一级选择器
+        setDialog(pvCustomer);
+        pvCustomer.show();
+    }
+
+    private List<NetParams> getCustomerParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", "GetTableData"));
+        params.add(new NetParams("sTableName", "BscDataCustomer"));
+        params.add(new NetParams("sFields", "irecno,sCustShortName"));
+        params.add(new NetParams("sFilters", "iCustType=0 and isnull(dStopDate,'2199-01-01')>getdate()"));
+        return params;
+    }
+
     private void setYearListener() {
         svYear.setOnSelectClickListener(new OnSelectClickListener() {
             @Override
@@ -526,6 +620,7 @@ public class StyleDetailActivity extends AppCompatActivity {
             @Override
             public void onTimeSelect(Date date, View v) {
                 svDateStop.setText(StringUtil.getDate(date));
+                styleBean.setdStopDate(StringUtil.getDate(date));
             }
         }).setRangDate(TimeUtil.str2calendar(getString(R.string.common_pickdate_start)), TimeUtil.str2calendar(getString(R.string.common_pickdate_end)))
                 .setDate(Calendar.getInstance())
@@ -644,11 +739,6 @@ public class StyleDetailActivity extends AppCompatActivity {
                 LoadingFinish(e.getMessage());
             }
         });
-//        if (operatortype.equals(Operatortype.add)) {
-//            saveAdd();
-//        } else if (operatortype.equals(Operatortype.update)) {
-//
-//        }
     }
 
     private void initSaveDate(String data) throws JSONException {
