@@ -26,6 +26,7 @@ import com.yyy.fuzhuangpad.dialog.EditDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnDeleteListener;
 import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
+import com.yyy.fuzhuangpad.interfaces.OnModifyListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.sale.upload.BillChildQuery;
@@ -306,7 +307,35 @@ public class BillDetailActivity extends AppCompatActivity {
                 showEditDialog(pos);
             }
         });
+        mAdapter.setOnModifyListener(new OnModifyListener() {
+            @Override
+            public void onModify(int pos) {
+                Log.e("styles", new Gson().toJson(getModifyData(billDetail.get(pos))));
+                if (shopId == 0) {
+                    Toast(getString(R.string.sale_billing_empty_shop));
+                    return;
+                }
+                startActivityForResult(new Intent()
+                                .putExtra("shopId", shopId + "")
+                                .putExtra("styles", new Gson().toJson(getModifyData(billDetail.get(pos))))
+                                .setClass(BillDetailActivity.this, BillingStyleDetailModifyActivity.class)
+                        , CodeUtil.BILLINGSTYLEQTYMODIFY);
+            }
+        });
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private List<BillDetailBean> getModifyData(BillDetailBean billDetailBean) {
+        List<BillDetailBean> list = new ArrayList<>();
+        boolean isLast = false;
+        for (BillDetailBean item : billDetail) {
+            if (billDetailBean.getiBscDataStyleMRecNo() == item.getiBscDataStyleMRecNo()) {
+                isLast = true;
+                list.add(item);
+            } else if (isLast)
+                break;
+        }
+        return list;
     }
 
     private List<NetParams> getParams() {
@@ -314,7 +343,7 @@ public class BillDetailActivity extends AppCompatActivity {
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", "GetTableData"));
         params.add(new NetParams("sTableName", "vwSDContractDDPad"));
-        params.add(new NetParams("sFields", "iRecNo,iMainRecNo,iBscDataStyleMRecNo,iBscDataColorRecNo,sSizeName,iSumQty,fPrice,fTotal,sStyleNo,sColorName,iSerial"));
+        params.add(new NetParams("sFields", "iRecNo,iMainRecNo,iBscDataStyleMRecNo,iBscDataColorRecNo,sSizeName,iSumQty,fPrice,fTotal,sStyleNo,sColorName,iSerial,sClassName,sStyleName"));
         params.add(new NetParams("sFilters", "iMainRecNo=" + bill.getiRecNo()));
         return params;
     }
@@ -880,7 +909,6 @@ public class BillDetailActivity extends AppCompatActivity {
                     return;
                 }
 
-
                 if (TextUtils.isEmpty(bill.getsOrderNo())) {
                     getOrderNo();
                 } else {
@@ -1000,7 +1028,7 @@ public class BillDetailActivity extends AppCompatActivity {
         new NetUtil(getOrderParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
-                Log.e("data", string);
+//                Log.e("data", string);
                 try {
                     JSONObject jsonObject = new JSONObject(string);
                     if (jsonObject.optBoolean("success")) {
@@ -1045,7 +1073,7 @@ public class BillDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String string) {
                 try {
-                    Log.e("data", string);
+//                    Log.e("data", string);
                     initSaveDate(string);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1093,8 +1121,6 @@ public class BillDetailActivity extends AppCompatActivity {
         params.add(new NetParams("otype", Otype.OperateData));
         params.add(new NetParams("mainquery", getMainquery()));
         params.add(new NetParams("children", "[" + getChildquery() + "]"));
-        Log.e("child", "[" + getChildquery() + "]");
-        Log.e("main", getMainquery());
         return params;
     }
 
@@ -1102,8 +1128,7 @@ public class BillDetailActivity extends AppCompatActivity {
         List<BillStyleUpload> styleUploads = new ArrayList<>();
         List<List<BillSizeUpload>> sizeList = new ArrayList<>();
         setUpload(styleUploads, sizeList);
-        Log.e("styles", new Gson().toJson(styleUploads));
-        Log.e("sizes", new Gson().toJson(sizeList));
+
         BillChildQuery mainQueryChild = new BillChildQuery();
         mainQueryChild.setChildtype(BillDetailBean.childtypeParams());
         mainQueryChild.setFieldkey(BillDetailBean.fieldkeyParams());
@@ -1137,20 +1162,20 @@ public class BillDetailActivity extends AppCompatActivity {
         }
     }
 
-    private List<BillDetailBase> getBillDetail() {
-        List<BillDetailBase> list = new ArrayList<>();
-        for (BillDetailBean item : billDetail) {
-            BillDetailBase billDetailBase = new BillDetailBase(item.getiMainRecNo(),
-                    item.getiBscDataStyleMRecNo(),
-                    item.getsStyleNo(),
-                    item.getiBscDataColorRecNo(),
-                    item.getsColorName(), item.getsSizeName(),
-                    item.getiSumQty(), item.getfPrice(),
-                    StringUtil.multiply(item.getiSumQty(), item.getfPrice()), item.getsRemark());
-            list.add(billDetailBase);
-        }
-        return list;
-    }
+//    private List<BillDetailBase> getBillDetail() {
+//        List<BillDetailBase> list = new ArrayList<>();
+//        for (BillDetailBean item : billDetail) {
+//            BillDetailBase billDetailBase = new BillDetailBase(item.getiMainRecNo(),
+//                    item.getiBscDataStyleMRecNo(),
+//                    item.getsStyleNo(),
+//                    item.getiBscDataColorRecNo(),
+//                    item.getsColorName(), item.getsSizeName(),
+//                    item.getiSumQty(), item.getfPrice(),
+//                    StringUtil.multiply(item.getiSumQty(), item.getfPrice()), item.getsRemark());
+//            list.add(billDetailBase);
+//        }
+//        return list;
+//    }
 
     private String getMainquery() {
         MainQuery mainQuery = new MainQuery();
@@ -1265,7 +1290,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
     private void addStyleDetails(List<BillDetailBean> newStyles) {
         for (BillDetailBean item : newStyles) {
-            Log.e("stylePos", billDetail.indexOf(item) + "");
+//            Log.e("stylePos", billDetail.indexOf(item) + "");
             if (billDetail.contains(item)) {
                 BillDetailBean oldItem = billDetail.get(billDetail.indexOf(item));
                 oldItem.setiSumQty(oldItem.getiSumQty() + item.getiSumQty());
@@ -1280,7 +1305,12 @@ public class BillDetailActivity extends AppCompatActivity {
     private List<BillDetailBean> switch2StyleDetails(BillStyle item, List<BillStyleQty> styles) {
         List<BillDetailBean> list = new ArrayList<>();
         for (BillStyleQty style : styles) {
-            list.add(new BillDetailBean(iMainRecNo, style.getiBscDataStyleMRecNo(), item.getsStyleName(), style.getiBscDataColorRecNo(), style.getsColorName(), style.getsSizeName(), style.getNum(), item.getfCostPrice(), StringUtil.multiply(style.getNum(), item.getfCostPrice()), "", style.getiSerial()));
+            list.add(new BillDetailBean(iMainRecNo, style.getiBscDataStyleMRecNo(),
+                    item.getsStyleNo(), style.getiBscDataColorRecNo(),
+                    style.getsColorName(), style.getsSizeName(),
+                    style.getNum(), item.getfCostPrice(),
+                    StringUtil.multiply(style.getNum(), item.getfCostPrice()),
+                    "", style.getiSerial(), item.getsClassName(), item.getsStyleName()));
         }
         return list;
     }

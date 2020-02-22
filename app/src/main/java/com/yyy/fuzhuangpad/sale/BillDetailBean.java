@@ -7,12 +7,16 @@ import java.io.Serializable;
 public class BillDetailBean extends BillDetailBase implements Comparable<BillDetailBean> {
     private String sStyleNo;
     private String sColorName;
+    private String sClassName;
+    private String sStyleName;
     private int iSerial;
 
     public BillDetailBean() {
     }
 
-    public BillDetailBean(int iMainRecNo, int iBscDataStyleMRecNo, String sStyleNo, int iBscDataColorRecNo, String sColorName, String sSizeName, int iSumQty, double fPrice, double fTotal, String sRemark, int iSerial) {
+    public BillDetailBean(int iMainRecNo, int iBscDataStyleMRecNo, String sStyleNo, int iBscDataColorRecNo,
+                          String sColorName, String sSizeName, int iSumQty, double fPrice, double fTotal,
+                          String sRemark, int iSerial, String sClassName, String sStyleName) {
         setiMainRecNo(iMainRecNo);
         setiBscDataStyleMRecNo(iBscDataStyleMRecNo);
         setiBscDataColorRecNo(iBscDataColorRecNo);
@@ -24,6 +28,22 @@ public class BillDetailBean extends BillDetailBase implements Comparable<BillDet
         this.iSerial = iSerial;
         this.sStyleNo = sStyleNo;
         this.sColorName = sColorName;
+    }
+
+    public String getsClassName() {
+        return sClassName;
+    }
+
+    public void setsClassName(String sClassName) {
+        this.sClassName = sClassName;
+    }
+
+    public String getsStyleName() {
+        return sStyleName;
+    }
+
+    public void setsStyleName(String sStyleName) {
+        this.sStyleName = sStyleName;
     }
 
     public int getiSerial() {

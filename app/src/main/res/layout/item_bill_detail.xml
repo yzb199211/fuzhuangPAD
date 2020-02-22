@@ -76,12 +76,19 @@
         android:textColor="@color/default_text_color"
         android:textSize="@dimen/sp_8"
         android:visibility="gone" />
-
+    <TextView
+        android:id="@+id/tv_style_modify"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:textColor="@color/common_btn_search"
+        android:textSize="@dimen/sp_8" />
     <TextView
         android:id="@+id/tv_style_operate"
         android:layout_width="@dimen/dp_0"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:gravity="center"
         android:textColor="@color/red"
         android:textSize="@dimen/sp_8" />

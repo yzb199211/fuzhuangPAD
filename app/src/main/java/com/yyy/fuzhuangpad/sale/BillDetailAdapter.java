@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.interfaces.OnDeleteListener;
 import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
+import com.yyy.fuzhuangpad.interfaces.OnModifyListener;
 
 import java.util.List;
 
@@ -20,10 +21,7 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
     List<BillDetailBean> list;
     OnDeleteListener onDeleteListener;
     OnEditQtyListener onEditQtyListener;
-
-    public OnDeleteListener getOnDeleteListener() {
-        return onDeleteListener;
-    }
+    OnModifyListener onModifyListener;
 
     public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
         this.onDeleteListener = onDeleteListener;
@@ -31,6 +29,10 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
 
     public void setOnEditQtyListener(OnEditQtyListener onEditQtyListener) {
         this.onEditQtyListener = onEditQtyListener;
+    }
+
+    public void setOnModifyListener(OnModifyListener onModifyListener) {
+        this.onModifyListener = onModifyListener;
     }
 
     public BillDetailAdapter(Context context, List<BillDetailBean> list) {
@@ -58,6 +60,15 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
         holder.tvStyleTotal.setText(item.getfTotal() + "");
         holder.tvStyleRemark.setText(item.getsRemark());
         holder.tvStyleOperate.setText(context.getString(R.string.common_delete));
+        holder.tvStyleModify.setText(context.getString(R.string.common_modify));
+        holder.tvStyleModify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onModifyListener != null) {
+                    onModifyListener.onModify(position);
+                }
+            }
+        });
         holder.tvStyleQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +102,7 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
         TextView tvStyleTotal;
         TextView tvStyleRemark;
         TextView tvStyleOperate;
+        TextView tvStyleModify;
 
         public VH(View v) {
             super(v);
@@ -103,6 +115,7 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
             tvStyleTotal = v.findViewById(R.id.tv_style_total);
             tvStyleRemark = v.findViewById(R.id.tv_style_remark);
             tvStyleOperate = v.findViewById(R.id.tv_style_operate);
+            tvStyleModify = v.findViewById(R.id.tv_style_modify);
         }
     }
 }

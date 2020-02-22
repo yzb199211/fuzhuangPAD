@@ -108,8 +108,8 @@ public class BillDetailBase {
         if (obj == null || getClass() != obj.getClass()) return false;
         BillDetailBase billDetailBase = (BillDetailBase) obj;
         return iBscDataColorRecNo == billDetailBase.iBscDataColorRecNo &&
-                iBscDataStyleMRecNo == billDetailBase.iBscDataStyleMRecNo &&
-                sSizeName.equals(billDetailBase.sSizeName);
+                iBscDataStyleMRecNo == billDetailBase.iBscDataStyleMRecNo
+                && sSizeName.equals(billDetailBase.sSizeName);
     }
 
 
