@@ -1,5 +1,6 @@
 package com.yyy.fuzhuangpad.customer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -95,7 +96,8 @@ public class CustomerDetailActivity extends AppCompatActivity {
     private OptionsPickerView pvSale;
     private TimePickerView pvDate;
 
-    String operatortype = "";
+    private String operatortype = "";
+    private int listPos = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +122,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
         if (StringUtil.isNotEmpty(data)) {
             customerBeans = new Gson().fromJson(data, CustomerBeans.class);
             operatortype = Operatortype.update;
+            listPos = getIntent().getIntExtra("pos", -1);
             setData();
         } else {
             customerBeans = new CustomerBeans();
@@ -462,7 +465,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
             LoadingFinish(getString(R.string.success_delete));
-            eixt();
+            eixt(CodeUtil.DELETE);
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -506,7 +509,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
         new NetUtil(getOrderParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
-                Log.e("data", string);
+//                Log.e("data", string);
                 try {
                     JSONObject jsonObject = new JSONObject(string);
                     if (jsonObject.optBoolean("success")) {
@@ -566,7 +569,8 @@ public class CustomerDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
             LoadingFinish(getString(R.string.success_save));
-            eixt();
+            customerBeans.setiRecNo(Integer.parseInt(jsonObject.optString("message")));
+            eixt(listPos == -1 ? CodeUtil.REFRESH : CodeUtil.MODIFY);
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -642,11 +646,12 @@ public class CustomerDetailActivity extends AppCompatActivity {
     }
 
 
-    private void eixt() {
+    private void eixt(int code) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                setResult(CodeUtil.REFRESH);
+                Intent intent = new Intent().putExtra("pos", listPos).putExtra("style", new Gson().toJson(customerBeans));
+                setResult(code, intent);
                 finish();
             }
         });

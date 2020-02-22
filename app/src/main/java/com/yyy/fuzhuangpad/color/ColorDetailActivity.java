@@ -2,7 +2,6 @@ package com.yyy.fuzhuangpad.color;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +78,7 @@ public class ColorDetailActivity extends AppCompatActivity {
     private TimePickerView pvDate;
 
     String operatortype = "";
+    int listPos = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +100,7 @@ public class ColorDetailActivity extends AppCompatActivity {
 
     private void getData() {
         String data = getIntent().getStringExtra("data");
+        listPos = getIntent().getIntExtra("pos", -1);
         if (StringUtil.isNotEmpty(data)) {
             colorBeans = new Gson().fromJson(data, ColorBeans.class);
             operatortype = Operatortype.update;
@@ -117,6 +118,7 @@ public class ColorDetailActivity extends AppCompatActivity {
         svColorType.setText(colorBeans.getsClassName());
         svDateStop.setText(colorBeans.getdStopDate());
         reRemark.setText(colorBeans.getsRemark());
+
     }
 
     private void init() {
@@ -316,7 +318,7 @@ public class ColorDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
             LoadingFinish(getString(R.string.success_delete));
-            eixt();
+            eixt(CodeUtil.DELETE);
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -384,7 +386,8 @@ public class ColorDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
             LoadingFinish(getString(R.string.success_save));
-            eixt();
+            colorBeans.setiRecNo(Integer.parseInt(jsonObject.optString("message")));
+            eixt(listPos == -1 ? CodeUtil.REFRESH : CodeUtil.MODIFY);
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -458,11 +461,12 @@ public class ColorDetailActivity extends AppCompatActivity {
         return params;
     }
 
-    private void eixt() {
+    private void eixt(int code) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                setResult(CodeUtil.REFRESH);
+                Intent intent = new Intent().putExtra("color", new Gson().toJson(colorBeans)).putExtra("pos", listPos);
+                setResult(code, intent);
                 finish();
             }
         });

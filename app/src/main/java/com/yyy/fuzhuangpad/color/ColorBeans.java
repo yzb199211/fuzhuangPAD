@@ -1,6 +1,7 @@
 package com.yyy.fuzhuangpad.color;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.yyy.fuzhuangpad.util.StringUtil;
 import com.yyy.fuzhuangpad.view.form.FormColumn;
@@ -27,56 +28,63 @@ public class ColorBeans {
         return iRecNo;
     }
 
-    public void setiRecNo(int iRecNo) {
+    public ColorBeans setiRecNo(int iRecNo) {
         this.iRecNo = iRecNo;
+        return this;
     }
 
     public String getsColorID() {
-        return sColorID;
+        return TextUtils.isEmpty(sColorID) ? "" : sColorID;
     }
 
-    public void setsColorID(String sColorID) {
+    public ColorBeans setsColorID(String sColorID) {
         this.sColorID = sColorID;
+        return this;
     }
 
     public String getsColorName() {
-        return sColorName;
+        return TextUtils.isEmpty(sColorName) ? "" : sColorName;
     }
 
-    public void setsColorName(String sColorName) {
+    public ColorBeans setsColorName(String sColorName) {
         this.sColorName = sColorName;
+        return this;
     }
 
     public String getsClassID() {
-        return sClassID;
+        return TextUtils.isEmpty(sClassID) ? "" : sClassID;
     }
 
-    public void setsClassID(String sClassID) {
+    public ColorBeans setsClassID(String sClassID) {
         this.sClassID = sClassID;
+        return this;
     }
 
     public String getsClassName() {
-        return sClassName;
+        return TextUtils.isEmpty(sClassName) ? "" : sClassName;
     }
 
-    public void setsClassName(String sClassName) {
+    public ColorBeans setsClassName(String sClassName) {
         this.sClassName = sClassName;
+        return this;
     }
 
     public String getdStopDate() {
         return StringUtil.getDate(dStopDate, 2);
     }
 
-    public void setdStopDate(String dStopDate) {
+    public ColorBeans setdStopDate(String dStopDate) {
         this.dStopDate = dStopDate;
+        return this;
     }
 
     public String getsRemark() {
-        return sRemark;
+        return TextUtils.isEmpty(sRemark) ? "" : sRemark;
     }
 
-    public void setsRemark(String sRemark) {
+    public ColorBeans setsRemark(String sRemark) {
         this.sRemark = sRemark;
+        return this;
     }
 
 
@@ -95,6 +103,7 @@ public class ColorBeans {
     }
 
     public String paramsFieldsValues() {
+//        Log.e("remark", sRemark + "qq");
         return sColorName + "," + sColorID + "," + sClassID + "," + dStopDate + "," + sRemark;
     }
 

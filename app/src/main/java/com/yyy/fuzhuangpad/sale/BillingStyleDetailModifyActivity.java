@@ -75,6 +75,7 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
     private String styleId;
     private String shopId;
     private String style;
+    private String oldData;
 
     private int currentPos = -1;
 
@@ -132,8 +133,8 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
 
     private void getIntentData() {
         shopId = getIntent().getStringExtra("shopId");
-        String data = getIntent().getStringExtra("styles");
-        stylesOld = new Gson().fromJson(data, new TypeToken<List<BillDetailBean>>() {
+        oldData = getIntent().getStringExtra("styles");
+        stylesOld = new Gson().fromJson(oldData, new TypeToken<List<BillDetailBean>>() {
         }.getType());
         BillDetailBean style = stylesOld.get(0);
         styleId = style.getiBscDataStyleMRecNo() + "";
@@ -143,7 +144,7 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
         tvStylePrice.setText(style.getfPrice() + "");
         setStyleData(style);
         setColorsOld();
-        Log.e("colorOlds", new Gson().toJson(colorsOld));
+//        Log.e("colorOlds", new Gson().toJson(colorsOld));
     }
 
     private void setColorsOld() {
@@ -236,6 +237,7 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
                     public void clickMark(int position, boolean isChecked) {
 //                       setGroupChecked(position,isChecked);
                         setSingleChecked(position);
+
                     }
                 });
             }
@@ -306,11 +308,25 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
         if (list == null || list.size() == 0) {
             LoadingFinish(getString(R.string.error_empty));
         } else {
+            modifyList(list, pos);
             Collections.sort(list);
             colors.get(pos).setStyleQty(list);
             styleQty.addAll(list);
             refreshList();
             LoadingFinish(null);
+        }
+    }
+
+    private void modifyList(List<BillStyleQty> list, int pos) {
+        int colorPos = colorsOld.indexOf(colors.get(pos));
+        if (colorPos != -1) {
+            for (BillStyleQty item : colorsOld.get(colorPos).getStyleQty()) {
+                int listPos = list.indexOf(item);
+                if (listPos != -1) {
+                    list.get(listPos).setNum(item.getNum());
+                }
+            }
+            colorsOld.remove(colorPos);
         }
     }
 
@@ -388,7 +404,8 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra("style", style);
             intent.putExtra("styleQty", new Gson().toJson(list));
-            setResult(CodeUtil.BILLINGSTYLEQTY, intent);
+            intent.putExtra("styleOld", oldData);
+            setResult(CodeUtil.BILLINGSTYLEQTYMODIFY, intent);
             finish();
         }
     }
@@ -399,6 +416,15 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
             for (BillStyleQty item : color.getStyleQty()) {
                 if (item.getNum() > 0) {
                     list.add(item);
+                }
+            }
+        }
+        if (colorsOld.size() > 0) {
+            for (BillColor color : colorsOld) {
+                for (BillStyleQty item : color.getStyleQty()) {
+                    if (item.getNum() > 0) {
+                        list.add(item);
+                    }
                 }
             }
         }

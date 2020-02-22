@@ -150,7 +150,7 @@ public class ColorFragment extends Fragment {
         list.add(new NetParams("sCompanyCode", companyCode));
         list.add(new NetParams("otype", "GetTableData"));
         list.add(new NetParams("sTableName", "vwBscDataColor"));
-        list.add(new NetParams("sFields", "iRecNo,sColorName,sColorID,sClassID,sClassName"));
+        list.add(new NetParams("sFields", "iRecNo,sColorName,sColorID,sClassID,sClassName,sRemark"));
         list.add(new NetParams("sFilters", getFilter()));
         return list;
     }
@@ -234,7 +234,7 @@ public class ColorFragment extends Fragment {
         colorAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                go2Detail(new Gson().toJson(colorDatas.get(pos)));
+                go2Detail(pos);
             }
         });
         recyclerView.setAdapter(colorAdapter);
@@ -250,12 +250,13 @@ public class ColorFragment extends Fragment {
         rlMain.addView(recyclerView, params);
     }
 
-    private void go2Detail(@Nullable String data) {
+    private void go2Detail(int pos) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), ColorDetailActivity.class);
-        if (StringUtil.isNotEmpty(data))
-            intent.putExtra("data", data);
-       startActivityForResult(intent, CodeUtil.COLORDETAIL);
+        intent.putExtra("pos", pos);
+        if (pos != -1)
+            intent.putExtra("data", new Gson().toJson(colorDatas.get(pos)));
+        startActivityForResult(intent, CodeUtil.COLORDETAIL);
     }
 
     @Override
@@ -308,7 +309,7 @@ public class ColorFragment extends Fragment {
                 refreshData();
                 break;
             case R.id.bwi_add:
-                go2Detail(null);
+                go2Detail(-1);
                 break;
             default:
                 break;
@@ -472,8 +473,62 @@ public class ColorFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("code",resultCode+"");
-        if (resultCode == CodeUtil.REFRESH)
-            refreshData();
+//        Log.e("code", resultCode + "");
+        if (data != null) {
+            switch (resultCode) {
+                case CodeUtil.REFRESH:
+                    addData(data);
+                    break;
+                case CodeUtil.MODIFY:
+                    modifyData(data);
+                    break;
+                case CodeUtil.DELETE:
+                    removeData(data);
+                    break;
+            }
+        }
+//        refreshData();
+    }
+
+    private void addData(Intent data) {
+        ColorBeans item = new Gson().fromJson(data.getStringExtra("color"), ColorBeans.class);
+        colorDatas.add(0, item);
+        formDatas.add(0, item.getList());
+        refreshList();
+    }
+
+    private void removeData(Intent data) {
+        int pos = data.getIntExtra("pos", -1);
+        if (pos != -1) {
+            colorDatas.remove(pos);
+            formDatas.remove(pos);
+            refreshList();
+        }
+    }
+
+    private void modifyData(Intent data) {
+        int pos = data.getIntExtra("pos", -1);
+        ColorBeans item = new Gson().fromJson(data.getStringExtra("color"), ColorBeans.class);
+        if (pos != -1) {
+            modifyColor(colorDatas.get(pos), item);
+            modifyFormData(formDatas.get(pos), item);
+        }
+    }
+
+    private void modifyFormData(List<FormColumn> row, ColorBeans item) {
+        row.get(1).setText(item.getsColorID());
+        row.get(2).setText(item.getsColorName());
+        row.get(3).setText(item.getsClassName());
+        row.get(4).setText(item.getsRemark());
+        refreshList();
+    }
+
+    private void modifyColor(ColorBeans color, ColorBeans item) {
+        color.setsRemark(item.getsRemark())
+                .setsColorName(item.getsColorName())
+                .setsColorID(item.getsColorID())
+                .setsClassID(item.getsClassID())
+                .setsClassName(item.getsClassName())
+                .setdStopDate(item.getdStopDate());
     }
 }

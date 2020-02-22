@@ -8,18 +8,18 @@ import java.util.List;
 
 public class CustomerBeans {
     private int iRecNo;
-    private String sCustID="";
-    private String sCustName="";
-    private String sCustShortName="";
-    private String sClassID="";
-    private String sClassName="";
-    private String sSaleID="";
-    private String sSaleName="";
-    private String sPerson="";
-    private String sTel="";
-    private String sAddress="";
-    private String dStopDate="";
-    private String sRemark="";
+    private String sCustID = "";
+    private String sCustName = "";
+    private String sCustShortName = "";
+    private String sClassID = "";
+    private String sClassName = "";
+    private String sSaleID = "";
+    private String sSaleName = "";
+    private String sPerson = "";
+    private String sTel = "";
+    private String sAddress = "";
+    private String dStopDate = "";
+    private String sRemark = "";
     private int iCustType;
     private int row;
 
@@ -152,13 +152,13 @@ public class CustomerBeans {
     }
 
     public String paramsFields() {
-        return "sCustName" + ",sCustID" + ",sCustShortName" + ",sClassID"  + ",sSaleID" + ",sPerson" + ",sTel" + ",sAddress" + ",dStopDate" + ",sRemark"+",iCustType";
+        return "sCustName" + ",sCustID" + ",sCustShortName" + ",sClassID" + ",sSaleID" + ",sPerson" + ",sTel" + ",sAddress" + ",dStopDate" + ",sRemark" + ",iCustType";
     }
 
     public String paramsFieldsValues() {
         return sCustName + "," + sCustID + "," + sCustShortName + ","
                 + sClassID + "," + sSaleID + ","
-                + sPerson + "," + sTel + "," + sAddress + "," + dStopDate + "," + sRemark+",0";
+                + sPerson + "," + sTel + "," + sAddress + "," + dStopDate + "," + sRemark + ",0";
     }
 
     public String paramsFilterFields() {
@@ -179,5 +179,21 @@ public class CustomerBeans {
 
     public String paramsFieldKeysValues() {
         return iRecNo == 0 ? "" : iRecNo + "";
+    }
+
+    public void copy(CustomerBeans customer) {
+        iRecNo = customer.getiRecNo();
+        sCustID = customer.getsCustID();
+        sCustName = customer.getsCustName();
+        sCustShortName = customer.getsCustShortName();
+        sClassID = customer.getsClassID();
+        sClassName = customer.getsClassName();
+        sSaleID = customer.getsSaleID();
+        sSaleName = customer.getsSaleName();
+        sPerson = customer.getsPerson();
+        sTel = customer.getsTel();
+        sAddress = customer.getsAddress();
+        dStopDate = customer.getdStopDate();
+        sRemark = customer.getsRemark();
     }
 }

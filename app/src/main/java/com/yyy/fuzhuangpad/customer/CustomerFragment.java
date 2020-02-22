@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.adapter.FormAdapter;
+import com.yyy.fuzhuangpad.color.ColorBeans;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
@@ -55,7 +56,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class CustomerFragment extends Fragment{
+public class CustomerFragment extends Fragment {
     private final int formTitleId = 0x00001000;
     @BindView(R.id.se_code)
     SearchEdit seCode;
@@ -221,7 +222,7 @@ public class CustomerFragment extends Fragment{
         formAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                go2Detail(new Gson().toJson(customerDatas.get(pos)));
+                go2Detail(pos);
             }
         });
         recyclerView.setAdapter(formAdapter);
@@ -297,7 +298,7 @@ public class CustomerFragment extends Fragment{
                 refreshData();
                 break;
             case R.id.bwi_add:
-                go2Detail(null);
+                go2Detail(-1);
                 break;
             default:
                 break;
@@ -410,12 +411,12 @@ public class CustomerFragment extends Fragment{
         return params;
     }
 
-    private void go2Detail(@Nullable String data) {
+    private void go2Detail(int pos) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), CustomerDetailActivity.class);
-        if (StringUtil.isNotEmpty(data))
-            intent.putExtra("data", data);
-      startActivityForResult(intent, CodeUtil.CUSTOMERDETAIL);
+        if (pos != -1)
+            intent.putExtra("data", new Gson().toJson(customerDatas.get(pos))).putExtra("pos", pos);
+        startActivityForResult(intent, CodeUtil.CUSTOMERDETAIL);
     }
 
     private void LoadingFinish(String msg) {
@@ -467,7 +468,58 @@ public class CustomerFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==CodeUtil.REFRESH)
-            refreshData();
+        if (data != null) {
+            switch (resultCode) {
+                case CodeUtil.REFRESH:
+                    addData(data);
+                    break;
+                case CodeUtil.MODIFY:
+                    modifyData(data);
+                    break;
+                case CodeUtil.DELETE:
+                    removeData(data);
+                    break;
+            }
+        }
     }
+
+    private void addData(Intent data) {
+        CustomerBeans item = new Gson().fromJson(data.getStringExtra("style"), CustomerBeans.class);
+        customerDatas.add(0, item);
+        formDatas.add(0, item.getList());
+        refreshList();
+    }
+
+    private void modifyData(Intent data) {
+        int pos = data.getIntExtra("pos", -1);
+        CustomerBeans item = new Gson().fromJson(data.getStringExtra("style"), CustomerBeans.class);
+        if (pos != -1) {
+            modifyCustomer(customerDatas.get(pos), item);
+            modifyFormData(formDatas.get(pos), item);
+        }
+    }
+
+    private void modifyCustomer(CustomerBeans customerBeans, CustomerBeans item) {
+        customerBeans.copy(item);
+    }
+
+    private void modifyFormData(List<FormColumn> formColumns, CustomerBeans item) {
+        formColumns.get(1).setText(item.getsCustID());
+        formColumns.get(2).setText(item.getsCustShortName());
+        formColumns.get(3).setText(item.getsSaleName());
+        formColumns.get(4).setText(item.getsClassName());
+        formColumns.get(5).setText(item.getsPerson());
+        formColumns.get(6).setText(item.getsTel());
+        refreshList();
+    }
+
+    private void removeData(Intent data) {
+        int pos = data.getIntExtra("pos", -1);
+        if (pos != -1) {
+            customerDatas.remove(pos);
+            formDatas.remove(pos);
+            refreshList();
+        }
+    }
+
 }

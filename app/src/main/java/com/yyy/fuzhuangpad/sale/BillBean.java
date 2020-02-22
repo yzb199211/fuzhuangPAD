@@ -227,10 +227,10 @@ public class BillBean {
                 "fPayMomey" + "," +
                 "sPaymethod" + "," +
                 "iQty" + "," +
-                "fTotal";
+                "fTotal" + "," + "sUserID";
     }
 
-    public String paramsFieldsValues() {
+    public String paramsFieldsValues(String userid) {
         return iRecNo + "," +
                 sOrderNo + "," +
                 dDate + "," +
@@ -243,7 +243,7 @@ public class BillBean {
                 fPayMomey + "," +
                 sPaymethod + "," +
                 iQty + "," +
-                fTotal;
+                fTotal + "," + userid;
     }
 
     public String paramsFilterFields() {

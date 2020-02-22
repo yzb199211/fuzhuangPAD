@@ -7,22 +7,22 @@ import java.util.List;
 
 public class StyleBean {
     private int iRecNo;
-    private String sStyleNo="";
-    private String sStyleName="";
-    private String sClassID="";
-    private String sClassName="";
-    private String sSizeGroupID="";
-    private String sGroupName="";
+    private String sStyleNo = "";
+    private String sStyleName = "";
+    private String sClassID = "";
+    private String sClassName = "";
+    private String sSizeGroupID = "";
+    private String sGroupName = "";
     private int iBscDataCustomerRecNo;
-    private String sCustShortName="";
-    private String iYear="";
+    private String sCustShortName = "";
+    private String iYear = "";
     private double fCostPrice;
     private double fBulkTotal1;
     private double fSalePrice;
-    private String sCustStyleNo="";
-    private String sWaterElents="";
-    private String sReMark="";
-    private String dStopDate="";
+    private String sCustStyleNo = "";
+    private String sWaterElents = "";
+    private String sReMark = "";
+    private String dStopDate = "";
     private int row;
 
 
@@ -193,6 +193,7 @@ public class StyleBean {
                 + "," + fCostPrice + "," + fBulkTotal1 + "," + fSalePrice + "," + sCustStyleNo
                 + "," + sWaterElents + "," + sReMark + "," + dStopDate;
     }
+
     public String paramsFilterFields() {
         return "iRecNo";
     }
@@ -211,5 +212,25 @@ public class StyleBean {
 
     public String paramsFieldKeysValues() {
         return iRecNo == 0 ? "" : iRecNo + "";
+    }
+
+    public void copy(StyleBean item) {
+        iRecNo = item.getiRecNo();
+        sStyleNo = item.getsStyleNo();
+        sStyleName = item.getsStyleName();
+        sClassID = item.getsClassID();
+        sClassName = item.getsClassName();
+        sSizeGroupID = item.getsSizeGroupID();
+        sGroupName = item.getsGroupName();
+        iBscDataCustomerRecNo = item.getiBscDataCustomerRecNo();
+        sCustShortName = item.getsCustShortName();
+        iYear = item.getiYear();
+        fCostPrice = item.getfCostPrice();
+        fBulkTotal1 = item.getfBulkTotal1();
+        fSalePrice = item.getfSalePrice();
+        sCustStyleNo = item.getsCustStyleNo();
+        sWaterElents = item.getsWaterElents();
+        sReMark = item.getsReMark();
+        dStopDate = item.getdStopDate();
     }
 }

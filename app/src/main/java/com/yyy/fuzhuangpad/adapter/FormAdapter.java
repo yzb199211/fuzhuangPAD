@@ -36,6 +36,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         holder.setIsRecyclable(false);
+        list.get(position).get(0).setText(position + 1 + "");
         ((FormRow) holder.itemView).setColumns(list.get(position)).addDefaultParams().build().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

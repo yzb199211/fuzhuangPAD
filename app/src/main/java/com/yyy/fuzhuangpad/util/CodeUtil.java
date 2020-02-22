@@ -11,4 +11,6 @@ public class CodeUtil {
     public static final int BILLINGSTYLEQTY = 0x0000807;
     public static final int BILLINGSTYLEQTYMODIFY = 0x0000808;
     public static final int REFRESH = 0x0000899;
+    public static final int MODIFY = 0x0000898;
+    public static final int DELETE = 0x0000897;
 }

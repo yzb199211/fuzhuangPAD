@@ -20,16 +20,16 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
     Context context;
     List<BillDetailBean> list;
     OnDeleteListener onDeleteListener;
-    OnEditQtyListener onEditQtyListener;
+//    OnEditQtyListener onEditQtyListener;
     OnModifyListener onModifyListener;
 
     public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
         this.onDeleteListener = onDeleteListener;
     }
 
-    public void setOnEditQtyListener(OnEditQtyListener onEditQtyListener) {
-        this.onEditQtyListener = onEditQtyListener;
-    }
+//    public void setOnEditQtyListener(OnEditQtyListener onEditQtyListener) {
+//        this.onEditQtyListener = onEditQtyListener;
+//    }
 
     public void setOnModifyListener(OnModifyListener onModifyListener) {
         this.onModifyListener = onModifyListener;
@@ -61,6 +61,9 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
         holder.tvStyleRemark.setText(item.getsRemark());
         holder.tvStyleOperate.setText(context.getString(R.string.common_delete));
         holder.tvStyleModify.setText(context.getString(R.string.common_modify));
+        if (position % 2 != 0) {
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.default_bg_color));
+        }
         holder.tvStyleModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,14 +72,14 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
                 }
             }
         });
-        holder.tvStyleQty.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onEditQtyListener != null) {
-                    onEditQtyListener.onEdit(position);
-                }
-            }
-        });
+//        holder.tvStyleQty.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (onEditQtyListener != null) {
+//                    onEditQtyListener.onEdit(position);
+//                }
+//            }
+//        });
         holder.tvStyleOperate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -39,7 +39,6 @@ import com.yyy.fuzhuangpad.util.StringUtil;
 import com.yyy.fuzhuangpad.util.TimeUtil;
 import com.yyy.fuzhuangpad.util.Toasts;
 import com.yyy.fuzhuangpad.util.net.MainQuery;
-import com.yyy.fuzhuangpad.util.net.MainQueryChild;
 import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
@@ -301,12 +300,12 @@ public class BillDetailActivity extends AppCompatActivity {
                 refreshList();
             }
         });
-        mAdapter.setOnEditQtyListener(new OnEditQtyListener() {
-            @Override
-            public void onEdit(int pos) {
-                showEditDialog(pos);
-            }
-        });
+//        mAdapter.setOnEditQtyListener(new OnEditQtyListener() {
+//            @Override
+//            public void onEdit(int pos) {
+//                showEditDialog(pos);
+//            }
+//        });
         mAdapter.setOnModifyListener(new OnModifyListener() {
             @Override
             public void onModify(int pos) {
@@ -885,7 +884,32 @@ public class BillDetailActivity extends AppCompatActivity {
                 delete();
                 break;
             case R.id.bw_submit:
-//                submit();
+                if (shopId == 0) {
+                    Toast(getString(R.string.sale_billing_empty_shop));
+                    return;
+                }
+                if (customerId == 0) {
+                    Toast(getString(R.string.sale_billing_empty_customer));
+                    return;
+                }
+                if (TextUtils.isEmpty(bill.getdDate())) {
+                    Toast(getString(R.string.sale_billing_empty_date));
+                    return;
+                }
+                if (TextUtils.isEmpty(saler)) {
+                    Toast(getString(R.string.sale_billing_empty_saler));
+                    return;
+                }
+                if (TextUtils.isEmpty(className)) {
+                    Toast(getString(R.string.sale_billing_empty_class));
+                    return;
+                }
+
+                if (TextUtils.isEmpty(bill.getsOrderNo())) {
+                    getOrderNo(true);
+                } else {
+                    save(true);
+                }
                 break;
             case R.id.bw_save:
                 if (shopId == 0) {
@@ -910,9 +934,9 @@ public class BillDetailActivity extends AppCompatActivity {
                 }
 
                 if (TextUtils.isEmpty(bill.getsOrderNo())) {
-                    getOrderNo();
+                    getOrderNo(false);
                 } else {
-                    save();
+                    save(false);
                 }
                 break;
             case R.id.bwi_add_customer:
@@ -928,8 +952,14 @@ public class BillDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void submit(int irecno) {
-        LoadingDialog.showDialogForLoading(this);
+    private void submit(String irecno) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LoadingDialog.showDialogForLoading(BillDetailActivity.this);
+            }
+        });
+
         new NetUtil(submitParams(irecno), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
@@ -960,13 +990,13 @@ public class BillDetailActivity extends AppCompatActivity {
         }
     }
 
-    private List<NetParams> submitParams(int irecno) {
+    private List<NetParams> submitParams(String irecno) {
         List<NetParams> params = new ArrayList<>();
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", Otype.MobileSubmit));
         params.add(new NetParams("iFormID", "2002"));
         params.add(new NetParams("userid", (String) preferencesHelper.getSharedPreference("userid", "")));
-        params.add(new NetParams("iRecNo", irecno + ""));
+        params.add(new NetParams("iRecNo", irecno));
         return params;
     }
 
@@ -1023,7 +1053,7 @@ public class BillDetailActivity extends AppCompatActivity {
         return new Gson().toJson(mainQuery);
     }
 
-    private void getOrderNo() {
+    private void getOrderNo(boolean b) {
         LoadingDialog.showDialogForLoading(this);
         new NetUtil(getOrderParams(), url, new ResponseListener() {
             @Override
@@ -1034,7 +1064,7 @@ public class BillDetailActivity extends AppCompatActivity {
                     if (jsonObject.optBoolean("success")) {
                         bill.setsOrderNo(jsonObject.optString("message"));
                         LoadingFinish(null);
-                        save();
+                        save(b);
                     } else {
                         LoadingFinish(jsonObject.optString("message"));
                     }
@@ -1061,7 +1091,7 @@ public class BillDetailActivity extends AppCompatActivity {
         return params;
     }
 
-    private void save() {
+    private void save(boolean b) {
         setSaveDate();
         runOnUiThread(new Runnable() {
             @Override
@@ -1073,8 +1103,7 @@ public class BillDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String string) {
                 try {
-//                    Log.e("data", string);
-                    initSaveDate(string);
+                    initSaveDate(string, b);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     LoadingFinish(getString(R.string.error_json));
@@ -1090,12 +1119,14 @@ public class BillDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initSaveDate(String data) throws JSONException {
-        Log.e("data", data);
+    private void initSaveDate(String data, boolean b) throws JSONException {
         JSONObject jsonObject = new JSONObject(data);
-        if (jsonObject.optBoolean("success")) {
+        if (jsonObject.optBoolean("success") && !b) {
             LoadingFinish(getString(R.string.success_save));
             eixt();
+        } else if (jsonObject.optBoolean("success") && b) {
+            LoadingFinish(null);
+            submit(jsonObject.optString("message"));
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -1162,25 +1193,11 @@ public class BillDetailActivity extends AppCompatActivity {
         }
     }
 
-//    private List<BillDetailBase> getBillDetail() {
-//        List<BillDetailBase> list = new ArrayList<>();
-//        for (BillDetailBean item : billDetail) {
-//            BillDetailBase billDetailBase = new BillDetailBase(item.getiMainRecNo(),
-//                    item.getiBscDataStyleMRecNo(),
-//                    item.getsStyleNo(),
-//                    item.getiBscDataColorRecNo(),
-//                    item.getsColorName(), item.getsSizeName(),
-//                    item.getiSumQty(), item.getfPrice(),
-//                    StringUtil.multiply(item.getiSumQty(), item.getfPrice()), item.getsRemark());
-//            list.add(billDetailBase);
-//        }
-//        return list;
-//    }
 
     private String getMainquery() {
         MainQuery mainQuery = new MainQuery();
         mainQuery.setFields(bill.paramsFields());
-        mainQuery.setFieldsValues(bill.paramsFieldsValues());
+        mainQuery.setFieldsValues(bill.paramsFieldsValues((String) preferencesHelper.getSharedPreference("userid", "")));
         mainQuery.setFieldKeys(bill.paramsFieldKeys());
         mainQuery.setFieldKeysValues(bill.paramsFieldKeysValues());
         mainQuery.setFilterFields(bill.paramsFilterFields());
@@ -1277,7 +1294,17 @@ public class BillDetailActivity extends AppCompatActivity {
             go2StyleDetail(data);
         } else if (resultCode == CodeUtil.BILLINGSTYLEQTY && data != null) {
             addStyleQty(data.getStringExtra("style"), data.getStringExtra("styleQty"));
+        } else if (resultCode == CodeUtil.BILLINGSTYLEQTYMODIFY && data != null) {
+            removeOld(data.getStringExtra("styleOld"));
+            addStyleQty(data.getStringExtra("style"), data.getStringExtra("styleQty"));
         }
+    }
+
+    private void removeOld(String styleOld) {
+        List<BillDetailBean> list = new Gson().fromJson(styleOld, new TypeToken<List<BillDetailBean>>() {
+        }.getType());
+        billDetail.removeAll(list);
+//        refreshList();
     }
 
     private void addStyleQty(String style, String styleQty) {
@@ -1290,7 +1317,6 @@ public class BillDetailActivity extends AppCompatActivity {
 
     private void addStyleDetails(List<BillDetailBean> newStyles) {
         for (BillDetailBean item : newStyles) {
-//            Log.e("stylePos", billDetail.indexOf(item) + "");
             if (billDetail.contains(item)) {
                 BillDetailBean oldItem = billDetail.get(billDetail.indexOf(item));
                 oldItem.setiSumQty(oldItem.getiSumQty() + item.getiSumQty());
