@@ -25,7 +25,6 @@ import com.yyy.fuzhuangpad.customer.CustomerDetailActivity;
 import com.yyy.fuzhuangpad.dialog.EditDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnDeleteListener;
-import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
 import com.yyy.fuzhuangpad.interfaces.OnModifyListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
@@ -134,6 +133,7 @@ public class BillDetailActivity extends AppCompatActivity {
     private String operatortype = "";
     private int[] deletekey;
     private int keyPos = 0;
+    private int listPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1124,6 +1124,7 @@ public class BillDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success") && !b) {
             LoadingFinish(getString(R.string.success_save));
+
             eixt();
         } else if (jsonObject.optBoolean("success") && b) {
             LoadingFinish(null);

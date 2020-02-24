@@ -26,6 +26,7 @@ import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.adapter.FormAdapter;
 import com.yyy.fuzhuangpad.color.ColorBeans;
 import com.yyy.fuzhuangpad.color.ColorDetailActivity;
+import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
@@ -202,18 +203,19 @@ public class BillingFragment extends Fragment {
         formAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                go2Detail(new Gson().toJson(billDatas.get(pos)));
+                go2Detail(pos);
             }
         });
         recyclerView.setAdapter(formAdapter);
     }
 
-    private void go2Detail(@Nullable String data) {
+    private void go2Detail(int pos) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), BillDetailActivity.class);
-        if (StringUtil.isNotEmpty(data)) {
-            intent.putExtra("data", data);
+        if (pos == -1) {
+            intent.putExtra("data", new Gson().toJson(billDatas.get(pos)));
         }
+        intent.putExtra("pos", pos);
         startActivityForResult(intent, CodeUtil.BILLINGDETAIL);
     }
 
@@ -652,7 +654,7 @@ public class BillingFragment extends Fragment {
                 refreshData();
                 break;
             case R.id.bwi_add:
-                go2Detail(null);
+                go2Detail(-1);
                 break;
             default:
                 break;
@@ -810,7 +812,62 @@ public class BillingFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == CodeUtil.REFRESH)
-            refreshData();
+//        if (resultCode == CodeUtil.REFRESH)
+//            refreshData();
+        if (data != null) {
+            switch (resultCode) {
+                case CodeUtil.REFRESH:
+                    addData(data);
+                    break;
+                case CodeUtil.MODIFY:
+                    modifyData(data);
+                    break;
+                case CodeUtil.DELETE:
+                    removeData(data);
+                    break;
+            }
+        }
     }
+
+    private void addData(Intent data) {
+        BillBean item = new Gson().fromJson(data.getStringExtra("style"), BillBean.class);
+        billDatas.add(0, item);
+        formDatas.add(0, item.getList());
+        refreshList();
+    }
+
+    private void modifyData(Intent data) {
+        int pos = data.getIntExtra("pos", -1);
+        BillBean item = new Gson().fromJson(data.getStringExtra("style"), BillBean.class);
+        if (pos != -1) {
+            modifyCustomer(billDatas.get(pos), item);
+            modifyFormData(formDatas.get(pos), item);
+        }
+    }
+
+    private void modifyCustomer(BillBean billBean, BillBean item) {
+        billBean.copy(item);
+    }
+
+    private void modifyFormData(List<FormColumn> formColumns, BillBean item) {
+        formColumns.get(1).setText(item.getsStatusName());
+        formColumns.get(2).setText(item.getsOrderNo());
+        formColumns.get(3).setText(item.getsStockName());
+        formColumns.get(4).setText(item.getdDate());
+        formColumns.get(5).setText(item.getsCustShortName());
+        formColumns.get(6).setText(item.getsSaleName());
+        formColumns.get(7).setText(item.getiQty() + "");
+        formColumns.get(8).setText(item.getfTotal() + "");
+        refreshList();
+    }
+
+    private void removeData(Intent data) {
+        int pos = data.getIntExtra("pos", -1);
+        if (pos != -1) {
+            billDatas.remove(pos);
+            formDatas.remove(pos);
+            refreshList();
+        }
+    }
+
 }
