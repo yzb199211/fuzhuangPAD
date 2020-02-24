@@ -89,6 +89,8 @@ public class BillingFragment extends Fragment {
     ButtonSelect bsDataEnd;
     @BindView(R.id.bs_shop)
     ButtonSelect bsShop;
+    @BindView(R.id.bs_status)
+    ButtonSelect bsStatus;
 
     private final int formTitleId = 0x00001000;
     FormRow formTitle;
@@ -97,16 +99,20 @@ public class BillingFragment extends Fragment {
     private List<BillBean> billDatas;
     private List<BillShop> shops;
     private List<BillCustomer> customers;
+    private List<BillStatus> status;
     private TimePickerView pvDateStart;
     private TimePickerView pvDateEnd;
     private OptionsPickerView pvShop;
     private OptionsPickerView pvCustomer;
+    private OptionsPickerView pvStatus;
     private String url;
     private String address;
     private String companyCode;
     private String filter = "";
     private String shop = "";
     private int shopid;
+    private int statusId = 0;
+    private String statusName;
     private String code;
     private String customer;
     private int customerId;
@@ -241,12 +247,13 @@ public class BillingFragment extends Fragment {
     }
 
     private String getFilter() {
-        filter = "";
+        filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "isNull(iStatus,0) =" + "\'" + statusId + "\'";
         if (!isFrist) {
             code = seCode.getText();
 //            customerId = seName.getText();
             if (shopid != 0) {
-                filter = "iBscdataStockMRecNo=" + "\'" + shopid + "\'";
+                filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "iBscdataStockMRecNo=" + "\'" + shopid + "\'";
+//                filter = "iBscdataStockMRecNo=" + "\'" + shopid + "\'";
             }
             if (StringUtil.isNotEmpty(code)) {
                 filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "sOrderNo like" + "\'|" + code + "|\'";
@@ -267,6 +274,7 @@ public class BillingFragment extends Fragment {
     }
 
     private void initDefaultData() {
+        statusName = getString(R.string.common_default_status);
         address = (String) preferencesHelper.getSharedPreference("address", "");
         companyCode = (String) preferencesHelper.getSharedPreference("companyCode", "");
         url = address + NetConfig.server + NetConfig.MobileAppHandler_Method;
@@ -282,6 +290,7 @@ public class BillingFragment extends Fragment {
     }
 
     private void init() {
+        bsStatus.setContext(statusName);
         initTitle();
         initView();
     }
@@ -292,6 +301,7 @@ public class BillingFragment extends Fragment {
         formDatas = new ArrayList<>();
         billDatas = new ArrayList<>();
         customers = new ArrayList<>();
+        status = new ArrayList<>();
     }
 
     private void initTitle() {
@@ -308,6 +318,104 @@ public class BillingFragment extends Fragment {
         initEndDate();
         initShopView();
         initCustomerView();
+        initStatusView();
+    }
+
+    private void initStatusView() {
+        bsStatus.setOnSelectClickListener(new OnSelectClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (status.size() == 0) {
+                    getStatus();
+                } else {
+                    pvStatus.show();
+                }
+            }
+        });
+    }
+
+    private void getStatus() {
+        LoadingDialog.showDialogForLoading(getActivity());
+        new NetUtil(getStatusParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initStatusData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_data));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initStatusData(String string) throws JSONException, Exception {
+        JSONObject jsonObject = new JSONObject(string);
+        if (jsonObject.optBoolean("success")) {
+            setStatusData(jsonObject.optJSONObject("dataset").optString("bscBillstatus"));
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private void setStatusData(String optString) {
+        List<BillStatus> list = new Gson().fromJson(optString, new TypeToken<List<BillStatus>>() {
+        }.getType());
+        if (list == null || list.size() == 0) {
+            LoadingFinish(getString(R.string.error_empty));
+        } else {
+            status.addAll(list);
+            LoadingFinish(null);
+            setPickStatus();
+        }
+    }
+
+    private void setPickStatus() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                initPickStatus();
+            }
+        });
+    }
+
+    private void initPickStatus() {
+        pvStatus = new OptionsPickerBuilder(getActivity(), new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                statusName = status.get(options1).getPickerViewText();
+                statusId = status.get(options1).getiStatus();
+                bsStatus.setContext(statusName);
+            }
+        })
+                .setTitleText("状态选择")
+                .setContentTextSize(18)//设置滚轮文字大小
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setLabels("", "", "")
+                .isDialog(true)
+                .build();
+        pvStatus.setPicker(status);//一级选择器
+        setDialog(pvStatus);
+        pvStatus.show();
+    }
+
+    private List<NetParams> getStatusParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", "GetTableData"));
+        params.add(new NetParams("sTableName", "bscBillstatus"));
+        params.add(new NetParams("sFields", "iStatus,sStatusName"));
+        params.add(new NetParams("sFilters", ""));
+        return params;
     }
 
     private void initCustomerView() {

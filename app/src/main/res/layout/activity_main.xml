@@ -144,7 +144,7 @@
             android:id="@+id/fl_child"
             android:layout_width="@dimen/dp_0"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="6"
             android:background="@color/white" />
     </LinearLayout>
 </LinearLayout>

@@ -9,6 +9,8 @@
 	<dimen name="dp_m_60">-135.1667dp</dimen>
 	<dimen name="dp_m_30">-67.5833dp</dimen>
 	<dimen name="dp_m_20">-45.0556dp</dimen>
+	<dimen name="dp_m_19">-42.8028dp</dimen>
+	<dimen name="dp_m_18">-40.5500dp</dimen>
 	<dimen name="dp_m_12">-27.0333dp</dimen>
 	<dimen name="dp_m_10">-22.5278dp</dimen>
 	<dimen name="dp_m_8">-18.0222dp</dimen>

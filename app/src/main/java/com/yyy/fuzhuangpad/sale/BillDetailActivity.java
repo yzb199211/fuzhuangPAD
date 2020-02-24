@@ -164,6 +164,7 @@ public class BillDetailActivity extends AppCompatActivity {
             bill = new BillBean();
             operatortype = Operatortype.add;
             bwDelete.setVisibility(View.GONE);
+            bsDate.setContext(StringUtil.getDate(new Date(System.currentTimeMillis())));
         }
     }
 

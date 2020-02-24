@@ -97,7 +97,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
 
     private void setWindow() {
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.height = (int) ((PxUtil.getHeight(this)) * 0.8f);
+        params.height = (int) ((PxUtil.getHeight(this)));
         params.width = (int) ((PxUtil.getWidth(this)) * 0.8f);
         getWindow().setAttributes(params);
     }

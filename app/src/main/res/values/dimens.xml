@@ -23,6 +23,8 @@
     <dimen name="dp_m_60">-60dp</dimen>
     <dimen name="dp_m_30">-30dp</dimen>
     <dimen name="dp_m_20">-20dp</dimen>
+    <dimen name="dp_m_19">-19dp</dimen>
+    <dimen name="dp_m_18">-18dp</dimen>
     <dimen name="dp_m_12">-12dp</dimen>
     <dimen name="dp_m_10">-10dp</dimen>
     <dimen name="dp_m_8">-8dp</dimen>

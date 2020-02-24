@@ -265,4 +265,24 @@ public class BillBean {
     public String paramsFieldKeysValues() {
         return iRecNo == 0 ? "" : iRecNo + "";
     }
+
+    public void copy(BillBean item) {
+        iRecNo = item.getiRecNo();
+        sOrderNo = item.getsOrderNo();
+        dDate = item.getdDate();
+        iBscdataStockMRecNo = item.getiBscdataStockMRecNo();
+        sStockName = item.getsStockName();
+        iBscDataCustomerRecNo = item.getiBscDataCustomerRecNo();
+        sCustShortName = item.getsCustShortName();
+        iOrderType = item.getiOrderType();
+        sOrderType = item.getsOrderType();
+        dOrderDate = item.getdOrderDate();
+        sSaleID = item.getsSaleID();
+        sSaleName = item.getsSaleName();
+        sRemark = item.getsRemark();
+        fPayMomey = item.fPayMomey;
+        sPaymethod = item.getsPaymethod();
+        iQty = item.getiQty();
+        fTotal = item.getfTotal();
+    }
 }

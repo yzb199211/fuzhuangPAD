@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/iv_logo"
-            android:layout_width="@dimen/dp_50"
-            android:layout_height="@dimen/dp_50"
+            android:layout_width="@dimen/dp_46"
+            android:layout_height="@dimen/dp_46"
             android:layout_centerVertical="true" />
 
         <com.yyy.fuzhuangpad.view.search.SearchText
@@ -101,27 +101,20 @@
             android:visibility="gone"/>
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginRight="@dimen/dp_20"
-        android:background="@color/default_bg_color" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginTop="@dimen/dp_m_18"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_20"
         android:paddingRight="@dimen/dp_20">
 
         <ImageView
-            android:layout_width="@dimen/dp_15"
-            android:layout_height="@dimen/dp_15"
-            android:layout_marginRight="@dimen/dp_3"
+            android:layout_width="@dimen/dp_12"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginRight="@dimen/dp_2"
             android:src="@mipmap/common_color_select" />
 
         <TextView

@@ -222,7 +222,7 @@ public class StyleFragment extends Fragment {
             @Override
             public void onItemClick(View view, int pos) {
 //                Log.e("pos", pos + "");
-                go2Detail(new Gson().toJson(styleDatas.get(pos)));
+                go2Detail(pos);
             }
         });
         recyclerView.setAdapter(formAdapter);
@@ -295,19 +295,20 @@ public class StyleFragment extends Fragment {
                 refreshData();
                 break;
             case R.id.bwi_add:
-                go2Detail(null);
+                go2Detail(-1);
                 break;
             default:
                 break;
         }
     }
 
-    private void go2Detail(String data) {
+    private void go2Detail(int pos) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), StyleDetailActivity.class);
-        if (StringUtil.isNotEmpty(data)) {
-            intent.putExtra("data", data);
+        if (pos != -1) {
+            intent.putExtra("data", new Gson().toJson(styleDatas.get(pos)));
         }
+        intent.putExtra("pos", pos);
         startActivityForResult(intent, CodeUtil.STYLEDETAIL);
     }
 
@@ -462,11 +463,66 @@ public class StyleFragment extends Fragment {
         params.rightMargin = 0;
         return params;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        Log.e("code",resultCode+"");
-        if (resultCode == CodeUtil.REFRESH)
-            refreshData();
+//        if (resultCode == CodeUtil.REFRESH)
+//            refreshData();
+        if (data != null) {
+            switch (resultCode) {
+                case CodeUtil.REFRESH:
+                    addData(data);
+                    break;
+                case CodeUtil.MODIFY:
+                    modifyData(data);
+                    break;
+                case CodeUtil.DELETE:
+                    removeData(data);
+                    break;
+            }
+        }
+    }
+
+    private void addData(Intent data) {
+        StyleBean item = new Gson().fromJson(data.getStringExtra("style"), StyleBean.class);
+        styleDatas.add(0, item);
+        formDatas.add(0, item.getList());
+        refreshList();
+    }
+
+    private void modifyData(Intent data) {
+        int pos = data.getIntExtra("pos", -1);
+        StyleBean item = new Gson().fromJson(data.getStringExtra("style"), StyleBean.class);
+        if (pos != -1) {
+            modifyCustomer(styleDatas.get(pos), item);
+            modifyFormData(formDatas.get(pos), item);
+        }
+    }
+
+    private void modifyFormData(List<FormColumn> formColumns, StyleBean item) {
+        formColumns.get(1).setText(item.getsStyleNo());
+        formColumns.get(2).setText(item.getsStyleName());
+        formColumns.get(3).setText(item.getsClassName());
+        formColumns.get(4).setText(item.getsGroupName());
+        formColumns.get(5).setText(item.getsCustShortName());
+        formColumns.get(6).setText(item.getiYear());
+        formColumns.get(7).setText(item.getfCostPrice() + "");
+        formColumns.get(8).setText(item.getfBulkTotal1() + "");
+        refreshList();
+    }
+
+    private void modifyCustomer(StyleBean customerBeans, StyleBean item) {
+        customerBeans.copy(item);
+    }
+
+    private void removeData(Intent data) {
+        int pos = data.getIntExtra("pos", -1);
+        if (pos != -1) {
+            styleDatas.remove(pos);
+            formDatas.remove(pos);
+            refreshList();
+        }
     }
 }

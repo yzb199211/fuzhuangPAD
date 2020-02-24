@@ -116,6 +116,20 @@
             app:bsTitle="@string/sale_billing_search_customer"
             app:bsTitleColor="@color/default_text_color"
             app:bsTitleSize="@dimen/sp_8" />
+
+        <com.yyy.fuzhuangpad.view.button.ButtonSelect
+            android:id="@+id/bs_status"
+            android:layout_width="@dimen/dp_110"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_toRightOf="@id/bs_customer"
+            app:bsContentColor="@color/white"
+            app:bsContentSize="@dimen/sp_8"
+            app:bsSrc="@mipmap/icon_arrow_down"
+            app:bsTitle="@string/sale_billing_form_type"
+            app:bsTitleColor="@color/default_text_color"
+            app:bsTitleSize="@dimen/sp_8" />
         <!--        <com.yyy.fuzhuangpad.view.search.SearchEdit-->
         <!--            android:id="@+id/se_name"-->
         <!--            android:layout_width="@dimen/dp_110"-->

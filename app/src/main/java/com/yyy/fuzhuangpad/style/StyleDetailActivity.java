@@ -2,6 +2,7 @@ package com.yyy.fuzhuangpad.style;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -74,8 +75,8 @@ public class StyleDetailActivity extends AppCompatActivity {
     SelectView svType;
     @BindView(R.id.sv_size)
     SelectView svSize;
-    @BindView(R.id.se_customer)
-    SearchEdit seCustomer;
+    @BindView(R.id.sv_customer)
+    SelectView svCustomer;
     @BindView(R.id.se_customer_style)
     SearchEdit seCustomerStyle;
     @BindView(R.id.sv_year)
@@ -143,6 +144,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         if (StringUtil.isNotEmpty(data)) {
             styleBean = new Gson().fromJson(data, StyleBean.class);
             operatortype = Operatortype.update;
+            listPos = getIntent().getIntExtra("pos", -1);
             setData();
             getColorsData(styleBean.getiRecNo());
         } else {
@@ -158,7 +160,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         seName.setText(styleBean.getsStyleName());
         svType.setText(styleBean.getsClassName());
         svSize.setText(styleBean.getsGroupName());
-        seCustomer.setText(styleBean.getsCustShortName());
+        svCustomer.setText(styleBean.getsCustShortName());
         seCustomerStyle.setText(styleBean.getsCustStyleNo());
         svYear.setText(styleBean.getiYear());
         seComposition.setText(styleBean.getsWaterElents());
@@ -264,14 +266,29 @@ public class StyleDetailActivity extends AppCompatActivity {
         styleSizes = new ArrayList<>();
         styleTypes = new ArrayList<>();
         styleColors = new ArrayList<>();
+        customers = new ArrayList<>();
     }
 
     private void initView() {
         colorGroup.setCanClick(false);
         setTypeListener();
         setSizeListener();
+        setCustomerListener();
         setYearListener();
         setDateListener();
+    }
+
+    private void setCustomerListener() {
+        svCustomer.setOnSelectClickListener(new OnSelectClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (customers.size() == 0) {
+                    getCustomers();
+                } else {
+                    pvCustomer.show();
+                }
+            }
+        });
     }
 
     private void setTypeListener() {
@@ -426,7 +443,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         if (list == null || list.size() == 0) {
             LoadingFinish(getString(R.string.error_empty));
         } else {
-            styleSizes.add(new StyleSize("", getString(R.string.common_empty)));
+//            styleSizes.add(new StyleSize("", getString(R.string.common_empty)));
             styleSizes.addAll(list);
             LoadingFinish(null);
             setPickSize();
@@ -537,7 +554,9 @@ public class StyleDetailActivity extends AppCompatActivity {
                 if (!type.equals(customer)) {
                     customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(options1).getPickerViewText();
                     customerId = customers.get(options1).getIrecno();
-                    bsCustomer.setContext(customer);
+                    styleBean.setsCustShortName(customer);
+                    styleBean.setiBscDataCustomerRecNo(customerId);
+                    svCustomer.setText(customer);
                 }
             }
         })
@@ -656,12 +675,12 @@ public class StyleDetailActivity extends AppCompatActivity {
     }
 
     private void setSaveData() {
-        styleBean.setfBulkTotal1(Double.parseDouble(sePriceTrade.getText()));
-        styleBean.setfCostPrice(Double.parseDouble(sePriceRetail.getText()));
-        styleBean.setfSalePrice(Double.parseDouble(sePriceTag.getText()));
+        styleBean.setfBulkTotal1(Double.parseDouble(TextUtils.isEmpty(sePriceTrade.getText()) ? "0" : sePriceTag.getText()));
+        styleBean.setfCostPrice(Double.parseDouble(TextUtils.isEmpty(sePriceRetail.getText()) ? "0" : sePriceRetail.getText()));
+        styleBean.setfSalePrice(Double.parseDouble(TextUtils.isEmpty(sePriceTag.getText()) ? "0" : sePriceTag.getText()));
         styleBean.setsStyleNo(seCode.getText());
         styleBean.setsStyleName(seName.getText());
-        styleBean.setsCustShortName(seCustomer.getText());
+        styleBean.setsCustShortName(svCustomer.getText());
         styleBean.setsCustStyleNo(seCustomerStyle.getText());
         styleBean.setsWaterElents(seComposition.getText());
         styleBean.setsReMark(seRemark.getText());
@@ -692,7 +711,7 @@ public class StyleDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
             LoadingFinish(getString(R.string.success_delete));
-            eixt();
+            eixt(CodeUtil.DELETE);
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -721,6 +740,22 @@ public class StyleDetailActivity extends AppCompatActivity {
     }
 
     private void save() {
+        if (TextUtils.isEmpty(styleBean.getsStyleNo())) {
+            Toast(getString(R.string.style_empaty_no));
+            return;
+        }
+        if (TextUtils.isEmpty(styleBean.getsStyleName())) {
+            Toast(getString(R.string.style_empaty_name));
+            return;
+        }
+        if (TextUtils.isEmpty(styleBean.getsClassName())) {
+            Toast(getString(R.string.style_empaty_class));
+            return;
+        }
+        if (TextUtils.isEmpty(styleBean.getsGroupName())) {
+            Toast(getString(R.string.style_empaty_sizes));
+            return;
+        }
         LoadingDialog.showDialogForLoading(this);
         new NetUtil(getSave(), url, new ResponseListener() {
             @Override
@@ -745,7 +780,8 @@ public class StyleDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
             LoadingFinish(getString(R.string.success_save));
-            eixt();
+            styleBean.setiRecNo(Integer.parseInt(jsonObject.optString("message")));
+            eixt(listPos == -1 ? CodeUtil.REFRESH : CodeUtil.MODIFY);
         } else {
             Log.e("error", jsonObject.optString("message"));
             LoadingFinish(jsonObject.optString("message"));
@@ -793,7 +829,6 @@ public class StyleDetailActivity extends AppCompatActivity {
         for (StyleColor color : styleColors) {
             StyleColorUpload item = new StyleColorUpload();
             item.setiBscDataColorRecNo(color.getiRecNo());
-//            item.setsColorName(color.getsColorName());
             colors.add(item);
         }
         return colors;
@@ -852,11 +887,14 @@ public class StyleDetailActivity extends AppCompatActivity {
         return params;
     }
 
-    private void eixt() {
+    private void eixt(int code) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                setResult(CodeUtil.REFRESH);
+                Intent intent = new Intent();
+                intent.putExtra("pos", listPos);
+                intent.putExtra("style", new Gson().toJson(styleBean));
+                setResult(code, intent);
                 finish();
             }
         });

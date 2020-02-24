@@ -93,17 +93,17 @@
                     app:svTitleColor="@color/default_text_color"
                     app:svTitleSize="@dimen/sp_10" />
 
-                <com.yyy.fuzhuangpad.view.search.SearchEdit
-                    android:id="@+id/se_customer"
+                <com.yyy.fuzhuangpad.view.SelectView
+                    android:id="@+id/sv_customer"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:layout_weight="1"
-                    app:seEditColor="@color/default_text_color"
-                    app:seEditSize="@dimen/sp_10"
-                    app:seTilte="@string/style_detail_customer"
-                    app:seTitleColor="@color/default_text_color"
-                    app:seTitleSize="@dimen/sp_10" />
+                    app:svContentColor="@color/default_text_color"
+                    app:svContentSize="@dimen/sp_10"
+                    app:svTilte="@string/style_detail_customer"
+                    app:svTitleColor="@color/default_text_color"
+                    app:svTitleSize="@dimen/sp_10" />
 
                 <com.yyy.fuzhuangpad.view.search.SearchEdit
                     android:id="@+id/se_customer_style"
