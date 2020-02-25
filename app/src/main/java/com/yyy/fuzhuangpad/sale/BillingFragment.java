@@ -247,11 +247,13 @@ public class BillingFragment extends Fragment {
         list.add(new NetParams("sTableName", "vwSdContractM"));
         list.add(new NetParams("sFields", BillBean.getFields()));
         list.add(new NetParams("sFilters", getFilter()));
+//        Log.e("filter",filter);
         list.add(new NetParams("sSorts", ""));
         return list;
     }
 
     private String getFilter() {
+        filter="";
         filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "isNull(iStatus,0) =" + "\'" + statusId + "\'";
         if (!isFrist) {
             code = seCode.getText();
