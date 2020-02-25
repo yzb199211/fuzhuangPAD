@@ -849,6 +849,7 @@ public class BillingFragment extends Fragment {
 //        if (resultCode == CodeUtil.REFRESH)
 //            refreshData();
         if (data != null) {
+            Log.e("data", data.getStringExtra("data"));
             switch (resultCode) {
                 case CodeUtil.REFRESH:
                     addData(data);
@@ -864,6 +865,7 @@ public class BillingFragment extends Fragment {
     }
 
     private void addData(Intent data) {
+
         BillBean item = new Gson().fromJson(data.getStringExtra("data"), BillBean.class);
         billDatas.add(0, item);
         formDatas.add(0, item.getList());

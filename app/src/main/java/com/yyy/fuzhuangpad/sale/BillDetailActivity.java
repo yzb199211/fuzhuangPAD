@@ -1182,6 +1182,7 @@ public class BillDetailActivity extends AppCompatActivity {
         if (jsonObject.optBoolean("success") && !b) {
             LoadingFinish(getString(R.string.success_save));
             bill.setsStatusName(getString(R.string.common_default_status));
+            bill.setiRecNo(Integer.parseInt(jsonObject.optString("message")));
             eixt(listPos == -1 ? CodeUtil.REFRESH : CodeUtil.MODIFY);
         } else if (jsonObject.optBoolean("success") && b) {
             LoadingFinish(null);
