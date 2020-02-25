@@ -156,4 +156,8 @@ public class ButtonSelect extends LinearLayout {
     public String getContent() {
         return content;
     }
+
+    public TextView getTvContent() {
+        return tvContent;
+    }
 }

@@ -212,7 +212,7 @@ public class BillingFragment extends Fragment {
     private void go2Detail(int pos) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), BillDetailActivity.class);
-        if (pos == -1) {
+        if (pos!= -1) {
             intent.putExtra("data", new Gson().toJson(billDatas.get(pos)));
         }
         intent.putExtra("pos", pos);
@@ -830,7 +830,7 @@ public class BillingFragment extends Fragment {
     }
 
     private void addData(Intent data) {
-        BillBean item = new Gson().fromJson(data.getStringExtra("style"), BillBean.class);
+        BillBean item = new Gson().fromJson(data.getStringExtra("data"), BillBean.class);
         billDatas.add(0, item);
         formDatas.add(0, item.getList());
         refreshList();
@@ -838,7 +838,7 @@ public class BillingFragment extends Fragment {
 
     private void modifyData(Intent data) {
         int pos = data.getIntExtra("pos", -1);
-        BillBean item = new Gson().fromJson(data.getStringExtra("style"), BillBean.class);
+        BillBean item = new Gson().fromJson(data.getStringExtra("data"), BillBean.class);
         if (pos != -1) {
             modifyCustomer(billDatas.get(pos), item);
             modifyFormData(formDatas.get(pos), item);

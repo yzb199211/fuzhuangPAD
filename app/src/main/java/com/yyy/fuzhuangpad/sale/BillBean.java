@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BillBean {
-    private int iRecNo;
+    private int iRecNo=0;
     private String sOrderNo = "";
     private String dDate = "";
     private int iBscdataStockMRecNo;

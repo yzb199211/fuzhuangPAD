@@ -155,6 +155,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
         if (StringUtil.isNotEmpty(getIntent().getStringExtra("data"))) {
             String data = getIntent().getStringExtra("data");
+            listPos = getIntent().getIntExtra("pos", -1);
             bill = new Gson().fromJson(data, BillBean.class);
             iMainRecNo = bill.getiRecNo();
             operatortype = Operatortype.update;
@@ -165,6 +166,7 @@ public class BillDetailActivity extends AppCompatActivity {
             operatortype = Operatortype.add;
             bwDelete.setVisibility(View.GONE);
             bsDate.setContext(StringUtil.getDate(new Date(System.currentTimeMillis())));
+            bill.setdDate(StringUtil.getDate(new Date(System.currentTimeMillis())));
         }
     }
 
@@ -301,12 +303,6 @@ public class BillDetailActivity extends AppCompatActivity {
                 refreshList();
             }
         });
-//        mAdapter.setOnEditQtyListener(new OnEditQtyListener() {
-//            @Override
-//            public void onEdit(int pos) {
-//                showEditDialog(pos);
-//            }
-//        });
         mAdapter.setOnModifyListener(new OnModifyListener() {
             @Override
             public void onModify(int pos) {
@@ -985,7 +981,8 @@ public class BillDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
             LoadingFinish(getString(R.string.success_submit));
-            eixt();
+            bill.setsStatusName(getString(R.string.common_default_status_check));
+            eixt(listPos == -1 ? CodeUtil.REFRESH : CodeUtil.MODIFY);
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -1026,7 +1023,7 @@ public class BillDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success")) {
             LoadingFinish(getString(R.string.success_delete));
-            eixt();
+            eixt(CodeUtil.DELETE);
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -1124,10 +1121,11 @@ public class BillDetailActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(data);
         if (jsonObject.optBoolean("success") && !b) {
             LoadingFinish(getString(R.string.success_save));
-
-            eixt();
+            bill.setsStatusName(getString(R.string.common_default_status));
+            eixt(listPos == -1 ? CodeUtil.REFRESH : CodeUtil.MODIFY);
         } else if (jsonObject.optBoolean("success") && b) {
             LoadingFinish(null);
+            bill.setiRecNo(Integer.parseInt(jsonObject.optString("message")));
             submit(jsonObject.optString("message"));
         } else {
             LoadingFinish(jsonObject.optString("message"));
@@ -1349,11 +1347,14 @@ public class BillDetailActivity extends AppCompatActivity {
         startActivityForResult(data, CodeUtil.BILLINGSTYLEQTY);
     }
 
-    private void eixt() {
+    private void eixt(int code) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                setResult(CodeUtil.REFRESH);
+                Intent intent = new Intent();
+                intent.putExtra("pos", listPos);
+                intent.putExtra("data", new Gson().toJson(bill));
+                setResult(code, intent);
                 finish();
             }
         });

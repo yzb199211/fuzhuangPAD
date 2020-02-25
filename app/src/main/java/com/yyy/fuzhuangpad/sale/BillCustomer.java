@@ -1,8 +1,9 @@
 package com.yyy.fuzhuangpad.sale;
 
+import com.yyy.fuzhuangpad.dialog.ISelectText;
 import com.yyy.yyylibrary.wheel.interfaces.IPickerViewData;
 
-public class BillCustomer implements IPickerViewData {
+public class BillCustomer implements IPickerViewData, ISelectText {
     private int irecno;
     private String sCustShortName;
 
@@ -24,6 +25,11 @@ public class BillCustomer implements IPickerViewData {
 
     @Override
     public String getPickerViewText() {
+        return sCustShortName;
+    }
+
+    @Override
+    public String getText() {
         return sCustShortName;
     }
 }

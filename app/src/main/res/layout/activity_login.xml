@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@mipmap/bg_login_logo" />
+            android:src="@mipmap/bg_login_enter" />
 
         <RelativeLayout
             android:layout_width="wrap_content"

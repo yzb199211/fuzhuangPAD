@@ -27,6 +27,7 @@ import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.popwin.Popwin;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -293,7 +294,8 @@ public class ColorFragment extends Fragment {
                 if (colorTypes.size() == 0) {
                     getColorType();
                 } else {
-                    pvColorType.show();
+//                    pvColorType.show();
+                    popType.showAsDropDown(bsType.getTvContent());
                 }
             }
         });
@@ -387,7 +389,26 @@ public class ColorFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickColorType();
+//                initPickColorType();
+                initPopType();
+            }
+        });
+    }
+
+    Popwin popType;
+
+    private void initPopType() {
+        popType = new Popwin(getActivity(), colorTypes);
+        popType.showAsDropDown(bsType.getTvContent());
+        popType.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = colorTypes.get(pos).getPickerViewText();
+                if (!type.equals(colorType)) {
+                    colorType = type.equals(getString(R.string.common_empty)) ? "" : colorTypes.get(pos).getPickerViewText();
+                    bsType.setContext(colorType);
+                    refreshData();
+                }
             }
         });
     }

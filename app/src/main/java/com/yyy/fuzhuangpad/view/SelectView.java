@@ -168,4 +168,8 @@ public class SelectView extends LinearLayout {
     public void clear() {
         tvContent.setText("");
     }
+
+    public TextView getTvContent() {
+        return tvContent;
+    }
 }

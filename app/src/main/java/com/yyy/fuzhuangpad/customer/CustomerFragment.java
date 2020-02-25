@@ -26,6 +26,7 @@ import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.popwin.Popwin;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -93,7 +94,8 @@ public class CustomerFragment extends Fragment {
     private FormAdapter formAdapter;
     private boolean isFrist = true;
     private OptionsPickerView pvType;
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
+    private Popwin popType;
 
     @Override
 
@@ -264,7 +266,8 @@ public class CustomerFragment extends Fragment {
                 if (customerTypes.size() == 0) {
                     getType();
                 } else {
-                    pvType.show();
+                    popType.showAsDropDown(bsType.getTvContent());
+//                    pvType.show();
                 }
             }
         });
@@ -374,7 +377,24 @@ public class CustomerFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickColorType();
+//                initPickColorType();
+                initPopType();
+            }
+        });
+    }
+
+    private void initPopType() {
+        popType = new Popwin(getActivity(), customerTypes);
+        popType.showAsDropDown(bsType.getTvContent());
+        popType.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = customerTypes.get(pos).getPickerViewText();
+                if (!type.equals(customerType)) {
+                    customerType = type.equals(getString(R.string.common_empty)) ? "" : customerTypes.get(pos).getPickerViewText();
+                    bsType.setContext(customerType);
+                    refreshData();
+                }
             }
         });
     }

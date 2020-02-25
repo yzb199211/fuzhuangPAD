@@ -15,8 +15,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
+import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.popwin.Popwin;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -76,7 +78,8 @@ public class ColorDetailActivity extends AppCompatActivity {
     private List<ColorType> colorTypes;
     private OptionsPickerView pvColorType;
     private TimePickerView pvDate;
-
+    private Popwin popType;
+    //private Popwin popType;
     String operatortype = "";
     int listPos = -1;
 
@@ -149,7 +152,7 @@ public class ColorDetailActivity extends AppCompatActivity {
                 if (colorTypes.size() == 0) {
                     getColorTypesData();
                 } else {
-                    pvColorType.show();
+                    popType.showAsDropDown(svColorType.getTvContent());
                 }
             }
         });
@@ -214,7 +217,25 @@ public class ColorDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickColorType();
+//                initPickColorType();
+                initPopType();
+            }
+        });
+    }
+
+
+    private void initPopType() {
+        popType = new Popwin(this, colorTypes, svColorType.getTvContent().getWidth());
+        popType.showAsDropDown(svColorType.getTvContent());
+        popType.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = colorTypes.get(pos).getPickerViewText();
+                if (!type.equals(colorBeans.getsClassName())) {
+                    colorBeans.setsClassName(type);
+                    colorBeans.setsClassID(colorTypes.get(pos).getsClassID());
+                    svColorType.setText(type);
+                }
             }
         });
     }

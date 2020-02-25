@@ -40,7 +40,6 @@ public class LoadingDialog {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_loading, null);
         avi = view.findViewById(R.id.avi);
         mLoadingDialog = new Dialog(context, R.style.LoadingDialogStyle);
-        mLoadingDialog = new Dialog(context, R.style.LoadingDialogStyle);
         mLoadingDialog.setCancelable(false);
         mLoadingDialog.setCanceledOnTouchOutside(false);
         mLoadingDialog.setContentView(view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));

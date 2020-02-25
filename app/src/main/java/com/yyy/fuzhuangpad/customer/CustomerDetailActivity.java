@@ -18,8 +18,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
+import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.popwin.Popwin;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -98,6 +100,8 @@ public class CustomerDetailActivity extends AppCompatActivity {
 
     private String operatortype = "";
     private int listPos = -1;
+    private Popwin popType;
+    private Popwin popSaler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +178,8 @@ public class CustomerDetailActivity extends AppCompatActivity {
                 if (customerTypes.size() == 0) {
                     getTypesData();
                 } else {
-                    pvType.show();
+                    popType.showAsDropDown(svType.getTvContent());
+//                    pvType.show();
                 }
             }
         });
@@ -239,7 +244,24 @@ public class CustomerDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickType();
+//                initPickType();
+                initPopType();
+            }
+        });
+    }
+
+    private void initPopType() {
+        popType = new Popwin(this, customerTypes, svType.getTvContent().getWidth());
+        popType.showAsDropDown(svType.getTvContent());
+        popType.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = customerTypes.get(pos).getPickerViewText();
+                if (!type.equals(customerBeans.getsClassName())) {
+                    customerBeans.setsClassName(type);
+                    customerBeans.setsClassID(customerTypes.get(pos).getsClassID());
+                    svType.setText(type);
+                }
             }
         });
     }
@@ -274,7 +296,8 @@ public class CustomerDetailActivity extends AppCompatActivity {
                 if (customerSalers.size() == 0) {
                     getSalerData();
                 } else {
-                    pvSale.show();
+//                    pvSale.show();
+                    popSaler.showAsDropDown(svSale.getTvContent());
                 }
             }
         });
@@ -340,7 +363,24 @@ public class CustomerDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickSaler();
+//                initPickSaler();
+                initPopSaler();
+            }
+        });
+    }
+
+    private void initPopSaler() {
+        popSaler = new Popwin(this, customerSalers, svSale.getWidth());
+        popSaler.showAsDropDown(svSale.getTvContent());
+        popSaler.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = customerSalers.get(pos).getPickerViewText().equals(getString(R.string.common_empty)) ? "" : customerSalers.get(pos).getPickerViewText();
+                if (!type.equals(customerBeans.getsSaleName())) {
+                    customerBeans.setsSaleName(type);
+                    customerBeans.setsSaleID(customerSalers.get(pos).getsCode());
+                    svSale.setText(type);
+                }
             }
         });
     }

@@ -20,6 +20,8 @@ import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
+import com.yyy.fuzhuangpad.dialog.SelectDialog;
+import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.sale.BillCustomer;
@@ -285,7 +287,8 @@ public class StyleDetailActivity extends AppCompatActivity {
                 if (customers.size() == 0) {
                     getCustomers();
                 } else {
-                    pvCustomer.show();
+//                    pvCustomer.show();
+                    customerDialog.show();
                 }
             }
         });
@@ -541,7 +544,32 @@ public class StyleDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickCustomer();
+                initDialogCustomer();
+//                initPickCustomer();
+            }
+        });
+    }
+
+    SelectDialog customerDialog;
+
+    private void initDialogCustomer() {
+        customerDialog = new SelectDialog(this, R.style.DialogActivity, customers);
+        customerDialog.show();
+        WindowManager.LayoutParams params = customerDialog.getWindow().getAttributes();
+        params.width = (int) ((PxUtil.getHeight(this)) * 0.6f);
+        params.height = (int) ((PxUtil.getHeight(this)) * 0.75f);
+        customerDialog.getWindow().setAttributes(params);
+        customerDialog.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = customers.get(pos).getPickerViewText();
+                if (!type.equals(customer)) {
+                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(pos).getPickerViewText();
+                    customerId = customers.get(pos).getIrecno();
+                    styleBean.setsCustShortName(customer);
+                    styleBean.setiBscDataCustomerRecNo(customerId);
+                    svCustomer.setText(customer);
+                }
             }
         });
     }
