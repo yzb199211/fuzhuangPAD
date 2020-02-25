@@ -145,6 +145,7 @@
     <string name="sale_billing_add_remark">备注</string>
     <string name="sale_billing_add_operate">操作</string>
     <string name="sale_billing_add_select_color">选择颜色</string>
+    <string name="sale_billing_hint_style">筛选款号或款式名称</string>
 
 
     <!--commonBtn-->

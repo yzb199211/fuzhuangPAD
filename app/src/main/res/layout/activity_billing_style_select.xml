@@ -8,7 +8,63 @@
     android:orientation="vertical"
     tools:context=".sale.BillingStyleSelectActivity">
 
-    <include layout="@layout/activity_dialog_top" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_5">
+
+        <com.yyy.fuzhuangpad.view.button.ButtonWithImg
+            android:id="@+id/bw_exit"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_20"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_5"
+            app:bwiSrc="@mipmap/common_exit"
+            app:bwiTilte="@string/common_exit"
+            app:bwiTitleColor="@color/default_text_color"
+            app:bwiTitleSize="@dimen/sp_10" />
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="@dimen/dp_200"
+            android:layout_height="@dimen/dp_15"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:background="@drawable/bg_dialog_select_search"
+            android:gravity="center_vertical"
+            android:hint="@string/sale_billing_hint_style"
+            android:paddingLeft="@dimen/dp_3"
+            android:paddingRight="@dimen/dp_3"
+            android:singleLine="true"
+            android:textColor="@color/default_text_color"
+            android:textSize="@dimen/sp_8" />
+
+        <com.yyy.fuzhuangpad.view.button.ButtonWithImg
+            android:id="@+id/bw_delete"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_20"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_5"
+            android:layout_toLeftOf="@id/bw_save"
+            app:bwiSrc="@mipmap/common_delete"
+            app:bwiTilte="@string/common_delete"
+            app:bwiTitleColor="@color/common_btn_delete"
+            app:bwiTitleSize="@dimen/sp_10" />
+
+        <com.yyy.fuzhuangpad.view.button.ButtonWithImg
+            android:id="@+id/bw_save"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_20"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_5"
+            app:bwiSrc="@mipmap/common_save"
+            app:bwiTilte="@string/common_save"
+            app:bwiTitleColor="@color/common_btn_search"
+            app:bwiTitleSize="@dimen/sp_10" />
+    </RelativeLayout>
+    >
 
     <LinearLayout
         android:layout_width="match_parent"

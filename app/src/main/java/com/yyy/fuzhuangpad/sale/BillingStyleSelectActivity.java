@@ -2,9 +2,12 @@ package com.yyy.fuzhuangpad.sale;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -31,6 +34,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,11 +51,14 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
     ButtonWithImg bwDelete;
     @BindView(R.id.bw_save)
     ButtonWithImg bwSave;
+    @BindView(R.id.et_search)
+    EditText etSearch;
 
     private String url;
     private String address;
     private String companyCode;
     private List<BillStyle> styles;
+    private List<BillStyle> showList;
     private BillStyleAdapter mAdapter;
 
     @Override
@@ -111,6 +119,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
             LoadingFinish(getString(R.string.error_empty));
         } else {
             styles.addAll(list);
+            showList.addAll(list);
             refreshList();
             LoadingFinish(null);
         }
@@ -130,7 +139,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
-        mAdapter = new BillStyleAdapter(this, styles);
+        mAdapter = new BillStyleAdapter(this, showList);
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
@@ -157,11 +166,49 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
         initDefaultData();
         initList();
         initView();
+        initSearch();
+    }
+
+    private void initSearch() {
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    modifyShowList(s.toString());
+                    refreshList();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void modifyShowList(String s) {
+        Pattern pattern = Pattern.compile(s);
+        showList.clear();
+        for (int i = 0; i < styles.size(); i++) {
+            Matcher matcher = pattern.matcher(styles.get(i).getsStyleNo());
+            Matcher matcher1 = pattern.matcher(styles.get(i).getsStyleName());
+            if (matcher.find() || matcher1.find()) {
+                showList.add(styles.get(i));
+            }
+        }
     }
 
 
     private void initList() {
         styles = new ArrayList<>();
+        showList = new ArrayList<>();
     }
 
     private void initDefaultData() {
