@@ -31,6 +31,7 @@ import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.popwin.Popwin;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -106,6 +107,8 @@ public class BillingFragment extends Fragment {
     private OptionsPickerView pvShop;
     private OptionsPickerView pvCustomer;
     private OptionsPickerView pvStatus;
+    private Popwin popShop;
+    private Popwin popStatus;
     private String url;
     private String address;
     private String companyCode;
@@ -212,7 +215,7 @@ public class BillingFragment extends Fragment {
     private void go2Detail(int pos) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), BillDetailActivity.class);
-        if (pos!= -1) {
+        if (pos != -1) {
             intent.putExtra("data", new Gson().toJson(billDatas.get(pos)));
         }
         intent.putExtra("pos", pos);
@@ -330,7 +333,7 @@ public class BillingFragment extends Fragment {
                 if (status.size() == 0) {
                     getStatus();
                 } else {
-                    pvStatus.show();
+                    popStatus.showAsDropDown(bsStatus.getTvContent());
                 }
             }
         });
@@ -385,7 +388,21 @@ public class BillingFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickStatus();
+//                initPickStatus();
+                initPopStatus();
+            }
+        });
+    }
+
+    private void initPopStatus() {
+        popStatus = new Popwin(getActivity(), status, bsStatus.getTvContent().getWidth());
+        popStatus.showAsDropDown(bsStatus.getTvContent());
+        popStatus.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                statusName = status.get(pos).getPickerViewText();
+                statusId = status.get(pos).getiStatus();
+                bsStatus.setContext(statusName);
             }
         });
     }
@@ -548,7 +565,7 @@ public class BillingFragment extends Fragment {
                 if (shops.size() == 0) {
                     getShops();
                 } else {
-                    pvShop.show();
+                    popShop.showAsDropDown(bsShop.getTvContent());
                 }
             }
         });
@@ -616,7 +633,24 @@ public class BillingFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickShop();
+//                initPickShop();
+                initPopShop();
+            }
+        });
+    }
+
+    private void initPopShop() {
+        popShop = new Popwin(getActivity(), shops);
+        popShop.showAsDropDown(bsShop.getTvContent());
+        popShop.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = shops.get(pos).getPickerViewText();
+                if (!type.equals(shop)) {
+                    shop = type.equals(getString(R.string.common_empty)) ? "" : type;
+                    shopid = shops.get(pos).getiRecNo();
+                    bsShop.setContext(shop);
+                }
             }
         });
     }

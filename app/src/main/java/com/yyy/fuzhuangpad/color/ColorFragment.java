@@ -407,7 +407,7 @@ public class ColorFragment extends Fragment {
                 if (!type.equals(colorType)) {
                     colorType = type.equals(getString(R.string.common_empty)) ? "" : colorTypes.get(pos).getPickerViewText();
                     bsType.setContext(colorType);
-                    refreshData();
+//                    refreshData();
                 }
             }
         });

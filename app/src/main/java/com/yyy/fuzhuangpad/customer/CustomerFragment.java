@@ -393,7 +393,7 @@ public class CustomerFragment extends Fragment {
                 if (!type.equals(customerType)) {
                     customerType = type.equals(getString(R.string.common_empty)) ? "" : customerTypes.get(pos).getPickerViewText();
                     bsType.setContext(customerType);
-                    refreshData();
+//                    refreshData();
                 }
             }
         });

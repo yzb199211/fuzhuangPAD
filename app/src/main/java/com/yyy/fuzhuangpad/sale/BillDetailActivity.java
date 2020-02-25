@@ -480,7 +480,7 @@ public class BillDetailActivity extends AppCompatActivity {
                 if (salers.size() == 0) {
                     getSalers();
                 } else {
-                    pvSaler.show();
+                    popSaler.showAsDropDown(bsSale.getTvContent());
                 }
             }
         });
@@ -535,7 +535,24 @@ public class BillDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickSaler();
+//                initPickSaler();
+                initPopSaler();
+            }
+        });
+    }
+
+    private void initPopSaler() {
+        popSaler = new Popwin(this, salers, bsSale.getTvContent().getWidth());
+        popSaler.showAsDropDown(bsSale.getTvContent());
+        popSaler.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = salers.get(pos).getPickerViewText();
+                if (!type.equals(saler)) {
+                    saler = type.equals(getString(R.string.common_empty)) ? "" : type;
+                    salerId = salers.get(pos).getsCode();
+                    bsSale.setContext(saler);
+                }
             }
         });
     }
@@ -609,7 +626,8 @@ public class BillDetailActivity extends AppCompatActivity {
                 if (billClass.size() == 0) {
                     getClassData();
                 } else {
-                    pvClass.show();
+//                    pvClass.show();
+                    popClass.showAsDropDown(bsClass.getTvContent());
                 }
             }
         });
@@ -665,7 +683,25 @@ public class BillDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickClass();
+//                initPickClass();
+                initPopClass();
+            }
+        });
+    }
+
+    private void initPopClass() {
+        popClass = new Popwin(this, billClass, bsClass.getTvContent().getWidth());
+        popClass.showAsDropDown(bsClass.getTvContent());
+        popClass.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = billClass.get(pos).getPickerViewText();
+                if (!type.equals(className)) {
+                    className = type.equals(getString(R.string.common_empty)) ? "" : type;
+                    classId = billClass.get(pos).getsCode();
+                    bsClass.setContext(className);
+
+                }
             }
         });
     }
@@ -848,7 +884,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
     private void initPopShop() {
         popShop = new Popwin(this, shops, bsShop.getTvContent().getWidth());
-        popShop.showAsDropDown(bsClass.getTvContent());
+        popShop.showAsDropDown(bsShop.getTvContent());
         popShop.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
