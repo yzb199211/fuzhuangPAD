@@ -370,7 +370,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
     }
 
     private void initPopSaler() {
-        popSaler = new Popwin(this, customerSalers, svSale.getWidth());
+        popSaler = new Popwin(this, customerSalers, svSale.getTvContent().getWidth());
         popSaler.showAsDropDown(svSale.getTvContent());
         popSaler.setOnItemClickListener(new OnItemClickListener() {
             @Override

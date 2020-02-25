@@ -1,8 +1,9 @@
 package com.yyy.fuzhuangpad.style;
 
+import com.yyy.fuzhuangpad.dialog.ISelectText;
 import com.yyy.yyylibrary.wheel.interfaces.IPickerViewData;
 
-public class StyleSize implements IPickerViewData {
+public class StyleSize implements IPickerViewData, ISelectText {
     private String sGroupID;
     private String sGroupName;
 
@@ -32,6 +33,11 @@ public class StyleSize implements IPickerViewData {
 
     @Override
     public String getPickerViewText() {
+        return sGroupName;
+    }
+
+    @Override
+    public String getText() {
         return sGroupName;
     }
 }

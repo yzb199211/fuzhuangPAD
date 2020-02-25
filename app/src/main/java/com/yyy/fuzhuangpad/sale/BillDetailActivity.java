@@ -25,9 +25,11 @@ import com.yyy.fuzhuangpad.customer.CustomerDetailActivity;
 import com.yyy.fuzhuangpad.dialog.EditDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnDeleteListener;
+import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnModifyListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.popwin.Popwin;
 import com.yyy.fuzhuangpad.sale.upload.BillChildQuery;
 import com.yyy.fuzhuangpad.sale.upload.BillSizeUpload;
 import com.yyy.fuzhuangpad.sale.upload.BillStyleUpload;
@@ -134,6 +136,10 @@ public class BillDetailActivity extends AppCompatActivity {
     private int[] deletekey;
     private int keyPos = 0;
     private int listPos;
+
+    private Popwin popSaler;
+    private Popwin popShop;
+    private Popwin popClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -589,7 +595,8 @@ public class BillDetailActivity extends AppCompatActivity {
                     if (shops.size() == 0) {
                         getShops();
                     } else {
-                        pvShop.show();
+//                        pvShop.show();
+                        popShop.showAsDropDown(bsShop.getTvContent());
                     }
             }
         });
@@ -833,7 +840,24 @@ public class BillDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickShop();
+//                initPickShop();
+                initPopShop();
+            }
+        });
+    }
+
+    private void initPopShop() {
+        popShop = new Popwin(this, shops, bsShop.getTvContent().getWidth());
+        popShop.showAsDropDown(bsClass.getTvContent());
+        popShop.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = shops.get(pos).getPickerViewText();
+                if (!type.equals(shop)) {
+                    shop = type.equals(getString(R.string.common_empty)) ? "" : shops.get(pos).getPickerViewText();
+                    shopId = shops.get(pos).getiRecNo();
+                    bsShop.setContext(shop);
+                }
             }
         });
     }

@@ -24,6 +24,7 @@ import com.yyy.fuzhuangpad.dialog.SelectDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.popwin.Popwin;
 import com.yyy.fuzhuangpad.sale.BillCustomer;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
@@ -56,6 +57,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -106,6 +108,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     private List<StyleSize> styleSizes;
     private List<StyleColor> styleColors;
     private List<BillCustomer> customers;
+    private List<StyleYear> years;
     SharedPreferencesHelper preferencesHelper;
 
     private String url;
@@ -122,6 +125,10 @@ public class StyleDetailActivity extends AppCompatActivity {
     private TimePickerView pvDate;
     private TimePickerView pvYear;
     private int listPos = -1;
+
+    private Popwin popType;
+    private Popwin popSize;
+    private Popwin popYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +160,8 @@ public class StyleDetailActivity extends AppCompatActivity {
             styleBean = new StyleBean();
             operatortype = Operatortype.add;
             bwDelete.setVisibility(View.GONE);
+            styleBean.setiYear(StringUtil.getYear(new Date(System.currentTimeMillis())));
+            svYear.setText(styleBean.getiYear());
         }
     }
 
@@ -269,6 +278,15 @@ public class StyleDetailActivity extends AppCompatActivity {
         styleTypes = new ArrayList<>();
         styleColors = new ArrayList<>();
         customers = new ArrayList<>();
+        years = new ArrayList<>();
+        initYearData();
+    }
+
+    private void initYearData() {
+        int year = Integer.parseInt(StringUtil.getYear(new Date(System.currentTimeMillis())));
+        for (int i = year - 3; i < year + 3; i++) {
+            years.add(new StyleYear().setYear(i + ""));
+        }
     }
 
     private void initView() {
@@ -301,7 +319,7 @@ public class StyleDetailActivity extends AppCompatActivity {
                 if (styleTypes.size() == 0) {
                     getTypesData();
                 } else {
-                    pvType.show();
+                    popType.showAsDropDown(svType.getTvContent());
                 }
             }
         });
@@ -356,7 +374,24 @@ public class StyleDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickType();
+//                initPickType();
+                initPopType();
+            }
+        });
+    }
+
+    private void initPopType() {
+        popType = new Popwin(this, styleTypes, svType.getTvContent().getWidth());
+        popType.showAsDropDown(svType.getTvContent());
+        popType.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = styleTypes.get(pos).getPickerViewText();
+                if (!type.equals(styleBean.getsClassName())) {
+                    styleBean.setsClassName(type);
+                    styleBean.setsClassID(styleTypes.get(pos).getsClassID());
+                    svType.setText(type);
+                }
             }
         });
     }
@@ -401,7 +436,7 @@ public class StyleDetailActivity extends AppCompatActivity {
                 if (styleSizes.size() == 0) {
                     getSizeData();
                 } else {
-                    pvSize.show();
+                    popSize.showAsDropDown(svSize.getTvContent());
                 }
             }
         });
@@ -457,7 +492,24 @@ public class StyleDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickSize();
+//                initPickSize();
+                initPopSize();
+            }
+        });
+    }
+
+    private void initPopSize() {
+        popSize = new Popwin(this, styleSizes, svSize.getTvContent().getWidth());
+        popSize.showAsDropDown(svSize.getTvContent());
+        popSize.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = styleSizes.get(pos).getPickerViewText().equals(getString(R.string.common_empty)) ? "" : styleSizes.get(pos).getPickerViewText();
+                if (!type.equals(styleBean.getsGroupName())) {
+                    styleBean.setsGroupName(type);
+                    styleBean.setsSizeGroupID(styleSizes.get(pos).getsGroupID());
+                    svSize.setText(type);
+                }
             }
         });
     }
@@ -613,15 +665,23 @@ public class StyleDetailActivity extends AppCompatActivity {
         svYear.setOnSelectClickListener(new OnSelectClickListener() {
             @Override
             public void onClick(View view) {
-                if (pvYear == null) {
-                    try {
-                        initPvYear();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast(getString(R.string.error_pcik));
-                    }
+                if (popYear == null) {
+                    initPopYear();
+                } else {
+                    popYear.showAsDropDown(svYear.getTvContent());
                 }
-                pvYear.show();
+
+            }
+        });
+    }
+
+    private void initPopYear() {
+        popYear = new Popwin(this, years, svYear.getTvContent().getWidth());
+        popYear.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                svYear.setText(years.get(pos).getYear());
+                styleBean.setiYear(years.get(pos).getYear());
             }
         });
     }

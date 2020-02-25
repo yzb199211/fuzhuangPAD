@@ -26,6 +26,7 @@ import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
+import com.yyy.fuzhuangpad.popwin.Popwin;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -94,6 +95,7 @@ public class StyleFragment extends Fragment {
     private FormAdapter formAdapter;
     private boolean isFrist = true;
     private OptionsPickerView pvType;
+    private Popwin popType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -263,7 +265,8 @@ public class StyleFragment extends Fragment {
                 if (styleTypes.size() == 0) {
                     getType();
                 } else {
-                    pvType.show();
+//                    pvType.show();
+                    popType.showAsDropDown(bsType.getTvContent());
                 }
             }
         });
@@ -381,7 +384,23 @@ public class StyleFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickColorType();
+//                initPickColorType();
+                initPopType();
+            }
+        });
+    }
+
+    private void initPopType() {
+        popType = new Popwin(getActivity(), styleTypes);
+        popType.showAsDropDown(bsType.getTvContent());
+        popType.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = styleTypes.get(pos).getPickerViewText();
+                if (!type.equals(styleType)) {
+                    styleType = type.equals(getString(R.string.common_empty)) ? "" : styleTypes.get(pos).getPickerViewText();
+                    bsType.setContext(styleType);
+                }
             }
         });
     }
