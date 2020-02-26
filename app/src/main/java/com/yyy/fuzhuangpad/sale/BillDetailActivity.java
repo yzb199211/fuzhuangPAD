@@ -123,12 +123,9 @@ public class BillDetailActivity extends AppCompatActivity {
     private List<BillSaler> salers;
     private List<BillDetailBean> billDetail;
     private List<BillClass> billClass;
-    private OptionsPickerView pvShop;
     private OptionsPickerView pvCustomer;
-    private OptionsPickerView pvSaler;
     private TimePickerView pvDate;
     private TimePickerView pvDateDelivery;
-    private OptionsPickerView pvClass;
     FormRow formTitle;
     RecyclerView recyclerView;
     BillDetailAdapter mAdapter;
@@ -426,7 +423,7 @@ public class BillDetailActivity extends AppCompatActivity {
                 .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
                 .setContentTextSize(18).setBgColor(0xFFFFFFFF)
                 .build();
-        pvDateDelivery.getDialogContainerLayout().setLayoutParams(initPvTimeDialog());
+        pvDateDelivery.getDialogContainerLayout().setLayoutParams(initPvTimeDialog(bsDateDelivery));
 //        initPvTimeDialog(pvDateEnd.getDialog());
         initPvTimeWindow(pvDateDelivery.getDialog().getWindow());
         pvDateDelivery.show();
@@ -463,7 +460,7 @@ public class BillDetailActivity extends AppCompatActivity {
                 .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
                 .setContentTextSize(18).setBgColor(0xFFFFFFFF)
                 .build();
-        pvDate.getDialogContainerLayout().setLayoutParams(initPvTimeDialog());
+        pvDate.getDialogContainerLayout().setLayoutParams(initPvTimeDialog(bsDate));
 //        initPvTimeDialog(pvDateEnd.getDialog());
         initPvTimeWindow(pvDate.getDialog().getWindow());
         pvDate.show();
@@ -557,28 +554,6 @@ public class BillDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initPickSaler() {
-        pvSaler = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = salers.get(options1).getPickerViewText();
-                if (!type.equals(saler)) {
-                    saler = type.equals(getString(R.string.common_empty)) ? "" : salers.get(options1).getPickerViewText();
-                    salerId = salers.get(options1).getsCode();
-                    bsSale.setContext(saler);
-                }
-            }
-        })
-                .setTitleText("员工选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvSaler.setPicker(salers);//一级选择器
-        setDialog(pvSaler);
-        pvSaler.show();
-    }
 
     private List<NetParams> getSalerParams() {
         List<NetParams> params = new ArrayList<>();
@@ -706,29 +681,6 @@ public class BillDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initPickClass() {
-        pvClass = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = billClass.get(options1).getPickerViewText();
-                if (!type.equals(className)) {
-                    className = type.equals(getString(R.string.common_empty)) ? "" : billClass.get(options1).getPickerViewText();
-                    classId = billClass.get(options1).getsCode();
-                    bsClass.setContext(className);
-
-                }
-            }
-        })
-                .setTitleText("类别选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvClass.setPicker(billClass);//一级选择器
-        setDialog(pvClass);
-        pvClass.show();
-    }
 
     private List<NetParams> getClassParams() {
         List<NetParams> params = new ArrayList<>();
@@ -896,29 +848,6 @@ public class BillDetailActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void initPickShop() {
-        pvShop = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = shops.get(options1).getPickerViewText();
-                if (!type.equals(shop)) {
-                    shop = type.equals(getString(R.string.common_empty)) ? "" : shops.get(options1).getPickerViewText();
-                    shopId = shops.get(options1).getiRecNo();
-                    bsShop.setContext(shop);
-                }
-            }
-        })
-                .setTitleText("门店选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvShop.setPicker(shops);//一级选择器
-        setDialog(pvShop);
-        pvShop.show();
     }
 
     private List<NetParams> getShopParams() {
@@ -1279,8 +1208,8 @@ public class BillDetailActivity extends AppCompatActivity {
 
     private void initPvTimeWindow(Window dialogWindow) {
         if (dialogWindow != null) {
-            dialogWindow.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
-            dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+//            dialogWindow.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
+            dialogWindow.setGravity(Gravity.TOP);//改成Bottom,底部显示
             dialogWindow.setDimAmount(0.1f);
             //当显示只有一列是需要设置window宽度，防止两边有空隙；
             WindowManager.LayoutParams winParams;
@@ -1291,13 +1220,18 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
 
-    private FrameLayout.LayoutParams initPvTimeDialog() {
+    private FrameLayout.LayoutParams initPvTimeDialog(ButtonSelect topView) {
+        int[] location = new int[2];
+        topView.getTvContent().getLocationOnScreen(location);
+        int x = location[0];
+        int y = location[1];
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                PxUtil.getWidth(this) / 2,
+                PxUtil.getWidth(this) / 3,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        params.leftMargin = 0;
+                Gravity.LEFT);
+        params.leftMargin = x - 5;
         params.rightMargin = 0;
+        params.topMargin = y + 10;
         return params;
     }
 
@@ -1319,7 +1253,6 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void setDialog(OptionsPickerView pickview) {
-        getDialogLayoutParams();
         pickview.getDialogContainerLayout().setLayoutParams(getDialogLayoutParams());
         initDialogWindow(pickview.getDialog().getWindow());
     }

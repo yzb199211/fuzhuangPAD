@@ -3,6 +3,8 @@ package com.yyy.fuzhuangpad.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -18,7 +20,10 @@ import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +36,7 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     List<T> list;
+    List<T> showList;
     Context context;
     SelectAdapter adapter;
 
@@ -41,10 +47,11 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
     }
 
     public SelectDialog(@NonNull Context context, @StyleRes int themeResId, List<T> list) {
-        super(context,themeResId);
+        super(context, themeResId);
         this.context = context;
         this.list = list;
-
+        showList = new ArrayList<>();
+        showList.addAll(list);
     }
 
     @Override
@@ -58,7 +65,34 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
 
     private void initView() {
         initRecycle();
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                modifyShowList(s.toString());
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void modifyShowList(String s) {
+        Pattern pattern = Pattern.compile(s);
+        showList.clear();
+        for (int i = 0; i < list.size(); i++) {
+            Matcher matcher = pattern.matcher(list.get(i).getText());
+            if (matcher.find()) {
+                showList.add(list.get(i));
+            }
+        }
     }
 
     private void initRecycle() {
@@ -72,7 +106,7 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
     }
 
     private void initAdapter() {
-        adapter = new SelectAdapter(context, list);
+        adapter = new SelectAdapter(context, showList);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
@@ -91,6 +125,8 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
                 this.dismiss();
                 break;
             case R.id.tv_search:
+                modifyShowList(etSearch.getText().toString());
+                adapter.notifyDataSetChanged();
                 break;
         }
     }

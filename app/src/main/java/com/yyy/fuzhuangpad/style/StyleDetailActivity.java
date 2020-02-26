@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
-import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.dialog.SelectDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
@@ -34,7 +33,6 @@ import com.yyy.fuzhuangpad.util.TimeUtil;
 import com.yyy.fuzhuangpad.util.Toasts;
 import com.yyy.fuzhuangpad.util.net.MainQuery;
 import com.yyy.fuzhuangpad.util.net.MainQueryChild;
-import com.yyy.fuzhuangpad.util.net.MainQueryExtend;
 import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
@@ -43,7 +41,6 @@ import com.yyy.fuzhuangpad.util.net.Otype;
 import com.yyy.fuzhuangpad.view.SelectView;
 import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.color.ColorGroup;
-import com.yyy.fuzhuangpad.view.color.ColorList;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
 import com.yyy.yyylibrary.pick.builder.OptionsPickerBuilder;
 import com.yyy.yyylibrary.pick.builder.TimePickerBuilder;
@@ -57,7 +54,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -396,28 +392,6 @@ public class StyleDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initPickType() {
-        pvType = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = styleTypes.get(options1).getPickerViewText();
-                if (!type.equals(styleBean.getsClassName())) {
-                    styleBean.setsClassName(type);
-                    styleBean.setsClassID(styleTypes.get(options1).getsClassID());
-                    svType.setText(type);
-                }
-            }
-        })
-                .setTitleText("类别选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvType.setPicker(styleTypes);//一级选择器
-        setDialog(pvType);
-        pvType.show();
-    }
 
     private List<NetParams> getTypeParams() {
         List<NetParams> params = new ArrayList<>();
@@ -514,28 +488,6 @@ public class StyleDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initPickSize() {
-        pvSize = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = styleSizes.get(options1).getPickerViewText().equals(getString(R.string.common_empty)) ? "" : styleSizes.get(options1).getPickerViewText();
-                if (!type.equals(styleBean.getsGroupName())) {
-                    styleBean.setsGroupName(type);
-                    styleBean.setsSizeGroupID(styleSizes.get(options1).getsGroupID());
-                    svSize.setText(type);
-                }
-            }
-        })
-                .setTitleText("尺码组选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvSize.setPicker(styleSizes);//一级选择器
-        setDialog(pvSize);
-        pvSize.show();
-    }
 
     private List<NetParams> getSizeParams() {
         List<NetParams> params = new ArrayList<>();
@@ -626,31 +578,6 @@ public class StyleDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initPickCustomer() {
-        pvCustomer = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = customers.get(options1).getPickerViewText();
-                if (!type.equals(customer)) {
-                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(options1).getPickerViewText();
-                    customerId = customers.get(options1).getIrecno();
-                    styleBean.setsCustShortName(customer);
-                    styleBean.setiBscDataCustomerRecNo(customerId);
-                    svCustomer.setText(customer);
-                }
-            }
-        })
-                .setTitleText("客户选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvCustomer.setPicker(customers);//一级选择器
-        setDialog(pvCustomer);
-        pvCustomer.show();
-    }
-
     private List<NetParams> getCustomerParams() {
         List<NetParams> params = new ArrayList<>();
         params.add(new NetParams("sCompanyCode", companyCode));
@@ -686,25 +613,6 @@ public class StyleDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initPvYear() throws Exception {
-        pvYear = new TimePickerBuilder(this, new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                svYear.setText(StringUtil.getYear(date));
-                styleBean.setiYear(StringUtil.getYear(date));
-            }
-        }).setRangDate(TimeUtil.str2calendar(getString(R.string.common_pickdate_start)), TimeUtil.str2calendar(getString(R.string.common_pickdate_end)))
-                .setDate(Calendar.getInstance())
-                .setType(new boolean[]{true, false, false, false, false, false})
-                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
-                .setContentTextSize(18)
-                .setBgColor(0xFFFFFFFF)
-                .setTitleText(getString(R.string.style_detail_year))
-                .build();
-        setDialog(pvYear);
-        initDialogWindow(pvYear.getDialog().getWindow());
-    }
-
     private void setDateListener() {
         svDateStop.setOnSelectClickListener(new OnSelectClickListener() {
             @Override
@@ -737,7 +645,7 @@ public class StyleDetailActivity extends AppCompatActivity {
                 .setBgColor(0xFFFFFFFF)
                 .setTitleText(getString(R.string.common_date_stop))
                 .build();
-        setDialog(pvDate);
+        setDialog(pvDate, svDateStop);
         initDialogWindow(pvDate.getDialog().getWindow());
     }
 
@@ -945,15 +853,14 @@ public class StyleDetailActivity extends AppCompatActivity {
         Toasts.showShort(this, msg);
     }
 
-    private void setDialog(BasePickerView pickview) {
-        getDialogLayoutParams();
-        pickview.getDialogContainerLayout().setLayoutParams(getDialogLayoutParams());
+    private void setDialog(BasePickerView pickview, SelectView topView) {
+        pickview.getDialogContainerLayout().setLayoutParams(getDialogLayoutParams(topView));
         initDialogWindow(pickview.getDialog().getWindow());
     }
 
     private void initDialogWindow(Window window) {
-        window.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
-        window.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+//        window.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
+        window.setGravity(Gravity.TOP);//改成Bottom,底部显示
         window.setDimAmount(0.1f);
         window.setAttributes(getDialogWindowLayoutParams(window));
     }
@@ -965,13 +872,18 @@ public class StyleDetailActivity extends AppCompatActivity {
         return winParams;
     }
 
-    private FrameLayout.LayoutParams getDialogLayoutParams() {
+    private FrameLayout.LayoutParams getDialogLayoutParams(SelectView topView) {
+        int[] location = new int[2];
+        topView.getTvContent().getLocationOnScreen(location);
+        int x = location[0];
+        int y = location[1];
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                PxUtil.getWidth(this) / 2,
+                PxUtil.getWidth(this) / 3,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        params.leftMargin = 0;
+                Gravity.LEFT);
+        params.leftMargin = x - 5;
         params.rightMargin = 0;
+        params.topMargin = y + 10;
         return params;
     }
 

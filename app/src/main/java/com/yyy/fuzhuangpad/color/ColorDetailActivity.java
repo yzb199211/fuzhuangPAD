@@ -76,7 +76,6 @@ public class ColorDetailActivity extends AppCompatActivity {
     private String address;
     private String companyCode;
     private List<ColorType> colorTypes;
-    private OptionsPickerView pvColorType;
     private TimePickerView pvDate;
     private Popwin popType;
     //private Popwin popType;
@@ -238,29 +237,6 @@ public class ColorDetailActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void initPickColorType() {
-        pvColorType = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = colorTypes.get(options1).getPickerViewText();
-                if (!type.equals(colorBeans.getsClassName())) {
-                    colorBeans.setsClassName(type);
-                    colorBeans.setsClassID(colorTypes.get(options1).getsClassID());
-                    svColorType.setText(type);
-                }
-            }
-        })
-                .setTitleText("类别选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvColorType.setPicker(colorTypes);//一级选择器
-        setDialog(pvColorType);
-        pvColorType.show();
     }
 
     private void setDataListener() {
@@ -459,8 +435,8 @@ public class ColorDetailActivity extends AppCompatActivity {
     }
 
     private void initDialogWindow(Window window) {
-        window.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
-        window.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+//        window.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
+        window.setGravity(Gravity.TOP);//改成Bottom,底部显示
         window.setDimAmount(0.1f);
         window.setAttributes(getDialogWindowLayoutParams(window));
     }
@@ -473,12 +449,17 @@ public class ColorDetailActivity extends AppCompatActivity {
     }
 
     private FrameLayout.LayoutParams getDialogLayoutParams() {
+        int[] location = new int[2];
+        svDateStop.getTvContent().getLocationOnScreen(location);
+        int x = location[0];
+        int y = location[1];
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                PxUtil.getWidth(this) / 2,
+                PxUtil.getWidth(this) / 3,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        params.leftMargin = 0;
+                Gravity.LEFT);
+        params.leftMargin = x - 5;
         params.rightMargin = 0;
+        params.topMargin = y + 10;
         return params;
     }
 

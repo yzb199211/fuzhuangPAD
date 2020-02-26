@@ -409,25 +409,7 @@ public class BillingFragment extends Fragment {
         });
     }
 
-    private void initPickStatus() {
-        pvStatus = new OptionsPickerBuilder(getActivity(), new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                statusName = status.get(options1).getPickerViewText();
-                statusId = status.get(options1).getiStatus();
-                bsStatus.setContext(statusName);
-            }
-        })
-                .setTitleText("状态选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvStatus.setPicker(status);//一级选择器
-        setDialog(pvStatus);
-        pvStatus.show();
-    }
+
 
     private List<NetParams> getStatusParams() {
         List<NetParams> params = new ArrayList<>();
@@ -657,28 +639,7 @@ public class BillingFragment extends Fragment {
         });
     }
 
-    private void initPickShop() {
-        pvShop = new OptionsPickerBuilder(getActivity(), new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = shops.get(options1).getPickerViewText();
-                if (!type.equals(shop)) {
-                    shop = type.equals(getString(R.string.common_empty)) ? "" : shops.get(options1).getPickerViewText();
-                    shopid = shops.get(options1).getiRecNo();
-                    bsShop.setContext(shop);
-                }
-            }
-        })
-                .setTitleText("门店选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvShop.setPicker(shops);//一级选择器
-        setDialog(pvShop);
-        pvShop.show();
-    }
+
 
     @OnClick({R.id.bwi_remove, R.id.bwi_search, R.id.bwi_add})
     public void onViewClicked(View view) {
@@ -752,7 +713,7 @@ public class BillingFragment extends Fragment {
                 .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
                 .setContentTextSize(18).setBgColor(0xFFFFFFFF)
                 .build();
-        pvDateStart.getDialogContainerLayout().setLayoutParams(initPvTimeDialog());
+        pvDateStart.getDialogContainerLayout().setLayoutParams(initPvTimeDialog(bsDateStart));
 //initPvTimeDialog(pvDateStart.getDialog());
         initPvTimeWindow(pvDateStart.getDialog().getWindow());
     }
@@ -769,15 +730,15 @@ public class BillingFragment extends Fragment {
                 .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
                 .setContentTextSize(18).setBgColor(0xFFFFFFFF)
                 .build();
-        pvDateEnd.getDialogContainerLayout().setLayoutParams(initPvTimeDialog());
+        pvDateEnd.getDialogContainerLayout().setLayoutParams(initPvTimeDialog(bsDataEnd));
 //        initPvTimeDialog(pvDateEnd.getDialog());
         initPvTimeWindow(pvDateEnd.getDialog().getWindow());
     }
 
     private void initPvTimeWindow(Window dialogWindow) {
         if (dialogWindow != null) {
-            dialogWindow.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
-            dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+//            dialogWindow.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
+            dialogWindow.setGravity(Gravity.TOP);//改成Bottom,底部显示
             dialogWindow.setDimAmount(0.1f);
             //当显示只有一列是需要设置window宽度，防止两边有空隙；
             WindowManager.LayoutParams winParams;
@@ -788,13 +749,18 @@ public class BillingFragment extends Fragment {
     }
 
 
-    private FrameLayout.LayoutParams initPvTimeDialog() {
+    private FrameLayout.LayoutParams initPvTimeDialog(ButtonSelect topView) {
+        int[] location = new int[2];
+        topView.getTvContent().getLocationOnScreen(location);
+        int x = location[0];
+        int y = location[1];
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                PxUtil.getWidth(getActivity()) / 2,
+                PxUtil.getWidth(getActivity()) / 3,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        params.leftMargin = 0;
+                Gravity.LEFT);
+        params.leftMargin = x - 5;
         params.rightMargin = 0;
+        params.topMargin = y;
         return params;
     }
 

@@ -98,7 +98,6 @@ public class ColorFragment extends Fragment {
     private SharedPreferencesHelper preferencesHelper;
     private FormAdapter colorAdapter;
 
-    private OptionsPickerView pvColorType;
     private boolean isFrist = true;
 
     @Override
@@ -413,28 +412,6 @@ public class ColorFragment extends Fragment {
         });
     }
 
-    private void initPickColorType() {
-        pvColorType = new OptionsPickerBuilder(getActivity(), new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = colorTypes.get(options1).getPickerViewText();
-                if (!type.equals(colorType)) {
-                    colorType = type.equals(getString(R.string.common_empty)) ? "" : colorTypes.get(options1).getPickerViewText();
-                    bsType.setContext(colorType);
-                }
-            }
-        })
-                .setTitleText("类别选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvColorType.setPicker(colorTypes);//一级选择器
-        setDialog(pvColorType);
-        pvColorType.show();
-    }
-
     private void refreshData() {
         if (colorAdapter != null) {
             formDatas.clear();
@@ -461,35 +438,6 @@ public class ColorFragment extends Fragment {
         Toasts.showShort(getActivity(), msg);
     }
 
-    private void setDialog(OptionsPickerView pickview) {
-        getDialogLayoutParams();
-        pickview.getDialogContainerLayout().setLayoutParams(getDialogLayoutParams());
-        initDialogWindow(pickview.getDialog().getWindow());
-    }
-
-    private void initDialogWindow(Window window) {
-        window.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
-        window.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-        window.setDimAmount(0.1f);
-        window.setAttributes(getDialogWindowLayoutParams(window));
-    }
-
-    private WindowManager.LayoutParams getDialogWindowLayoutParams(Window window) {
-        WindowManager.LayoutParams winParams;
-        winParams = window.getAttributes();
-        winParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        return winParams;
-    }
-
-    private FrameLayout.LayoutParams getDialogLayoutParams() {
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                PxUtil.getWidth(getActivity()) / 2,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        params.leftMargin = 0;
-        params.rightMargin = 0;
-        return params;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

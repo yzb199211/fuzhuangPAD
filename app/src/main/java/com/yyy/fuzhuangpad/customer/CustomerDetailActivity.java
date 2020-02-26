@@ -94,8 +94,6 @@ public class CustomerDetailActivity extends AppCompatActivity {
     private String companyCode;
     private List<CustomerType> customerTypes;
     private List<CustomerSaler> customerSalers;
-    private OptionsPickerView pvType;
-    private OptionsPickerView pvSale;
     private TimePickerView pvDate;
 
     private String operatortype = "";
@@ -266,29 +264,6 @@ public class CustomerDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initPickType() {
-        pvType = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = customerTypes.get(options1).getPickerViewText();
-                if (!type.equals(customerBeans.getsClassName())) {
-                    customerBeans.setsClassName(type);
-                    customerBeans.setsClassID(customerTypes.get(options1).getsClassID());
-                    svType.setText(type);
-                }
-            }
-        })
-                .setTitleText("类别选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvType.setPicker(customerTypes);//一级选择器
-        setDialog(pvType);
-        pvType.show();
-    }
-
     private void setSaleListener() {
         svSale.setOnSelectClickListener(new OnSelectClickListener() {
             @Override
@@ -385,28 +360,6 @@ public class CustomerDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initPickSaler() {
-        pvSale = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = customerSalers.get(options1).getPickerViewText().equals(getString(R.string.common_empty)) ? "" : customerSalers.get(options1).getPickerViewText();
-                if (!type.equals(customerBeans.getsSaleName())) {
-                    customerBeans.setsSaleName(type);
-                    customerBeans.setsSaleID(customerSalers.get(options1).getsCode());
-                    svSale.setText(type);
-                }
-            }
-        })
-                .setTitleText("业务员选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvSale.setPicker(customerSalers);//一级选择器
-        setDialog(pvSale);
-        pvSale.show();
-    }
 
     private void setDataListener() {
         svDateStop.setOnSelectClickListener(new OnSelectClickListener() {
@@ -439,7 +392,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
                 .setBgColor(0xFFFFFFFF)
                 .setTitleText(getString(R.string.common_date_stop))
                 .build();
-        setDialog(pvDate);
+        setDialog(pvDate, svDateStop);
         initDialogWindow(pvDate.getDialog().getWindow());
     }
 
@@ -655,15 +608,14 @@ public class CustomerDetailActivity extends AppCompatActivity {
         Toasts.showShort(this, msg);
     }
 
-    private void setDialog(BasePickerView pickview) {
-        getDialogLayoutParams();
-        pickview.getDialogContainerLayout().setLayoutParams(getDialogLayoutParams());
+    private void setDialog(BasePickerView pickview, SelectView topView) {
+        pickview.getDialogContainerLayout().setLayoutParams(getDialogLayoutParams(topView));
         initDialogWindow(pickview.getDialog().getWindow());
     }
 
     private void initDialogWindow(Window window) {
-        window.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
-        window.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+//        window.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
+        window.setGravity(Gravity.TOP);//改成Bottom,底部显示
         window.setDimAmount(0.1f);
         window.setAttributes(getDialogWindowLayoutParams(window));
     }
@@ -675,13 +627,18 @@ public class CustomerDetailActivity extends AppCompatActivity {
         return winParams;
     }
 
-    private FrameLayout.LayoutParams getDialogLayoutParams() {
+    private FrameLayout.LayoutParams getDialogLayoutParams(SelectView topView) {
+        int[] location = new int[2];
+        topView.getTvContent().getLocationOnScreen(location);
+        int x = location[0];
+        int y = location[1];
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                PxUtil.getWidth(this) / 2,
+                PxUtil.getWidth(this) / 3,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        params.leftMargin = 0;
+                Gravity.LEFT);
+        params.leftMargin = x - 5;
         params.rightMargin = 0;
+        params.topMargin = y + 10;
         return params;
     }
 
