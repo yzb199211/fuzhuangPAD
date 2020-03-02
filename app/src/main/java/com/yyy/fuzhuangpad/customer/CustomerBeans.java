@@ -1,12 +1,13 @@
 package com.yyy.fuzhuangpad.customer;
 
+import com.yyy.fuzhuangpad.dialog.ISelectText;
 import com.yyy.fuzhuangpad.util.StringUtil;
 import com.yyy.fuzhuangpad.view.form.FormColumn;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerBeans {
+public class CustomerBeans implements ISelectText {
     private int iRecNo;
     private String sCustID = "";
     private String sCustName = "";
@@ -150,7 +151,16 @@ public class CustomerBeans {
         list.add(new FormColumn(sTel, 1.0f, true, 6, row));
         return list;
     }
-
+    public List<FormColumn> getSelectList() {
+        List<FormColumn> list = new ArrayList<>();
+        list.add(new FormColumn(row + 1 + "", 0.5f, true, 0, row));
+        list.add(new FormColumn(sCustID, 1.0f, true, 1, row));
+        list.add(new FormColumn(sCustShortName, 1.0f, true, 2, row));
+        list.add(new FormColumn(sSaleName, 1.0f, true, 3, row));
+        list.add(new FormColumn(sClassName, 1.0f, true, 4, row));
+        list.add(new FormColumn(sPerson, 1.0f, true, 5, row));
+        return list;
+    }
     public String paramsFields() {
         return "sCustName" + ",sCustID" + ",sCustShortName" + ",sClassID" + ",sSaleID" + ",sPerson" + ",sTel" + ",sAddress" + ",dStopDate" + ",sRemark" + ",iCustType";
     }
@@ -195,5 +205,10 @@ public class CustomerBeans {
         sAddress = customer.getsAddress();
         dStopDate = customer.getdStopDate();
         sRemark = customer.getsRemark();
+    }
+
+    @Override
+    public String getText() {
+        return sCustID+"|"+sCustName+"|"+sCustShortName;
     }
 }

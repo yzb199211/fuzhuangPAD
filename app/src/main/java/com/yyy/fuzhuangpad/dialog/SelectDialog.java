@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -17,8 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
-import com.yyy.fuzhuangpad.util.PxUtil;
+import com.yyy.fuzhuangpad.sale.BillBean;
 import com.yyy.fuzhuangpad.view.form.FormColumn;
 import com.yyy.fuzhuangpad.view.form.FormRow;
 import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SelectDialog<T extends ISelectText> extends Dialog {
+public class SelectDialog extends Dialog {
 
     @BindView(R.id.et_search)
     EditText etSearch;
@@ -43,10 +43,13 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
     @BindView(R.id.ll_main)
     LinearLayout llMain;
 
-    List<T> list;
-    List<T> showList;
+    List<CustomerBeans> list;
+    List<CustomerBeans> showList;
+
+    List<List<FormColumn>> formDatas;
+
     Context context;
-    SelectAdapter adapter;
+    SelectAdapter2 adapter;
     OnItemClickListener onItemClickListener;
     FormRow formTitle;
 
@@ -54,12 +57,13 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public SelectDialog(@NonNull Context context, @StyleRes int themeResId, List<T> list, FormRow formTitle) {
+    public SelectDialog(@NonNull Context context, @StyleRes int themeResId, List<CustomerBeans> list, FormRow formTitle) {
         super(context, themeResId);
         this.context = context;
         this.list = list;
         this.formTitle = formTitle;
         showList = new ArrayList<>();
+        formDatas = new ArrayList<>();
         showList.addAll(list);
     }
 
@@ -74,7 +78,7 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
 
     private void initView() {
         initTiltes();
-//        initRecycle();
+        initRecycle();
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -84,6 +88,7 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 modifyShowList(s.toString());
+                initformData();
                 adapter.notifyDataSetChanged();
             }
 
@@ -116,14 +121,22 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new RecyclerViewDivider(context, LinearLayout.VERTICAL));
         if (adapter == null) {
+            initformData();
             initAdapter();
         }
         recyclerView.setAdapter(adapter);
 
     }
 
+    private void initformData() {
+        formDatas.clear();
+        for (int i = 0; i < showList.size(); i++) {
+            formDatas.add(showList.get(i).getSelectList());
+        }
+    }
+
     private void initAdapter() {
-        adapter = new SelectAdapter(context, showList);
+        adapter = new SelectAdapter2(formDatas, context);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {

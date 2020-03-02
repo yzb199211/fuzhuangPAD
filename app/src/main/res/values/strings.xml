@@ -170,6 +170,7 @@
     <string name="common_empty">无</string>
     <string name="common_open">-</string>
     <string name="common_close">+</string>
+    <string name="common_hint_customer">请输入客户信息</string>
     <!--icon-->
     <string name="icon_man">&#xe71b;</string>
     <string name="icon_lock">&#xe644;</string>
