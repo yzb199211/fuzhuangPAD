@@ -248,7 +248,7 @@ public class BillingFragment extends Fragment {
         list.add(new NetParams("sFields", BillBean.getFields()));
         list.add(new NetParams("sFilters", getFilter()));
 //        Log.e("filter",filter);
-        list.add(new NetParams("sSorts", ""));
+        list.add(new NetParams("sSorts", "irecno desc"));
         return list;
     }
 

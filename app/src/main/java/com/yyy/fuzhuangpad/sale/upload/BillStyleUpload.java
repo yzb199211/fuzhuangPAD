@@ -81,7 +81,7 @@ public class BillStyleUpload {
         this.fTotal = fTotal;
     }
 
-    private void sum(int iSumQty, double fTotal) {
+    public void sum(int iSumQty, double fTotal) {
         this.iSumQty = this.iSumQty + iSumQty;
         this.fTotal = StringUtil.add(this.fTotal, fTotal);
     }

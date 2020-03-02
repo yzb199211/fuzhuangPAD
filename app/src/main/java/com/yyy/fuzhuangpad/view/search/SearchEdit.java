@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.util.StringUtil;
 
 public class SearchEdit extends LinearLayout implements View.OnKeyListener {
     Context context;
@@ -72,9 +74,9 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
     }
 
     private void initTitle() {
-            addMust();
+        addMust();
         tvTitle = new TextView(context);
-        tvTitle.setText(title);
+        tvTitle.setText(TextUtils.isEmpty(title) ? "" : StringUtil.formatTitle(title));
         tvTitle.setSingleLine();
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         tvTitle.setTextColor(titleColor);
@@ -117,7 +119,7 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
             case 3:
                 return InputType.TYPE_CLASS_NUMBER;
             case 2:
-                return EditorInfo.TYPE_CLASS_NUMBER|EditorInfo.TYPE_NUMBER_FLAG_DECIMAL;
+                return EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_NUMBER_FLAG_DECIMAL;
             case 1:
                 return InputType.TYPE_TEXT_FLAG_MULTI_LINE;
             default:

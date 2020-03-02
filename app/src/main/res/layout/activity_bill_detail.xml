@@ -34,6 +34,7 @@
             android:text="@string/sale_billing_detail_title"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/sp_12" />
+
         <com.yyy.fuzhuangpad.view.button.ButtonWithImg
             android:id="@+id/bw_delete"
             android:layout_width="@dimen/dp_50"
@@ -45,6 +46,7 @@
             app:bwiTilte="@string/common_delete"
             app:bwiTitleColor="@color/common_btn_delete"
             app:bwiTitleSize="@dimen/sp_10" />
+
         <com.yyy.fuzhuangpad.view.button.ButtonWithImg
             android:id="@+id/bw_submit"
             android:layout_width="@dimen/dp_50"
@@ -114,7 +116,7 @@
             app:bsTitleSize="@dimen/sp_10" />
 
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
-            android:id="@+id/bs_customer"
+            android:id="@+id/bs_sale"
             android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -122,31 +124,31 @@
             app:bsContentColor="@color/white"
             app:bsContentSize="@dimen/sp_10"
             app:bsSrc="@mipmap/icon_arrow_down"
-            app:bsTitle="@string/sale_billing_form_customer"
+            app:bsTitle="@string/sale_billing_form_saler"
             app:bsTitleColor="@color/default_text_color"
             app:bsTitleSize="@dimen/sp_10" />
 
-        <com.yyy.fuzhuangpad.view.button.ButtonWithImg
-            android:id="@+id/bwi_add_customer"
-            android:layout_width="@dimen/dp_40"
-            android:layout_height="@dimen/dp_15"
+        <com.yyy.fuzhuangpad.view.button.ButtonSelect
+            android:id="@+id/bs_size"
+            android:layout_width="@dimen/dp_130"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_5"
-            android:layout_marginRight="@dimen/dp_5"
-            android:layout_toRightOf="@id/bs_customer"
-            android:background="@drawable/common_btn_search"
-            app:bwiTilte="@string/sale_billing_detail_add"
-            app:bwiTitleColor="@color/common_btn_search"
-            app:bwiTitleSize="@dimen/sp_10" />
-
+            android:layout_toRightOf="@id/bs_sale"
+            app:bsContentColor="@color/white"
+            app:bsContentSize="@dimen/sp_10"
+            app:bsSrc="@mipmap/icon_arrow_down"
+            app:bsTitle="@string/style_detail_size"
+            app:bsTitleColor="@color/default_text_color"
+            app:bsTitleSize="@dimen/sp_10" />
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/rl_two"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_3"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_5"  android:layout_marginTop="@dimen/dp_3"
+        android:paddingLeft="@dimen/dp_5"
         android:paddingRight="@dimen/dp_5">
 
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
@@ -173,19 +175,32 @@
             app:bsTitleColor="@color/default_text_color"
             app:bsTitleSize="@dimen/sp_10" />
 
+
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
-            android:id="@+id/bs_sale"
+            android:id="@+id/bs_customer"
             android:layout_width="@dimen/dp_130"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/bs_shop"
             app:bsContentColor="@color/white"
             app:bsContentSize="@dimen/sp_10"
             app:bsSrc="@mipmap/icon_arrow_down"
-            app:bsTitle="@string/sale_billing_form_saler"
+            app:bsTitle="@string/sale_billing_form_customer"
             app:bsTitleColor="@color/default_text_color"
             app:bsTitleSize="@dimen/sp_10" />
 
-
+        <com.yyy.fuzhuangpad.view.button.ButtonWithImg
+            android:id="@+id/bwi_add_customer"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_15"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_marginRight="@dimen/dp_5"
+            android:layout_toRightOf="@id/bs_customer"
+            android:background="@drawable/common_btn_search"
+            app:bwiTilte="@string/sale_billing_detail_add"
+            app:bwiTitleColor="@color/common_btn_search"
+            app:bwiTitleSize="@dimen/sp_10" />
 
     </LinearLayout>
 
@@ -193,10 +208,11 @@
         android:id="@+id/rl_three"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_3"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_5"
-        android:layout_marginTop="@dimen/dp_3"
         android:paddingRight="@dimen/dp_5">
+
         <com.yyy.fuzhuangpad.view.button.ButtonSelect
             android:id="@+id/bs_class"
             android:layout_width="@dimen/dp_130"
@@ -208,6 +224,7 @@
             app:bsTitle="@string/sale_billing_add_class"
             app:bsTitleColor="@color/default_text_color"
             app:bsTitleSize="@dimen/sp_10" />
+
         <com.yyy.fuzhuangpad.view.search.SearchEdit
             android:id="@+id/se_remark"
             android:layout_width="@dimen/dp_260"
@@ -223,7 +240,8 @@
         android:id="@+id/ll_three"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"  android:layout_marginTop="@dimen/dp_3"
+        android:layout_marginTop="@dimen/dp_3"
+        android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_5"
         android:paddingRight="@dimen/dp_5">
 

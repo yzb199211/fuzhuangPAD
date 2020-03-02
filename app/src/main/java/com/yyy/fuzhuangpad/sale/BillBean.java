@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BillBean {
-    private int iRecNo=0;
+    private int iRecNo = 0;
     private String sOrderNo = "";
     private String dDate = "";
     private int iBscdataStockMRecNo;
@@ -25,6 +25,8 @@ public class BillBean {
     private int iQty;
     private double fTotal;
     private String sStatusName = "";
+    private String sGroupName = "";
+    private String sSizeGroupID = "";
     private int row;
 
     public int getRow() {
@@ -179,6 +181,22 @@ public class BillBean {
         this.sStatusName = sStatusName;
     }
 
+    public String getsGroupName() {
+        return sGroupName;
+    }
+
+    public void setsGroupName(String sGroupName) {
+        this.sGroupName = sGroupName;
+    }
+
+    public String getsSizeGroupID() {
+        return sSizeGroupID;
+    }
+
+    public void setsSizeGroupID(String sSizeGroupID) {
+        this.sSizeGroupID = sSizeGroupID;
+    }
+
     public static String getFields() {
         return "iRecNo" + "," +
                 "sOrderNo" + "," +
@@ -192,6 +210,8 @@ public class BillBean {
                 "dOrderDate" + "," +
                 "sSaleID" + "," +
                 "sSaleName" + "," +
+                "sGroupName" + "," +
+                "sSizeGroupID" + "," +
                 "sRemark" + "," +
                 "fPayMomey" + "," +
                 "sPaymethod" + "," +
@@ -227,7 +247,9 @@ public class BillBean {
                 "fPayMomey" + "," +
                 "sPaymethod" + "," +
                 "iQty" + "," +
-                "fTotal" + "," + "sUserID";
+                "fTotal" + "," +
+                "sUserID" + "," +
+                "sSizeGroupID";
     }
 
     public String paramsFieldsValues(String userid) {
@@ -243,7 +265,9 @@ public class BillBean {
                 fPayMomey + "," +
                 sPaymethod + "," +
                 iQty + "," +
-                fTotal + "," + userid;
+                fTotal + "," +
+                userid + "," +
+                sSizeGroupID;
     }
 
     public String paramsFilterFields() {
@@ -284,5 +308,7 @@ public class BillBean {
         sPaymethod = item.getsPaymethod();
         iQty = item.getiQty();
         fTotal = item.getfTotal();
+        sSizeGroupID = item.getsSizeGroupID();
+        sGroupName = item.getsGroupName();
     }
 }

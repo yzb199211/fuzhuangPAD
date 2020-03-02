@@ -2,6 +2,7 @@ package com.yyy.fuzhuangpad.view.button;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -17,6 +18,7 @@ import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
+import com.yyy.fuzhuangpad.util.StringUtil;
 
 public class ButtonSelect extends LinearLayout {
     private Context context;
@@ -88,7 +90,7 @@ public class ButtonSelect extends LinearLayout {
 
     private void initTitle() {
         tvTitle = findViewById(R.id.tv_title);
-        tvTitle.setText(title);
+        tvTitle.setText(TextUtils.isEmpty(title) ? "" : StringUtil.formatTitle(title));
         tvTitle.setTextColor(titleColor);
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         tvTitle.setLayoutParams(titleParams());

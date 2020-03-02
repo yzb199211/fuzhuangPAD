@@ -3,6 +3,7 @@ package com.yyy.fuzhuangpad.view.remark;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.application.BaseApplication;
+import com.yyy.fuzhuangpad.util.StringUtil;
 
 public class RemarkEdit extends LinearLayout implements View.OnKeyListener {
     Context context;
@@ -65,7 +67,7 @@ public class RemarkEdit extends LinearLayout implements View.OnKeyListener {
 
     private void initTitle() {
         tvTitle = new TextView(context);
-        tvTitle.setText(title);
+        tvTitle.setText(TextUtils.isEmpty(title) ? "" : StringUtil.formatTitle(title));
         tvTitle.setSingleLine();
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         tvTitle.setTextColor(titleColor);

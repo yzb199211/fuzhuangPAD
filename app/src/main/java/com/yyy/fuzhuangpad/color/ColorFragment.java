@@ -150,6 +150,7 @@ public class ColorFragment extends Fragment {
         list.add(new NetParams("sCompanyCode", companyCode));
         list.add(new NetParams("otype", "GetTableData"));
         list.add(new NetParams("sTableName", "vwBscDataColor"));
+        list.add(new NetParams("sSorts", "irecno desc"));
         list.add(new NetParams("sFields", "iRecNo,sColorName,sColorID,sClassID,sClassName,sRemark"));
         list.add(new NetParams("sFilters", getFilter()));
         return list;

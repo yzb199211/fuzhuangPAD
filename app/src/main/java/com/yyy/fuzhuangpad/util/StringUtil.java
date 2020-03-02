@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
@@ -24,6 +25,18 @@ public class StringUtil {
     public final static int DATETYPE = 1;
     final static String colorFormat = "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$";
 
+    public static String formatTitle(@NonNull String s) {
+        switch (s.length()) {
+            case 0 | 1 | 4:
+                return s;
+            case 2:
+                return new StringBuffer().append(s).insert(1, "\u3000\u3000").toString();
+            case 3:
+                return new StringBuffer().append(s).insert(1, "\u0020\u0020").insert(4, "\u0020\u0020").toString();
+            default:
+                return s.substring(0, 4);
+        }
+    }
 
     public static String float2Str(float d) {
         NumberFormat nf = NumberFormat.getInstance();

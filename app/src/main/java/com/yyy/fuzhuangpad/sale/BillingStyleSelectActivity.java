@@ -57,6 +57,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
     private String url;
     private String address;
     private String companyCode;
+    private String sizeId;
     private List<BillStyle> styles;
     private List<BillStyle> showList;
     private BillStyleAdapter mAdapter;
@@ -158,7 +159,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
         list.add(new NetParams("otype", "GetTableData"));
         list.add(new NetParams("sTableName", "vwBscDataStyleM"));
         list.add(new NetParams("sFields", "iRecNo,sStyleNo,sStyleName,sClassID,sClassName,fCostPrice,sReMark,sGroupName"));
-        list.add(new NetParams("sFilters", "isnull(dStopDate,'2199-01-01')>getdate()"));
+        list.add(new NetParams("sFilters", "isnull(dStopDate,'2199-01-01')>getdate() and sSizeGroupID=" + sizeId));
         return list;
     }
 
@@ -215,6 +216,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
         address = (String) preferencesHelper.getSharedPreference("address", "");
         companyCode = (String) preferencesHelper.getSharedPreference("companyCode", "");
         url = address + NetConfig.server + NetConfig.MobileAppHandler_Method;
+        sizeId = getIntent().getStringExtra("sizeId");
     }
 
     private void initView() {

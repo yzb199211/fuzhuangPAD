@@ -2,7 +2,6 @@ package com.yyy.fuzhuangpad.util.net;
 
 import android.widget.Toast;
 
-
 import com.yyy.fuzhuangpad.application.BaseApplication;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 

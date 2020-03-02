@@ -141,6 +141,7 @@ public class StyleFragment extends Fragment {
         list.add(new NetParams("sTableName", "vwBscDataStyleM"));
         list.add(new NetParams("sFields", "iRecNo,sStyleNo,sStyleName,sClassID,sClassName,sSizeGroupID,sGroupName,iBscDataCustomerRecNo,sCustShortName,iYear,fCostPrice,fBulkTotal1,fSalePrice,sCustStyleNo,sWaterElents,sReMark,dStopDate"));
         list.add(new NetParams("sFilters", getFilter()));
+        list.add(new NetParams("sSorts", "irecno desc"));
         return list;
     }
 

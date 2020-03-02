@@ -142,6 +142,7 @@ public class CustomerFragment extends Fragment {
         list.add(new NetParams("sTableName", "vwBscDataCustomer"));
         list.add(new NetParams("sFields", "iRecNo,sCustID,sCustName,sCustShortName,sClassID,sClassName,sSaleID,sSaleName,sPerson,sTel,sAddress,dStopDate,sRemark,iCustType"));
         list.add(new NetParams("sFilters", getFilter()));
+        list.add(new NetParams("sSorts", "irecno desc"));
         return list;
     }
 

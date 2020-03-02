@@ -3,6 +3,7 @@ package com.yyy.fuzhuangpad.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
+import com.yyy.fuzhuangpad.util.StringUtil;
 
 public class SelectView extends LinearLayout {
     private Context context;
@@ -80,7 +82,7 @@ public class SelectView extends LinearLayout {
     private void initTitle() {
         addMust();
         tvTitle = new TextView(context);
-        tvTitle.setText(title);
+        tvTitle.setText(TextUtils.isEmpty(title)? "" : StringUtil.formatTitle(title));
         tvTitle.setSingleLine();
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         tvTitle.setTextColor(titleColor);

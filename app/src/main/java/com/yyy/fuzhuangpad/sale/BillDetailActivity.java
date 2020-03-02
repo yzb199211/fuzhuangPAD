@@ -33,6 +33,7 @@ import com.yyy.fuzhuangpad.popwin.Popwin;
 import com.yyy.fuzhuangpad.sale.upload.BillChildQuery;
 import com.yyy.fuzhuangpad.sale.upload.BillSizeUpload;
 import com.yyy.fuzhuangpad.sale.upload.BillStyleUpload;
+import com.yyy.fuzhuangpad.style.StyleSize;
 import com.yyy.fuzhuangpad.util.CodeUtil;
 import com.yyy.fuzhuangpad.util.PxUtil;
 import com.yyy.fuzhuangpad.util.SharedPreferencesHelper;
@@ -86,6 +87,8 @@ public class BillDetailActivity extends AppCompatActivity {
     ButtonSelect bsDateDelivery;
     @BindView(R.id.bs_sale)
     ButtonSelect bsSale;
+    @BindView(R.id.bs_size)
+    ButtonSelect bsSize;
     @BindView(R.id.se_remark)
     SearchEdit seRemark;
     @BindView(R.id.st_num)
@@ -114,6 +117,9 @@ public class BillDetailActivity extends AppCompatActivity {
     private String saler;
     private String salerId;
 
+    private String size;
+    private String sizeId;
+
     private String classId = "0";
     private String className;
 
@@ -123,6 +129,7 @@ public class BillDetailActivity extends AppCompatActivity {
     private List<BillSaler> salers;
     private List<BillDetailBean> billDetail;
     private List<BillClass> billClass;
+    private List<BillSize> billSizes;
     private OptionsPickerView pvCustomer;
     private TimePickerView pvDate;
     private TimePickerView pvDateDelivery;
@@ -135,6 +142,7 @@ public class BillDetailActivity extends AppCompatActivity {
     private int listPos;
 
     private Popwin popSaler;
+    private Popwin popSize;
     private Popwin popShop;
     private Popwin popClass;
 
@@ -184,6 +192,9 @@ public class BillDetailActivity extends AppCompatActivity {
         customer = bill.getsCustShortName();
         customerId = bill.getiBscDataCustomerRecNo();
         bsCustomer.setContext(customer);
+        size = bill.getsGroupName();
+        sizeId = bill.getsSizeGroupID();
+        bsSize.setContext(size);
         bsDate.setContext(StringUtil.getDate(bill.getdDate(), 2));
         bsDateDelivery.setContext(StringUtil.getDate(bill.getdOrderDate(), 2));
         saler = bill.getsSaleName();
@@ -272,27 +283,6 @@ public class BillDetailActivity extends AppCompatActivity {
         stTotal.setText(bill.getfTotal() + "");
     }
 
-    EditDialog editDialog;
-
-    private void showEditDialog(int position) {
-        if (editDialog == null) {
-            editDialog = new EditDialog(this).max(billDetail.get(position).getiSumQty());
-        } else {
-            editDialog.setMax(billDetail.get(position).getiSumQty());
-        }
-        editDialog.setOnCloseListener(new EditDialog.OnCloseListener() {
-            @Override
-            public void onClick(boolean confirm, @NonNull String data) {
-                if (confirm) {
-                    billDetail.get(position).setiSumQty(Integer.parseInt(data));
-                    billDetail.get(position).setfTotal(StringUtil.multiply(billDetail.get(position).getiSumQty(), billDetail.get(position).getfPrice()));
-                    refreshList();
-                }
-            }
-        });
-        editDialog.show();
-    }
-
     private void initAdapter() {
         mAdapter = new BillDetailAdapter(this, billDetail);
         mAdapter.setOnDeleteListener(new OnDeleteListener() {
@@ -359,12 +349,14 @@ public class BillDetailActivity extends AppCompatActivity {
         salers = new ArrayList<>();
         billDetail = new ArrayList<>();
         billClass = new ArrayList<>();
+        billSizes = new ArrayList<>();
     }
 
     private void initView() {
         initTitle();
         initRecycle();
         setShopListener();
+        setSizeListener();
         setCustomerListener();
         setSalerListener();
         setClassListener();
@@ -589,6 +581,21 @@ public class BillDetailActivity extends AppCompatActivity {
                     } else {
 //                        pvShop.show();
                         popShop.showAsDropDown(bsShop.getTvContent());
+                    }
+            }
+        });
+    }
+
+    private void setSizeListener() {
+        bsSize.setOnSelectClickListener(new OnSelectClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (TextUtils.isEmpty(sizeId) || billDetail.size() == 0)
+                    if (billSizes.size() == 0) {
+                        getSize();
+                    } else {
+//                        pvShop.show();
+                        popSize.showAsDropDown(bsSize.getTvContent());
                     }
             }
         });
@@ -860,6 +867,90 @@ public class BillDetailActivity extends AppCompatActivity {
         return params;
     }
 
+    private void getSize() {
+        LoadingDialog.showDialogForLoading(this);
+        new NetUtil(getSizeParams(), url, new ResponseListener() {
+            @Override
+            public void onSuccess(String string) {
+                try {
+                    initSizeData(string);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_json));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LoadingFinish(getString(R.string.error_data));
+                }
+            }
+
+            @Override
+            public void onFail(IOException e) {
+                e.printStackTrace();
+                LoadingFinish(e.getMessage());
+            }
+        });
+    }
+
+    private void initSizeData(String string) throws JSONException, Exception {
+        JSONObject jsonObject = new JSONObject(string);
+        if (jsonObject.optBoolean("success")) {
+            setSizeData(jsonObject.optJSONObject("dataset").optString("BscDataSizeM"));
+        } else {
+            LoadingFinish(jsonObject.optString("message"));
+        }
+    }
+
+    private void setSizeData(String data) throws Exception {
+        List<BillSize> list = new Gson().fromJson(data, new TypeToken<List<BillSize>>() {
+        }.getType());
+        if (list == null || list.size() == 0) {
+            LoadingFinish(getString(R.string.error_empty));
+        } else {
+//            styleSizes.add(new StyleSize("", getString(R.string.common_empty)));
+            billSizes.addAll(list);
+            LoadingFinish(null);
+            setPickSize();
+        }
+    }
+
+    private void setPickSize() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                initPickSize();
+                initPopSize();
+            }
+        });
+    }
+
+    private void initPopSize() {
+        popSize = new Popwin(this, billSizes, bsSize.getTvContent().getWidth());
+        popSize.showAsDropDown(bsSize.getTvContent());
+        popSize.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                String type = billSizes.get(pos).getPickerViewText().equals(getString(R.string.common_empty)) ? "" : billSizes.get(pos).getPickerViewText();
+                if (!type.equals(bill.getsGroupName())) {
+                    sizeId = billSizes.get(pos).getsGroupID();
+                    size = type;
+                    bill.setsGroupName(type);
+                    bill.setsSizeGroupID(sizeId);
+                    bsSize.setContext(type);
+                }
+            }
+        });
+    }
+
+    private List<NetParams> getSizeParams() {
+        List<NetParams> params = new ArrayList<>();
+        params.add(new NetParams("sCompanyCode", companyCode));
+        params.add(new NetParams("otype", "GetTableData"));
+        params.add(new NetParams("sTableName", "BscDataSizeM"));
+        params.add(new NetParams("sFields", "sGroupID,sGroupName"));
+        params.add(new NetParams("sFilters", ""));
+        return params;
+    }
+
     @OnClick({R.id.bw_exit, R.id.bw_submit, R.id.bw_save, R.id.bwi_add_customer, R.id.bwi_add_style, R.id.bw_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -872,6 +963,10 @@ public class BillDetailActivity extends AppCompatActivity {
             case R.id.bw_submit:
                 if (shopId == 0) {
                     Toast(getString(R.string.sale_billing_empty_shop));
+                    return;
+                }
+                if (TextUtils.isEmpty(sizeId)) {
+                    Toast(getString(R.string.sale_billing_empty_size));
                     return;
                 }
                 if (customerId == 0) {
@@ -900,6 +995,10 @@ public class BillDetailActivity extends AppCompatActivity {
             case R.id.bw_save:
                 if (shopId == 0) {
                     Toast(getString(R.string.sale_billing_empty_shop));
+                    return;
+                }
+                if (TextUtils.isEmpty(sizeId)) {
+                    Toast(getString(R.string.sale_billing_empty_size));
                     return;
                 }
                 if (customerId == 0) {
@@ -933,7 +1032,11 @@ public class BillDetailActivity extends AppCompatActivity {
                     Toast(getString(R.string.sale_billing_empty_shop));
                     return;
                 }
-                go2AddStyle();
+                if (TextUtils.isEmpty(sizeId)) {
+                    Toast(getString(R.string.sale_billing_empty_size));
+                    return;
+                }
+                go2AddStyle(sizeId);
                 break;
         }
     }
@@ -1178,6 +1281,8 @@ public class BillDetailActivity extends AppCompatActivity {
                 billSizeList.add(list);
                 styleUploads.add(style);
             } else {
+                oldStyle.sum(item.getiSumQty(),
+                        item.getfPrice());
                 billSizeList.get(styleUploads.indexOf(oldStyle)).add(sizes);
             }
         }
@@ -1202,8 +1307,8 @@ public class BillDetailActivity extends AppCompatActivity {
         startActivity(new Intent().setClass(this, CustomerDetailActivity.class));
     }
 
-    private void go2AddStyle() {
-        startActivityForResult(new Intent().setClass(this, BillingStyleSelectActivity.class), CodeUtil.BILLINGSTYLE);
+    private void go2AddStyle(String sizeId) {
+        startActivityForResult(new Intent().setClass(this, BillingStyleSelectActivity.class).putExtra("sizeId", sizeId), CodeUtil.BILLINGSTYLE);
     }
 
     private void initPvTimeWindow(Window dialogWindow) {

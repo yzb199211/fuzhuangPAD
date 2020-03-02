@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.util.StringUtil;
 
 public class SearchText extends LinearLayout {
     Context context;
@@ -74,7 +76,7 @@ public class SearchText extends LinearLayout {
     private void initTitle() {
         addMust();
         tvTitle = new TextView(context);
-        tvTitle.setText(title);
+        tvTitle.setText(TextUtils.isEmpty(title)? "" : StringUtil.formatTitle(title));
         tvTitle.setSingleLine();
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         tvTitle.setTextColor(titleColor);
