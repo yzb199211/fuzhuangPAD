@@ -556,10 +556,10 @@ public class StyleDetailActivity extends AppCompatActivity {
     SelectDialog customerDialog;
 
     private void initDialogCustomer() {
-        customerDialog = new SelectDialog(this, R.style.DialogActivity, customers,new FormRow(this).isTitle(true).setColumns(CustomerUtil.getSelectTitles(this)).build());
+        customerDialog = new SelectDialog(this, R.style.DialogActivity, customers, new FormRow(this).isTitle(true).setColumns(CustomerUtil.getSelectTitles(this)).build());
         customerDialog.show();
         WindowManager.LayoutParams params = customerDialog.getWindow().getAttributes();
-        params.width = (int) ((PxUtil.getHeight(this)) * 0.6f);
+        params.width = (int) ((PxUtil.getWidth(this)) * 0.6f);
         params.height = (int) ((PxUtil.getHeight(this)) * 0.75f);
         customerDialog.getWindow().setAttributes(params);
         customerDialog.setOnItemClickListener(new OnItemClickListener() {
