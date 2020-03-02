@@ -253,14 +253,12 @@ public class BillingFragment extends Fragment {
     }
 
     private String getFilter() {
-        filter="";
+        filter = "";
         filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "isNull(iStatus,0) =" + "\'" + statusId + "\'";
         if (!isFrist) {
             code = seCode.getText();
-//            customerId = seName.getText();
             if (shopid != 0) {
                 filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "iBscdataStockMRecNo=" + "\'" + shopid + "\'";
-//                filter = "iBscdataStockMRecNo=" + "\'" + shopid + "\'";
             }
             if (StringUtil.isNotEmpty(code)) {
                 filter = filter + (StringUtil.isNotEmpty(filter) ? " and " : "") + "sOrderNo like" + "\'|" + code + "|\'";
@@ -408,7 +406,6 @@ public class BillingFragment extends Fragment {
             }
         });
     }
-
 
 
     private List<NetParams> getStatusParams() {
@@ -638,7 +635,6 @@ public class BillingFragment extends Fragment {
             }
         });
     }
-
 
 
     @OnClick({R.id.bwi_remove, R.id.bwi_search, R.id.bwi_add})

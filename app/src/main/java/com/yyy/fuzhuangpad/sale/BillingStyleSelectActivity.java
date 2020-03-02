@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +28,7 @@ import com.yyy.fuzhuangpad.util.net.NetConfig;
 import com.yyy.fuzhuangpad.util.net.NetParams;
 import com.yyy.fuzhuangpad.util.net.NetUtil;
 import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
+import com.yyy.fuzhuangpad.view.recycle.DividerGridItemDecoration;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -221,6 +223,7 @@ public class BillingStyleSelectActivity extends AppCompatActivity {
 
     private void initView() {
         rvStyle.setLayoutManager(new GridLayoutManager(this, 6));
+        rvStyle.addItemDecoration(new DividerGridItemDecoration(this));
         bwDelete.setVisibility(View.INVISIBLE);
         bwSave.setVisibility(View.INVISIBLE);
     }

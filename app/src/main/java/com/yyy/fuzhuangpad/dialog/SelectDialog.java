@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.util.PxUtil;
+import com.yyy.fuzhuangpad.view.form.FormColumn;
+import com.yyy.fuzhuangpad.view.form.FormRow;
 import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
 
 import java.util.ArrayList;
@@ -35,21 +38,27 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
     EditText etSearch;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.ll_top)
+    LinearLayout llTop;
+    @BindView(R.id.ll_main)
+    LinearLayout llMain;
+
     List<T> list;
     List<T> showList;
     Context context;
     SelectAdapter adapter;
-
     OnItemClickListener onItemClickListener;
+    FormRow formTitle;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public SelectDialog(@NonNull Context context, @StyleRes int themeResId, List<T> list) {
+    public SelectDialog(@NonNull Context context, @StyleRes int themeResId, List<T> list, FormRow formTitle) {
         super(context, themeResId);
         this.context = context;
         this.list = list;
+        this.formTitle = formTitle;
         showList = new ArrayList<>();
         showList.addAll(list);
     }
@@ -64,7 +73,8 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
 
 
     private void initView() {
-        initRecycle();
+        initTiltes();
+//        initRecycle();
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -82,6 +92,13 @@ public class SelectDialog<T extends ISelectText> extends Dialog {
 
             }
         });
+    }
+
+    private void initTiltes() {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, context.getResources().getDimensionPixelSize(R.dimen.dp_20));
+        params.topMargin = context.getResources().getDimensionPixelSize(R.dimen.dp_5);
+        formTitle.setLayoutParams(params);
+        llMain.addView(formTitle, 1);
     }
 
     private void modifyShowList(String s) {

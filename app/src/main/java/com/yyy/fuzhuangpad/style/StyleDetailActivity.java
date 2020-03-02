@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.customer.CustomerBeans;
+import com.yyy.fuzhuangpad.customer.CustomerUtil;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.dialog.SelectDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
@@ -41,6 +43,7 @@ import com.yyy.fuzhuangpad.util.net.Otype;
 import com.yyy.fuzhuangpad.view.SelectView;
 import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.color.ColorGroup;
+import com.yyy.fuzhuangpad.view.form.FormRow;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
 import com.yyy.yyylibrary.pick.builder.OptionsPickerBuilder;
 import com.yyy.yyylibrary.pick.builder.TimePickerBuilder;
@@ -103,7 +106,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     private List<StyleType> styleTypes;
     private List<StyleSize> styleSizes;
     private List<StyleColor> styleColors;
-    private List<BillCustomer> customers;
+    private List<CustomerBeans> customers;
     private List<StyleYear> years;
     SharedPreferencesHelper preferencesHelper;
 
@@ -115,11 +118,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     private int[] deleteKey;
 
     private String operatortype = "";
-    private OptionsPickerView pvType;
-    private OptionsPickerView pvSize;
-    private OptionsPickerView pvCustomer;
     private TimePickerView pvDate;
-    private TimePickerView pvYear;
     private int listPos = -1;
 
     private Popwin popType;
@@ -526,7 +525,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     private void initCustomerData(String string) throws JSONException, Exception {
         JSONObject jsonObject = new JSONObject(string);
         if (jsonObject.optBoolean("success")) {
-            setCustomerData(jsonObject.optJSONObject("dataset").optString("BscDataCustomer"));
+            setCustomerData(jsonObject.optJSONObject("dataset").optString("vwBscDataCustomer"));
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -534,7 +533,7 @@ public class StyleDetailActivity extends AppCompatActivity {
 
     private void setCustomerData(String optString) {
         LoadingFinish(null);
-        List<BillCustomer> list = new Gson().fromJson(optString, new TypeToken<List<BillCustomer>>() {
+        List<CustomerBeans> list = new Gson().fromJson(optString, new TypeToken<List<CustomerBeans>>() {
         }.getType());
         if (list == null || list.size() == 0) {
 //            LoadingFinish(getString(R.string.error_empty));
@@ -557,7 +556,7 @@ public class StyleDetailActivity extends AppCompatActivity {
     SelectDialog customerDialog;
 
     private void initDialogCustomer() {
-        customerDialog = new SelectDialog(this, R.style.DialogActivity, customers);
+        customerDialog = new SelectDialog(this, R.style.DialogActivity, customers,new FormRow(this).isTitle(true).setColumns(CustomerUtil.getSelectTitles(this)).build());
         customerDialog.show();
         WindowManager.LayoutParams params = customerDialog.getWindow().getAttributes();
         params.width = (int) ((PxUtil.getHeight(this)) * 0.6f);
@@ -566,10 +565,10 @@ public class StyleDetailActivity extends AppCompatActivity {
         customerDialog.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                String type = customers.get(pos).getPickerViewText();
+                String type = customers.get(pos).getsCustShortName();
                 if (!type.equals(customer)) {
-                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(pos).getPickerViewText();
-                    customerId = customers.get(pos).getIrecno();
+                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(pos).getsCustShortName();
+                    customerId = customers.get(pos).getiRecNo();
                     styleBean.setsCustShortName(customer);
                     styleBean.setiBscDataCustomerRecNo(customerId);
                     svCustomer.setText(customer);
@@ -582,8 +581,8 @@ public class StyleDetailActivity extends AppCompatActivity {
         List<NetParams> params = new ArrayList<>();
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", "GetTableData"));
-        params.add(new NetParams("sTableName", "BscDataCustomer"));
-        params.add(new NetParams("sFields", "irecno,sCustShortName"));
+        params.add(new NetParams("sTableName", "vwBscDataCustomer"));
+        params.add(new NetParams("sFields", "iRecNo,sCustID,sCustName,sCustShortName,sClassID,sClassName,sSaleID,sSaleName,sPerson,sTel,sAddress,dStopDate,sRemark,iCustType"));
         params.add(new NetParams("sFilters", "iCustType=0 and isnull(dStopDate,'2199-01-01')>getdate()"));
         return params;
     }
