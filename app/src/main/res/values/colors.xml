@@ -22,6 +22,8 @@
     <color name="btn_blue_normal">#1296db</color>
     <color name="btn_blue_press">#122DDF</color>
     <color name="gray">#555</color>
+    <color name="gray2">#999</color>
+    <color name="line_gray">#cccccc</color>
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
 

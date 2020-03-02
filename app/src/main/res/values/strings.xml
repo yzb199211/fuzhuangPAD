@@ -160,6 +160,9 @@
     <string name="common_submit">提交</string>
     <string name="common_enable">启用</string>
     <string name="common_unable">停用</string>
+    <string name="common_user">账号</string>
+    <string name="common_pwd">密码</string>
+    <string name="common_remember_pwd">记住密码</string>
     <string name="common_default_status">未提交</string>
     <string name="common_default_status_check">提交未审核</string>
     <string name="common_date_start">开始日期</string>

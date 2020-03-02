@@ -31,12 +31,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".login.Login2Activity" android:screenOrientation="landscape"></activity>
         <activity
             android:name=".sale.BillingStyleDetailActivity"
-            android:theme="@style/DialogActivity" />
+            android:theme="@style/DialogActivity"  android:screenOrientation="landscape"/>
         <activity
             android:name=".sale.BillingStyleDetailModifyActivity"
-            android:theme="@style/DialogActivity" />
+            android:theme="@style/DialogActivity" android:screenOrientation="landscape" />
         <activity
             android:name=".sale.BillDetailActivity"
             android:screenOrientation="landscape" />
