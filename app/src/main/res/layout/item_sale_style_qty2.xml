@@ -36,6 +36,6 @@
         android:id="@+id/nsv_qty"
         android:layout_width="@dimen/dp_0"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         />
 </LinearLayout>

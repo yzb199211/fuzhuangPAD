@@ -1,6 +1,10 @@
 package com.yyy.fuzhuangpad.sale;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +47,10 @@ public class BillStyleAdapter extends RecyclerView.Adapter<BillStyleAdapter.VH> 
         BillStyle style = list.get(position);
         holder.tvNo.setText(style.getsStyleNo());
         holder.tvClass.setText(style.getsClassName());
-        holder.tvPrice.setText("零售：" + style.getfCostPrice());
+//        holder.tvPrice.setText("零售：" + style.getfCostPrice());
+        SpannableString spannableString = new SpannableString("零售：" + style.getfCostPrice());
+        spannableString.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.red)), 3, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        holder.tvPrice.setText(spannableString);
         ImageLoaderUtil.loadDrawableImg(holder.ivLogo, R.mipmap.default_style);
         holder.setIsRecyclable(false);
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -157,6 +157,7 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
             billStyleQty.setsSizeName(billDetailBean.getsSizeName());
             billStyleQty.setiBscDataColorRecNo(billDetailBean.getiBscDataColorRecNo());
             billStyleQty.setiBscDataStyleMRecNo(billDetailBean.getiBscDataStyleMRecNo());
+            billStyleQty.setsColorName(billDetailBean.getsColorName());
             if (item.equals(billColor)) {
                 billColor.getStyleQty().add(billStyleQty);
             } else {

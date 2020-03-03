@@ -20,8 +20,7 @@
         android:layout_below="@id/iv_logo"
         android:layout_centerHorizontal="true"
         android:singleLine="true"
-        android:text="kus0001"
-        android:textColor="@color/default_text_color"
+        android:textColor="@color/main_activity_top"
         android:textSize="@dimen/sp_10" />
 
     <TextView
@@ -30,10 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_style_no"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_3"
         android:singleLine="true"
-        android:text="kus0001"
-        android:textColor="@color/default_text_color"
-        android:textSize="@dimen/sp_10" />
+        android:textColor="@color/default_title_color"
+        android:textSize="@dimen/sp_8" />
 
     <TextView
         android:id="@+id/tv_style_price"
@@ -42,9 +41,8 @@
         android:layout_below="@+id/tv_style_class"
         android:layout_centerHorizontal="true"
         android:singleLine="true"
-        android:text="kus0001"
-        android:textColor="@color/default_text_color"
-        android:textSize="@dimen/sp_10" />
+        android:textColor="@color/default_title_color"
+        android:textSize="@dimen/sp_8" />
 
     <ImageView
         android:id="@+id/iv_checked"

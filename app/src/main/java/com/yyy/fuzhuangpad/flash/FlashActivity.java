@@ -6,9 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.yyy.fuzhuangpad.MainActivity;
 import com.yyy.fuzhuangpad.R;
-import com.yyy.fuzhuangpad.login.Login2Activity;
 import com.yyy.fuzhuangpad.login.LoginActivity;
 
 
@@ -26,7 +24,7 @@ public class FlashActivity extends AppCompatActivity {
         public void run() {
             // TODO Auto-generated method stub
             Intent intent = new Intent();
-            intent.setClass(FlashActivity.this, Login2Activity.class);
+            intent.setClass(FlashActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
