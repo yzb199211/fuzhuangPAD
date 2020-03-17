@@ -318,13 +318,15 @@ public class LoginActivity extends BaseActivity implements View.OnKeyListener {
         JSONObject jsonObject = new JSONObject(content);
         String address = jsonObject.optString("ServerAddr");
         String addressImg = jsonObject.optString("ServerImageAddr");
+        String companyCode = jsonObject.optString("companyCode");
         if (StringUtil.isNotEmpty(address)) {
             preferencesHelper.put("address", address);
+            preferencesHelper.put("companyCode", companyCode);
             this.address = address;
+            this.companyCode = companyCode;
         } else {
             Toasts.showShort(this, getString(R.string.login_address_empty));
         }
-
         if (StringUtil.isNotEmpty(addressImg)) {
             preferencesHelper.put("addressImg", address);
         } else {

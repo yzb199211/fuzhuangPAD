@@ -1,7 +1,6 @@
 package com.yyy.fuzhuangpad.view.recycle;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;

@@ -151,6 +151,7 @@ public class CustomerBeans implements ISelectText {
         list.add(new FormColumn(sTel, 1.0f, true, 6, row));
         return list;
     }
+
     public List<FormColumn> getSelectList() {
         List<FormColumn> list = new ArrayList<>();
         list.add(new FormColumn(row + 1 + "", 0.5f, true, 0, row));
@@ -161,6 +162,7 @@ public class CustomerBeans implements ISelectText {
         list.add(new FormColumn(sPerson, 1.0f, true, 5, row));
         return list;
     }
+
     public String paramsFields() {
         return "sCustName" + ",sCustID" + ",sCustShortName" + ",sClassID" + ",sSaleID" + ",sPerson" + ",sTel" + ",sAddress" + ",dStopDate" + ",sRemark" + ",iCustType";
     }
@@ -209,6 +211,6 @@ public class CustomerBeans implements ISelectText {
 
     @Override
     public String getText() {
-        return sCustID+"|"+sCustName+"|"+sCustShortName;
+        return sCustName + "|" + sCustShortName;
     }
 }

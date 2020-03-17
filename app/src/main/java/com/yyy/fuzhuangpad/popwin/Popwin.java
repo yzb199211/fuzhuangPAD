@@ -82,6 +82,4 @@ public class Popwin<T extends ISelectText> extends PopupWindow {
         });
         recyclerView.setAdapter(adapter);
     }
-
-
 }

@@ -21,9 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.customer.CustomerDetailActivity;
+import com.yyy.fuzhuangpad.customer.CustomerUtil;
 import com.yyy.fuzhuangpad.dialog.EditDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
+import com.yyy.fuzhuangpad.dialog.SelectDialog;
 import com.yyy.fuzhuangpad.interfaces.OnDeleteListener;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnModifyListener;
@@ -125,7 +128,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
 
     private List<BillShop> shops;
-    private List<BillCustomer> customers;
+    private List<CustomerBeans> customers;
     private List<BillSaler> salers;
     private List<BillDetailBean> billDetail;
     private List<BillClass> billClass;
@@ -564,7 +567,7 @@ public class BillDetailActivity extends AppCompatActivity {
                 if (customers.size() == 0) {
                     getCustomers();
                 } else {
-                    pvCustomer.show();
+                    customerDialog.show();
                 }
             }
         });
@@ -726,7 +729,7 @@ public class BillDetailActivity extends AppCompatActivity {
     private void initCustomerData(String string) throws JSONException, Exception {
         JSONObject jsonObject = new JSONObject(string);
         if (jsonObject.optBoolean("success")) {
-            setCustomerData(jsonObject.optJSONObject("dataset").optString("BscDataCustomer"));
+            setCustomerData(jsonObject.optJSONObject("dataset").optString("vwBscDataCustomer"));
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
@@ -734,7 +737,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
     private void setCustomerData(String optString) {
         LoadingFinish(null);
-        List<BillCustomer> list = new Gson().fromJson(optString, new TypeToken<List<BillCustomer>>() {
+        List<CustomerBeans> list = new Gson().fromJson(optString, new TypeToken<List<CustomerBeans>>() {
         }.getType());
         if (list == null || list.size() == 0) {
 //            LoadingFinish(getString(R.string.error_empty));
@@ -748,40 +751,40 @@ public class BillDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickCustomer();
+                initDialogCustomer();
             }
         });
     }
 
-    private void initPickCustomer() {
-        pvCustomer = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+    SelectDialog customerDialog;
+
+    private void initDialogCustomer() {
+        customerDialog = new SelectDialog(this, R.style.DialogActivity, customers, new FormRow(this).isTitle(true).setColumns(CustomerUtil.getSelectTitles(this)).build());
+        customerDialog.show();
+        WindowManager.LayoutParams params = customerDialog.getWindow().getAttributes();
+        params.width = (int) ((PxUtil.getWidth(this)) * 0.6f);
+        params.height = (int) ((PxUtil.getHeight(this)) * 0.75f);
+        customerDialog.getWindow().setAttributes(params);
+        customerDialog.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = customers.get(options1).getPickerViewText();
+            public void onItemClick(View view, int pos) {
+                String type = customers.get(pos).getsCustShortName();
                 if (!type.equals(customer)) {
-                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(options1).getPickerViewText();
-                    customerId = customers.get(options1).getIrecno();
+                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(pos).getsCustShortName();
+                    customerId = customers.get(pos).getiRecNo();
                     bsCustomer.setContext(customer);
                 }
             }
-        })
-                .setTitleText("客户选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvCustomer.setPicker(customers);//一级选择器
-        setDialog(pvCustomer);
-        pvCustomer.show();
+        });
     }
+
 
     private List<NetParams> getCustomerParams() {
         List<NetParams> params = new ArrayList<>();
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", "GetTableData"));
-        params.add(new NetParams("sTableName", "BscDataCustomer"));
-        params.add(new NetParams("sFields", "irecno,sCustShortName"));
+        params.add(new NetParams("sTableName", "vwBscDataCustomer"));
+        params.add(new NetParams("sFields", "iRecNo,sCustID,sCustName,sCustShortName,sClassID,sClassName,sSaleID,sSaleName,sPerson,sTel,sAddress,dStopDate,sRemark,iCustType"));
         params.add(new NetParams("sFilters", "iCustType=0 and isnull(dStopDate,'2199-01-01')>getdate()"));
         return params;
     }

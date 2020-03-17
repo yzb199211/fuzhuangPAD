@@ -27,7 +27,9 @@ import com.yyy.fuzhuangpad.adapter.FormAdapter;
 import com.yyy.fuzhuangpad.color.ColorBeans;
 import com.yyy.fuzhuangpad.color.ColorDetailActivity;
 import com.yyy.fuzhuangpad.customer.CustomerBeans;
+import com.yyy.fuzhuangpad.customer.CustomerUtil;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
+import com.yyy.fuzhuangpad.dialog.SelectDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
@@ -100,13 +102,10 @@ public class BillingFragment extends Fragment {
     private List<List<FormColumn>> formDatas;
     private List<BillBean> billDatas;
     private List<BillShop> shops;
-    private List<BillCustomer> customers;
+    private List<CustomerBeans> customers;
     private List<BillStatus> status;
     private TimePickerView pvDateStart;
     private TimePickerView pvDateEnd;
-    private OptionsPickerView pvShop;
-    private OptionsPickerView pvCustomer;
-    private OptionsPickerView pvStatus;
     private Popwin popShop;
     private Popwin popStatus;
     private String url;
@@ -425,7 +424,7 @@ public class BillingFragment extends Fragment {
                 if (customers.size() == 0) {
                     getCustomers();
                 } else {
-                    pvCustomer.show();
+                    customerDialog.show();
                 }
             }
         });
@@ -458,21 +457,18 @@ public class BillingFragment extends Fragment {
     private void initCustomerData(String string) throws JSONException, Exception {
         JSONObject jsonObject = new JSONObject(string);
         if (jsonObject.optBoolean("success")) {
-            setCustomerData(jsonObject.optJSONObject("dataset").optString("BscDataCustomer"));
+            setCustomerData(jsonObject.optJSONObject("dataset").optString("vwBscDataCustomer"));
         } else {
             LoadingFinish(jsonObject.optString("message"));
         }
     }
 
     private void setCustomerData(String optString) {
-        List<BillCustomer> list = new Gson().fromJson(optString, new TypeToken<List<BillCustomer>>() {
+        List<CustomerBeans> list = new Gson().fromJson(optString, new TypeToken<List<CustomerBeans>>() {
         }.getType());
         if (list == null || list.size() == 0) {
             LoadingFinish(getString(R.string.error_empty));
         } else {
-            BillCustomer billCustomer = new BillCustomer();
-            billCustomer.setsCustShortName(getString(R.string.common_empty));
-            customers.add(billCustomer);
             customers.addAll(list);
             LoadingFinish(null);
             setPickCustomer();
@@ -483,40 +479,43 @@ public class BillingFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initPickCustomer();
+                initDialogCustomer();
             }
         });
     }
 
-    private void initPickCustomer() {
-        pvCustomer = new OptionsPickerBuilder(getActivity(), new OnOptionsSelectListener() {
+    SelectDialog customerDialog;
+
+    private void initDialogCustomer() {
+        customerDialog = new SelectDialog(getActivity(),
+                R.style.DialogActivity, customers,
+                new FormRow(getActivity()).isTitle(true).setColumns(CustomerUtil.getSelectTitles(getActivity()))
+                        .build());
+        customerDialog.show();
+        WindowManager.LayoutParams params = customerDialog.getWindow().getAttributes();
+        params.width = (int) ((PxUtil.getWidth(getActivity())) * 0.6f);
+        params.height = (int) ((PxUtil.getHeight(getActivity())) * 0.75f);
+        customerDialog.getWindow().setAttributes(params);
+        customerDialog.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                String type = customers.get(options1).getPickerViewText();
+            public void onItemClick(View view, int pos) {
+                String type = customers.get(pos).getsCustShortName();
                 if (!type.equals(customer)) {
-                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(options1).getPickerViewText();
-                    customerId = customers.get(options1).getIrecno();
+                    customer = type.equals(getString(R.string.common_empty)) ? "" : customers.get(pos).getsCustShortName();
+                    customerId = customers.get(pos).getiRecNo();
                     bsCustomer.setContext(customer);
                 }
             }
-        })
-                .setTitleText("客户选择")
-                .setContentTextSize(18)//设置滚轮文字大小
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .setLabels("", "", "")
-                .isDialog(true)
-                .build();
-        pvCustomer.setPicker(customers);//一级选择器
-        setDialog(pvCustomer);
-        pvCustomer.show();
+        });
     }
+
 
     private List<NetParams> getCustomerParams() {
         List<NetParams> params = new ArrayList<>();
         params.add(new NetParams("sCompanyCode", companyCode));
         params.add(new NetParams("otype", "GetTableData"));
-        params.add(new NetParams("sTableName", "BscDataCustomer"));
-        params.add(new NetParams("sFields", "irecno,sCustShortName"));
+        params.add(new NetParams("sTableName", "vwBscDataCustomer"));
+        params.add(new NetParams("sFields", "iRecNo,sCustID,sCustName,sCustShortName,sClassID,sClassName,sSaleID,sSaleName,sPerson,sTel,sAddress,dStopDate,sRemark,iCustType"));
         params.add(new NetParams("sFilters", "iCustType=0"));
         return params;
     }
@@ -777,35 +776,6 @@ public class BillingFragment extends Fragment {
         Toasts.showShort(getActivity(), msg);
     }
 
-    private void setDialog(OptionsPickerView pickview) {
-        getDialogLayoutParams();
-        pickview.getDialogContainerLayout().setLayoutParams(getDialogLayoutParams());
-        initDialogWindow(pickview.getDialog().getWindow());
-    }
-
-    private void initDialogWindow(Window window) {
-        window.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
-        window.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-        window.setDimAmount(0.1f);
-        window.setAttributes(getDialogWindowLayoutParams(window));
-    }
-
-    private WindowManager.LayoutParams getDialogWindowLayoutParams(Window window) {
-        WindowManager.LayoutParams winParams;
-        winParams = window.getAttributes();
-        winParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        return winParams;
-    }
-
-    private FrameLayout.LayoutParams getDialogLayoutParams() {
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                PxUtil.getWidth(getActivity()) / 2,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        params.leftMargin = 0;
-        params.rightMargin = 0;
-        return params;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
