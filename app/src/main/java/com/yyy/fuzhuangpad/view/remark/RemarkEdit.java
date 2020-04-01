@@ -66,6 +66,7 @@ public class RemarkEdit extends LinearLayout implements View.OnKeyListener {
     }
 
     private void initTitle() {
+        addMust();
         tvTitle = new TextView(context);
         tvTitle.setText(TextUtils.isEmpty(title) ? "" : StringUtil.formatTitle(title));
         tvTitle.setSingleLine();
@@ -74,6 +75,16 @@ public class RemarkEdit extends LinearLayout implements View.OnKeyListener {
         tvTitle.setLayoutParams(titleParams());
         tvTitle.setGravity(Gravity.RIGHT);
         addView(tvTitle);
+    }
+
+    private void addMust() {
+        TextView textView = new TextView(context);
+        textView.setText("*");
+        textView.setTextColor(context.getResources().getColor(R.color.red));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
+//        if (!isMust)
+        textView.setVisibility(INVISIBLE);
+        addView(textView);
     }
 
     private LayoutParams titleParams() {

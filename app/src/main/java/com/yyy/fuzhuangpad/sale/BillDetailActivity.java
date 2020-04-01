@@ -104,6 +104,10 @@ public class BillDetailActivity extends AppCompatActivity {
     ButtonSelect bsClass;
     @BindView(R.id.bw_delete)
     ButtonWithImg bwDelete;
+    @BindView(R.id.bw_save)
+    ButtonWithImg bwSave;
+    @BindView(R.id.bw_submit)
+    ButtonWithImg bwSubmit;
     SharedPreferencesHelper preferencesHelper;
     private String url;
     private String address;
@@ -185,6 +189,11 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void setViewData() {
+        if (!bill.getsStatusName().equals(getString(R.string.common_default_status))) {
+            bwDelete.setVisibility(View.GONE);
+            bwSave.setVisibility(View.GONE);
+            bwSubmit.setVisibility(View.GONE);
+        }
         classId = bill.getiOrderType() + "";
         className = bill.getsOrderType();
         bsClass.setContext(className);
