@@ -24,18 +24,19 @@ import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.util.StringUtil;
 
 public class SearchEdit extends LinearLayout implements View.OnKeyListener {
-    Context context;
-    String title;
-    int titleSize;
-    int titleColor;
-    int editSize;
-    int editColor;
+    private Context context;
+    private String title;
+    private int titleSize;
+    private int titleColor;
+    private int editSize;
+    private int editColor;
     private int inputType;
     private int maxLength;
-    boolean isMust;
+    private boolean isMust;
 
-    TextView tvTitle;
-    EditText etContent;
+    private TextView tvTitle;
+    private EditText etContent;
+    private TextView tvContent;
 
     public SearchEdit(Context context) {
         this(context, null);
@@ -145,6 +146,9 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
 
     public void setText(String text) {
         etContent.setText(text);
+        if (tvContent!=null){
+            tvContent.setText(text);
+        }
     }
 
     public void clear() {
@@ -166,5 +170,24 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
         if (imm != null) {
             imm.hideSoftInputFromWindow(((Activity) context).getWindow().getDecorView().getWindowToken(), 0);
         }
+    }
+
+    public void forbirdEdit() {
+        etContent.setVisibility(GONE);
+        tvContent = new TextView(context);
+        tvContent.setSingleLine();
+        tvContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, editSize);
+        tvContent.setTextColor(editColor);
+        tvContent.setLayoutParams(etParams());
+        tvContent.setPadding(5, 5, 5, 5);
+        tvContent.setBackgroundResource(R.drawable.bg_detail_edit);
+//        tvContent.setBackground(null);
+        tvContent.setGravity(Gravity.CENTER_VERTICAL);
+        if (inputType != 0) {
+            tvContent.setInputType(getIntype());
+        }
+        if (maxLength != 0)
+            tvContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
+        addView(tvContent);
     }
 }

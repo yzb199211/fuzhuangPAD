@@ -87,6 +87,7 @@
             android:layout_centerVertical="true"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
+            app:seGravity="center"
             app:seTilte="@string/sale_billing_form_code"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
@@ -252,6 +253,7 @@
             android:layout_centerVertical="true"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
+            app:seGravity="center"
             app:seTilte="@string/sale_billing_form_qty"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
@@ -263,6 +265,7 @@
             android:layout_centerVertical="true"
             app:seEditColor="@color/default_text_color"
             app:seEditSize="@dimen/sp_10"
+            app:seGravity="center"
             app:seTilte="@string/sale_billing_form_sum"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />

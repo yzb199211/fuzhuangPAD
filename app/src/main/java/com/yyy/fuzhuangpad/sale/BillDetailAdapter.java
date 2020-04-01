@@ -20,8 +20,9 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
     Context context;
     List<BillDetailBean> list;
     OnDeleteListener onDeleteListener;
-//    OnEditQtyListener onEditQtyListener;
+    //    OnEditQtyListener onEditQtyListener;
     OnModifyListener onModifyListener;
+    boolean isEditalbe = true;
 
     public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
         this.onDeleteListener = onDeleteListener;
@@ -59,8 +60,13 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
         holder.tvStylePrice.setText(item.getfPrice() + "");
         holder.tvStyleTotal.setText(item.getfTotal() + "");
         holder.tvStyleRemark.setText(item.getsRemark());
-        holder.tvStyleOperate.setText(context.getString(R.string.common_delete));
-        holder.tvStyleModify.setText(context.getString(R.string.common_modify));
+        if (isEditalbe) {
+            holder.tvStyleOperate.setText(context.getString(R.string.common_delete));
+            holder.tvStyleModify.setText(context.getString(R.string.common_modify));
+        } else {
+            holder.tvStyleOperate.setVisibility(View.GONE);
+            holder.tvStyleModify.setVisibility(View.GONE);
+        }
         if (position % 2 != 0) {
             holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.default_bg_color));
         }
@@ -120,5 +126,9 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.VH
             tvStyleOperate = v.findViewById(R.id.tv_style_operate);
             tvStyleModify = v.findViewById(R.id.tv_style_modify);
         }
+    }
+
+    public void setEditalbe(boolean editalbe) {
+        isEditalbe = editalbe;
     }
 }

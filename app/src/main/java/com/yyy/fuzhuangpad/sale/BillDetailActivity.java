@@ -51,6 +51,7 @@ import com.yyy.fuzhuangpad.util.net.Operatortype;
 import com.yyy.fuzhuangpad.util.net.Otype;
 import com.yyy.fuzhuangpad.view.button.ButtonSelect;
 import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
+import com.yyy.fuzhuangpad.view.form.FormColumn;
 import com.yyy.fuzhuangpad.view.form.FormRow;
 import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
 import com.yyy.fuzhuangpad.view.search.SearchEdit;
@@ -108,6 +109,11 @@ public class BillDetailActivity extends AppCompatActivity {
     ButtonWithImg bwSave;
     @BindView(R.id.bw_submit)
     ButtonWithImg bwSubmit;
+    @BindView(R.id.bwi_add_customer)
+    ButtonWithImg bwiAddCustomer;
+    @BindView(R.id.bwi_add_style)
+    ButtonWithImg bwiAddStyle;
+
     SharedPreferencesHelper preferencesHelper;
     private String url;
     private String address;
@@ -152,6 +158,7 @@ public class BillDetailActivity extends AppCompatActivity {
     private Popwin popSize;
     private Popwin popShop;
     private Popwin popClass;
+    private boolean canEdit=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,19 +172,19 @@ public class BillDetailActivity extends AppCompatActivity {
     private void init() {
         initDefaultData();
         initList();
-        initView();
         getIntentData();
+
     }
 
     private void getIntentData() {
-
+        listPos = getIntent().getIntExtra("pos", -1);
         if (StringUtil.isNotEmpty(getIntent().getStringExtra("data"))) {
             String data = getIntent().getStringExtra("data");
-            listPos = getIntent().getIntExtra("pos", -1);
             bill = new Gson().fromJson(data, BillBean.class);
             iMainRecNo = bill.getiRecNo();
             operatortype = Operatortype.update;
             setViewData();
+            initView();
             getData();
         } else {
             bill = new BillBean();
@@ -185,6 +192,7 @@ public class BillDetailActivity extends AppCompatActivity {
             bwDelete.setVisibility(View.GONE);
             bsDate.setContext(StringUtil.getDate(new Date(System.currentTimeMillis())));
             bill.setdDate(StringUtil.getDate(new Date(System.currentTimeMillis())));
+            initView();
         }
     }
 
@@ -193,6 +201,10 @@ public class BillDetailActivity extends AppCompatActivity {
             bwDelete.setVisibility(View.GONE);
             bwSave.setVisibility(View.GONE);
             bwSubmit.setVisibility(View.GONE);
+            bwiAddCustomer.setVisibility(View.GONE);
+            bwiAddStyle.setVisibility(View.GONE);
+            seRemark.forbirdEdit();
+            canEdit = false;
         }
         classId = bill.getiOrderType() + "";
         className = bill.getsOrderType();
@@ -297,6 +309,8 @@ public class BillDetailActivity extends AppCompatActivity {
 
     private void initAdapter() {
         mAdapter = new BillDetailAdapter(this, billDetail);
+        if (!bill.getsStatusName().equals(getString(R.string.common_default_status)))
+            mAdapter.setEditalbe(false);
         mAdapter.setOnDeleteListener(new OnDeleteListener() {
             @Override
             public void onDelete(int pos) {
@@ -367,13 +381,15 @@ public class BillDetailActivity extends AppCompatActivity {
     private void initView() {
         initTitle();
         initRecycle();
-        setShopListener();
-        setSizeListener();
-        setCustomerListener();
-        setSalerListener();
-        setClassListener();
-        setDateListener();
-        setDateDeliveryListener();
+        if (canEdit) {
+            setShopListener();
+            setSizeListener();
+            setCustomerListener();
+            setSalerListener();
+            setClassListener();
+            setDateListener();
+            setDateDeliveryListener();
+        }
     }
 
 
@@ -391,7 +407,10 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void initTitle() {
-        formTitle = new FormRow(this).isTitle(true).setColumns(BillingUtil.getAddTitles(this)).build();
+        List<FormColumn> titles = BillingUtil.getAddTitles(this);
+        if (!bill.getsStatusName().equals(getString(R.string.common_default_status)))
+            titles.remove(titles.size() - 1);
+        formTitle = new FormRow(this).isTitle(true).setColumns(titles).build();
         formTitle.setId(formTitleId);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.dp_20));
         params.topMargin = getResources().getDimensionPixelSize(R.dimen.dp_5);

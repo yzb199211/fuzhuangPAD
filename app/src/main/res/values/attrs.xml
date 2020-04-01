@@ -111,7 +111,11 @@
         <attr name="seEditSize" format="dimension" />
         <attr name="seEditColor" format="color" />
         <attr name="seMust" format="boolean" />
-        <attr name="seMaxLength" format="integer"/>
+        <attr name="seMaxLength" format="integer" />
+        <attr name="seGravity" format="enum">
+            <enum name="center" value="1"/>
+            <enum name="left" value="0"/>
+        </attr>
         <attr name="seInputType" format="enum">
             <enum name="normal" value="0" />
             <enum name="enlish" value="1" />

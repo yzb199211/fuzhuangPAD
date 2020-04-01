@@ -36,6 +36,7 @@ public class SearchText extends LinearLayout {
 
     TextView tvTitle;
     TextView tvContent;
+    int gravity;
 
     public SearchText(Context context) {
         this(context, null);
@@ -58,6 +59,7 @@ public class SearchText extends LinearLayout {
         isMust = typedArray.getBoolean(R.styleable.SearchEdit_seMust, false);
         inputType = typedArray.getInt(R.styleable.SearchEdit_seInputType, 0);
         maxLength = typedArray.getInteger(R.styleable.SearchEdit_seMaxLength, 0);
+        gravity = typedArray.getInt(R.styleable.SearchEdit_seGravity, 0);
         typedArray.recycle();
     }
 
@@ -76,7 +78,7 @@ public class SearchText extends LinearLayout {
     private void initTitle() {
         addMust();
         tvTitle = new TextView(context);
-        tvTitle.setText(TextUtils.isEmpty(title)? "" : StringUtil.formatTitle(title));
+        tvTitle.setText(TextUtils.isEmpty(title) ? "" : StringUtil.formatTitle(title));
         tvTitle.setSingleLine();
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         tvTitle.setTextColor(titleColor);
@@ -104,7 +106,8 @@ public class SearchText extends LinearLayout {
         tvContent.setPadding(5, 5, 5, 5);
         tvContent.setBackgroundResource(R.drawable.bg_detail_edit);
 //        tvContent.setBackground(null);
-        tvContent.setGravity(Gravity.CENTER_VERTICAL);
+        if (gravity == 1) tvContent.setGravity(Gravity.CENTER);
+        else tvContent.setGravity(Gravity.CENTER_VERTICAL);
         if (inputType != 0) {
             tvContent.setInputType(getIntype());
         }

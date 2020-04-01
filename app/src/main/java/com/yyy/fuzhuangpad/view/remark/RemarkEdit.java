@@ -32,6 +32,7 @@ public class RemarkEdit extends LinearLayout implements View.OnKeyListener {
 
     TextView tvTitle;
     EditText etContent;
+    TextView tvContent;
 
     public RemarkEdit(Context context) {
         this(context, null);
@@ -51,6 +52,7 @@ public class RemarkEdit extends LinearLayout implements View.OnKeyListener {
         titleColor = typedArray.getColor(R.styleable.SearchEdit_seTitleColor, 0xFF000000);
         editSize = typedArray.getDimensionPixelSize(R.styleable.SearchEdit_seEditSize, 12);
         editColor = typedArray.getColor(R.styleable.SearchEdit_seEditColor, 0xFF000000);
+
         typedArray.recycle();
     }
 
@@ -138,6 +140,24 @@ public class RemarkEdit extends LinearLayout implements View.OnKeyListener {
         if (imm != null) {
             imm.hideSoftInputFromWindow(((Activity) context).getWindow().getDecorView().getWindowToken(), 0);
         }
+    }
+
+    public void firbirdEdit() {
+        etContent.setVisibility(GONE);
+
+    }
+    public void initTvContent(){
+
+            tvContent = new EditText(context);
+            tvContent.setLines(5);
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, editSize);
+            tvContent.setTextColor(editColor);
+            tvContent.setLayoutParams(etParams());
+            tvContent.setGravity(Gravity.START);
+            tvContent.setPadding(5, 5, 5, 5);
+            tvContent.setBackground(context.getResources().getDrawable(R.drawable.bg_remark_edit));
+            tvContent.setOnKeyListener(this);
+            addView(tvContent);
     }
 
 }
