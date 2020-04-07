@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.application.BaseActivity;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.util.CodeUtil;
@@ -40,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StyleColorActivity extends AppCompatActivity {
+public class StyleColorActivity extends BaseActivity {
 
     @BindView(R.id.ll_color)
     LinearLayout llColor;

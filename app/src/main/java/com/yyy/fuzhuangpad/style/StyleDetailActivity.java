@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.application.BaseActivity;
 import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.customer.CustomerUtil;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
@@ -66,7 +67,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StyleDetailActivity extends AppCompatActivity {
+public class StyleDetailActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;

@@ -2,6 +2,7 @@ package com.yyy.fuzhuangpad.sale;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.application.BaseActivity;
 import com.yyy.fuzhuangpad.dialog.EditDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
@@ -32,6 +34,7 @@ import com.yyy.fuzhuangpad.util.net.NetUtil;
 import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.color.ColorGroup;
 import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
+import com.yyy.fuzhuangpad.view.search.SearchEdit;
 import com.yyy.fuzhuangpad.view.search.SearchText;
 
 import org.json.JSONException;
@@ -46,7 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BillingStyleDetailModifyActivity extends AppCompatActivity {
+public class BillingStyleDetailModifyActivity extends BaseActivity {
 
     @BindView(R.id.iv_logo)
     ImageView ivLogo;
@@ -55,7 +58,7 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
     @BindView(R.id.tv_style_class)
     SearchText tvStyleClass;
     @BindView(R.id.tv_style_price)
-    SearchText tvStylePrice;
+    SearchEdit tvStylePrice;
     @BindView(R.id.tv_style_name)
     SearchText tvStyleName;
     @BindView(R.id.tv_style_sizes)
@@ -76,6 +79,7 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
     private String shopId;
     private String style;
     private String oldData;
+    private String price;
 
     private int currentPos = -1;
 
@@ -117,6 +121,18 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
         ImageLoaderUtil.loadDrawableImg(ivLogo, R.mipmap.default_style);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new RecyclerViewDivider(this, LinearLayout.VERTICAL));
+        setPriceListener();
+    }
+
+    private void setPriceListener() {
+        tvStylePrice.setOnTextChange(s -> {
+            Log.e("text", s);
+            if (currentPos == -1) {
+                price = s;
+            } else {
+                colors.get(currentPos).setfPrice(TextUtils.isEmpty(s) ? 0 : Double.parseDouble(s));
+            }
+        });
     }
 
     private void initList() {
@@ -142,6 +158,7 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
         tvStyleName.setText(style.getsStyleName());
         tvStyleClass.setText(style.getsClassName());
         tvStylePrice.setText(style.getfPrice() + "");
+        price = style.getfPrice() + "";
         setStyleData(style);
         setColorsOld();
 //        Log.e("colorOlds", new Gson().toJson(colorsOld));
@@ -164,10 +181,12 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
                 List<BillStyleQty> list = new ArrayList<>();
                 list.add(billStyleQty);
                 item.setStyleQty(list);
+                item.setfPrice(billDetailBean.getfPrice());
                 colorsOld.add(item);
                 billColor = item;
             }
         }
+        Log.e("color", new Gson().toJson(colorsOld));
     }
 
     private void setStyleData(BillDetailBean style) {
@@ -222,8 +241,18 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
             LoadingFinish(getString(R.string.error_empty));
         } else {
             colors.addAll(list);
+            setColorPrice();
             LoadingFinish(null);
             setColorGroup();
+        }
+    }
+
+    private void setColorPrice() {
+        for (BillColor color : colorsOld) {
+            int colorPos = colors.indexOf(color);
+            if (colorPos != -1) {
+                colors.get(colorPos).setfPrice(color.getfPrice());
+            }
         }
     }
 
@@ -238,7 +267,6 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
                     public void clickMark(int position, boolean isChecked) {
 //                       setGroupChecked(position,isChecked);
                         setSingleChecked(position);
-
                     }
                 });
             }
@@ -248,9 +276,15 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
     private void setSingleChecked(int position) {
         if (position != currentPos) {
             styleQty.clear();
+            currentPos = position;
             if (colors.get(position).getStyleQty().size() == 0) {
+                if (colors.get(position).getfPrice() == 0) {
+                    colors.get(position).setfPrice(TextUtils.isEmpty(price) ? 0 : Double.parseDouble(price));
+                }
+                tvStylePrice.setText(colors.get(position).getfPrice() + "");
                 getStyleQty(position);
             } else {
+                tvStylePrice.setText(colors.get(position).getfPrice() + "");
                 styleQty.addAll(colors.get(position).getStyleQty());
                 refreshList();
             }
@@ -416,6 +450,7 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
         for (BillColor color : colors) {
             for (BillStyleQty item : color.getStyleQty()) {
                 if (item.getNum() > 0) {
+                    item.setPrice(color.getfPrice());
                     list.add(item);
                 }
             }
@@ -424,6 +459,7 @@ public class BillingStyleDetailModifyActivity extends AppCompatActivity {
             for (BillColor color : colorsOld) {
                 for (BillStyleQty item : color.getStyleQty()) {
                     if (item.getNum() > 0) {
+                        item.setPrice(color.getfPrice());
                         list.add(item);
                     }
                 }

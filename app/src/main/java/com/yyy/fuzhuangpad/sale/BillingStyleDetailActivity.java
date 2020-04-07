@@ -2,6 +2,7 @@ package com.yyy.fuzhuangpad.sale;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,9 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.application.BaseActivity;
 import com.yyy.fuzhuangpad.dialog.EditDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnEditQtyListener;
+import com.yyy.fuzhuangpad.interfaces.PermissionListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
 import com.yyy.fuzhuangpad.style.StyleColor;
 import com.yyy.fuzhuangpad.util.CodeUtil;
@@ -33,6 +36,7 @@ import com.yyy.fuzhuangpad.util.net.NetUtil;
 import com.yyy.fuzhuangpad.view.button.ButtonWithImg;
 import com.yyy.fuzhuangpad.view.color.ColorGroup;
 import com.yyy.fuzhuangpad.view.recycle.RecyclerViewDivider;
+import com.yyy.fuzhuangpad.view.search.SearchEdit;
 import com.yyy.fuzhuangpad.view.search.SearchText;
 
 import org.json.JSONException;
@@ -47,7 +51,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BillingStyleDetailActivity extends AppCompatActivity {
+public class BillingStyleDetailActivity extends BaseActivity {
 
     @BindView(R.id.iv_logo)
     ImageView ivLogo;
@@ -56,7 +60,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     @BindView(R.id.tv_style_class)
     SearchText tvStyleClass;
     @BindView(R.id.tv_style_price)
-    SearchText tvStylePrice;
+    SearchEdit tvStylePrice;
     @BindView(R.id.tv_style_name)
     SearchText tvStyleName;
     @BindView(R.id.tv_style_sizes)
@@ -76,6 +80,13 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     private String styleId;
     private String shopId;
     private String style;
+    private String price;
+
+    @Override
+    public void requestRunPermisssion(String[] permissions, PermissionListener listener) {
+        super.requestRunPermisssion(permissions, listener);
+    }
+
     private int currentPos = -1;
 
     SharedPreferencesHelper preferencesHelper;
@@ -97,7 +108,7 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
 
     private void setWindow() {
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.height = (int) ((PxUtil.getHeight(this)));
+        params.height = (PxUtil.getHeight(this));
         params.width = (int) ((PxUtil.getWidth(this)) * 0.8f);
         getWindow().setAttributes(params);
     }
@@ -114,6 +125,18 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         ImageLoaderUtil.loadDrawableImg(ivLogo, R.mipmap.default_style);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new RecyclerViewDivider(this, LinearLayout.VERTICAL));
+        setPriceListener();
+    }
+
+    private void setPriceListener() {
+        tvStylePrice.setOnTextChange(s -> {
+            Log.e("text", s);
+            if (currentPos == -1) {
+                price = s;
+            } else {
+                colors.get(currentPos).setfPrice(TextUtils.isEmpty(s) ? 0 : Double.parseDouble(s));
+            }
+        });
     }
 
     private void initList() {
@@ -128,7 +151,6 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
     }
 
     private void getIntentData() {
-//        Log.e("tiem", getIntent().getStringExtra("style"));
         shopId = getIntent().getStringExtra("shopId");
         this.style = getIntent().getStringExtra("style");
         BillStyle style = new Gson().fromJson(this.style, BillStyle.class);
@@ -138,11 +160,11 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         tvStyleClass.setText(style.getsClassName());
         tvStyleSizes.setText(style.getsGroupName());
         tvStylePrice.setText(style.getfCostPrice() + "");
+        price = style.getfCostPrice() + "";
         tvStyleStorage.setText("0");
     }
 
     private void getData() {
-//        getStorageData();
         getColorData();
     }
 
@@ -151,7 +173,6 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         new NetUtil(getColorParams(), url, new ResponseListener() {
             @Override
             public void onSuccess(String string) {
-//                Log.e("color", string);
                 try {
                     initColorData(string);
                 } catch (JSONException e) {
@@ -209,27 +230,17 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
 
     private void setSingleChecked(int position) {
         if (position != currentPos) {
+            currentPos = position;
             styleQty.clear();
             if (colors.get(position).getStyleQty().size() == 0) {
+                tvStylePrice.setText(price);
+                colors.get(position).setfPrice(TextUtils.isEmpty(price) ? 0 : Double.parseDouble(price));
                 getStyleQty(position);
             } else {
+                tvStylePrice.setText(colors.get(position).getfPrice() + "");
                 styleQty.addAll(colors.get(position).getStyleQty());
                 refreshList();
             }
-        }
-    }
-
-    private void setGroupChecked(int position, boolean isChecked) {
-        if (isChecked) {
-            if (colors.get(position).getStyleQty().size() == 0) {
-                getStyleQty(position);
-            } else {
-                styleQty.addAll(colors.get(position).getStyleQty());
-                refreshList();
-            }
-        } else {
-            styleQty.removeAll(colors.get(position).getStyleQty());
-            refreshList();
         }
     }
 
@@ -378,15 +389,11 @@ public class BillingStyleDetailActivity extends AppCompatActivity {
         for (BillColor color : colors) {
             for (BillStyleQty item : color.getStyleQty()) {
                 if (item.getNum() > 0) {
+                    item.setPrice(color.getfPrice());
                     list.add(item);
                 }
             }
         }
-//        for (BillStyleQty billStyleQty : styleQty) {
-//            if (billStyleQty.getNum() > 0) {
-//                list.add(billStyleQty);
-//            }
-//        }
         return list;
     }
 

@@ -1,9 +1,5 @@
 package com.yyy.fuzhuangpad.sale;
 
-import androidx.annotation.Nullable;
-
-import java.io.Serializable;
-
 public class BillDetailBean extends BillDetailBase implements Comparable<BillDetailBean> {
     private String sStyleNo;
     private String sColorName;
@@ -28,6 +24,8 @@ public class BillDetailBean extends BillDetailBase implements Comparable<BillDet
         this.iSerial = iSerial;
         this.sStyleNo = sStyleNo;
         this.sColorName = sColorName;
+        this.sClassName = sClassName;
+        this.sStyleName = sStyleName;
     }
 
     public String getsClassName() {

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.application.BaseActivity;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.ResponseListener;
@@ -45,7 +46,7 @@ import butterknife.OnClick;
 
 import static com.yyy.fuzhuangpad.util.CodeUtil.BILLINGSTYLE;
 
-public class BillingStyleSelectActivity extends AppCompatActivity {
+public class BillingStyleSelectActivity extends BaseActivity {
     SharedPreferencesHelper preferencesHelper;
     @BindView(R.id.rv_style)
     RecyclerView rvStyle;

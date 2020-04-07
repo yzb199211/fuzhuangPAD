@@ -47,7 +47,7 @@
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
 
-        <com.yyy.fuzhuangpad.view.search.SearchText
+        <com.yyy.fuzhuangpad.view.search.SearchEdit
             android:id="@+id/tv_style_price"
             android:layout_width="@dimen/dp_120"
             android:layout_height="@dimen/dp_20"
@@ -56,6 +56,8 @@
             android:layout_marginTop="@dimen/dp_5"
             android:layout_toRightOf="@id/tv_style_no"
             app:seEditSize="@dimen/sp_10"
+            app:seInputType="floats"
+            app:seMaxLength="10"
             app:seTilte="@string/sale_billing_add_price"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
@@ -80,9 +82,9 @@
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_toRightOf="@id/tv_style_no"
+            android:visibility="gone"
             app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_add_sizes"
-            android:visibility="gone"
             app:seTitleColor="@color/default_text_color"
             app:seTitleSize="@dimen/sp_10" />
 
@@ -94,11 +96,11 @@
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_toRightOf="@id/tv_style_no"
+            android:visibility="gone"
             app:seEditSize="@dimen/sp_10"
             app:seTilte="@string/sale_billing_add_storage"
             app:seTitleColor="@color/default_text_color"
-            app:seTitleSize="@dimen/sp_10"
-            android:visibility="gone"/>
+            app:seTitleSize="@dimen/sp_10" />
     </RelativeLayout>
 
 
@@ -194,17 +196,4 @@
         android:layout_weight="1"
         android:paddingLeft="@dimen/dp_20"
         android:paddingRight="@dimen/dp_20" />
-    <!--    <ScrollView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="@dimen/dp_0"-->
-    <!--        android:layout_weight="1"-->
-    <!--        android:paddingLeft="@dimen/dp_20"-->
-    <!--        android:paddingRight="@dimen/dp_20">-->
-
-    <!--        <LinearLayout-->
-    <!--            android:id="@+id/ll_style"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:orientation="vertical" />-->
-    <!--    </ScrollView>-->
 </LinearLayout>

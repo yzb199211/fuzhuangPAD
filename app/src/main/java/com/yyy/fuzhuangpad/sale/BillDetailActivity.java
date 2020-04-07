@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.application.BaseActivity;
 import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.customer.CustomerDetailActivity;
 import com.yyy.fuzhuangpad.customer.CustomerUtil;
@@ -77,7 +78,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BillDetailActivity extends AppCompatActivity {
+public class BillDetailActivity extends BaseActivity {
     private final int formTitleId = 0x00001000;
     @BindView(R.id.se_code)
     SearchText seCode;
@@ -143,7 +144,6 @@ public class BillDetailActivity extends AppCompatActivity {
     private List<BillDetailBean> billDetail;
     private List<BillClass> billClass;
     private List<BillSize> billSizes;
-    private OptionsPickerView pvCustomer;
     private TimePickerView pvDate;
     private TimePickerView pvDateDelivery;
     FormRow formTitle;
@@ -158,7 +158,7 @@ public class BillDetailActivity extends AppCompatActivity {
     private Popwin popSize;
     private Popwin popShop;
     private Popwin popClass;
-    private boolean canEdit=true;
+    private boolean canEdit = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,7 +309,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
     private void initAdapter() {
         mAdapter = new BillDetailAdapter(this, billDetail);
-        if (!bill.getsStatusName().equals(getString(R.string.common_default_status)))
+        if (!bill.getsStatusName().equals(getString(R.string.common_default_status)) && StringUtil.isNotEmpty(bill.getsStatusName()))
             mAdapter.setEditalbe(false);
         mAdapter.setOnDeleteListener(new OnDeleteListener() {
             @Override
@@ -408,7 +408,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
     private void initTitle() {
         List<FormColumn> titles = BillingUtil.getAddTitles(this);
-        if (!bill.getsStatusName().equals(getString(R.string.common_default_status)))
+        if (!bill.getsStatusName().equals(getString(R.string.common_default_status)) && StringUtil.isNotEmpty(bill.getsStatusName()))
             titles.remove(titles.size() - 1);
         formTitle = new FormRow(this).isTitle(true).setColumns(titles).build();
         formTitle.setId(formTitleId);
@@ -696,7 +696,6 @@ public class BillDetailActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                initPickClass();
                 initPopClass();
             }
         });
@@ -713,7 +712,6 @@ public class BillDetailActivity extends AppCompatActivity {
                     className = type.equals(getString(R.string.common_empty)) ? "" : type;
                     classId = billClass.get(pos).getsCode();
                     bsClass.setContext(className);
-
                 }
             }
         });
@@ -1388,34 +1386,6 @@ public class BillDetailActivity extends AppCompatActivity {
         Toasts.showShort(this, msg);
     }
 
-    private void setDialog(OptionsPickerView pickview) {
-        pickview.getDialogContainerLayout().setLayoutParams(getDialogLayoutParams());
-        initDialogWindow(pickview.getDialog().getWindow());
-    }
-
-    private void initDialogWindow(Window window) {
-        window.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
-        window.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-        window.setDimAmount(0.1f);
-        window.setAttributes(getDialogWindowLayoutParams(window));
-    }
-
-    private WindowManager.LayoutParams getDialogWindowLayoutParams(Window window) {
-        WindowManager.LayoutParams winParams;
-        winParams = window.getAttributes();
-        winParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        return winParams;
-    }
-
-    private FrameLayout.LayoutParams getDialogLayoutParams() {
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                PxUtil.getWidth(this) / 2,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        params.leftMargin = 0;
-        params.rightMargin = 0;
-        return params;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -1461,12 +1431,18 @@ public class BillDetailActivity extends AppCompatActivity {
     private List<BillDetailBean> switch2StyleDetails(BillStyle item, List<BillStyleQty> styles) {
         List<BillDetailBean> list = new ArrayList<>();
         for (BillStyleQty style : styles) {
-            list.add(new BillDetailBean(iMainRecNo, style.getiBscDataStyleMRecNo(),
-                    item.getsStyleNo(), style.getiBscDataColorRecNo(),
-                    style.getsColorName(), style.getsSizeName(),
-                    style.getNum(), item.getfCostPrice(),
-                    StringUtil.multiply(style.getNum(), item.getfCostPrice()),
-                    "", style.getiSerial(), item.getsClassName(), item.getsStyleName()));
+            list.add(new BillDetailBean(iMainRecNo,
+                    style.getiBscDataStyleMRecNo(),
+                    item.getsStyleNo(),
+                    style.getiBscDataColorRecNo(),
+                    style.getsColorName(),
+                    style.getsSizeName(),
+                    style.getNum(),
+                    style.getPrice(),
+                    StringUtil.multiply(style.getNum(), style.getPrice()),
+                    "", style.getiSerial(),
+                    item.getsClassName(),
+                    item.getsStyleName()));
         }
         return list;
     }

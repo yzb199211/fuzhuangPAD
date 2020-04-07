@@ -3,9 +3,11 @@ package com.yyy.fuzhuangpad.view.search;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.yyy.fuzhuangpad.R;
+import com.yyy.fuzhuangpad.interfaces.OnTextChange;
 import com.yyy.fuzhuangpad.util.StringUtil;
 
 public class SearchEdit extends LinearLayout implements View.OnKeyListener {
@@ -37,6 +40,7 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
     private TextView tvTitle;
     private EditText etContent;
     private TextView tvContent;
+    private OnTextChange onTextChange;
 
     public SearchEdit(Context context) {
         this(context, null);
@@ -112,6 +116,22 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
         }
         if (maxLength != 0)
             etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
+        etContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (onTextChange != null) onTextChange.onText(editable.toString());
+            }
+        });
         addView(etContent);
     }
 
@@ -146,7 +166,7 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
 
     public void setText(String text) {
         etContent.setText(text);
-        if (tvContent!=null){
+        if (tvContent != null) {
             tvContent.setText(text);
         }
     }
@@ -189,5 +209,9 @@ public class SearchEdit extends LinearLayout implements View.OnKeyListener {
         if (maxLength != 0)
             tvContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
         addView(tvContent);
+    }
+
+    public void setOnTextChange(OnTextChange onTextChange) {
+        this.onTextChange = onTextChange;
     }
 }

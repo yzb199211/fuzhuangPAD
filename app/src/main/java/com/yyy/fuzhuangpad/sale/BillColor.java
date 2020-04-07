@@ -8,7 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BillColor extends StyleColor {
+    private double fPrice;
     List<BillStyleQty> styleQty = new ArrayList<>();
+
+    public double getfPrice() {
+        return fPrice;
+    }
+
+    public void setfPrice(double fPrice) {
+        this.fPrice = fPrice;
+    }
 
     public List<BillStyleQty> getStyleQty() {
         return styleQty;

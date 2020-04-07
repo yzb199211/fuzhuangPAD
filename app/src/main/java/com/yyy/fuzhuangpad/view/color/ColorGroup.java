@@ -97,7 +97,7 @@ public class ColorGroup<T extends StyleColor> extends ViewGroup {
                     if (!canClick) {
                         return;
                     }
-                    setGroupClick(btn, finalI);
+//                    setGroupClick(btn, finalI);
                     setSingleClick(btn, finalI);
                     if (markClickListener != null)
                         markClickListener.clickMark(finalI, colors.get(finalI).isChecked());
