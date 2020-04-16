@@ -104,6 +104,7 @@ public class StyleDetailActivity extends BaseActivity {
 
     StyleBean styleBean;
 
+
     private List<StyleType> styleTypes;
     private List<StyleSize> styleSizes;
     private List<StyleColor> styleColors;
