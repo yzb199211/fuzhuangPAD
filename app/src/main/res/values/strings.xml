@@ -26,6 +26,9 @@
     <string name="success_save">保存成功</string>
     <string name="success_delete">删除成功</string>
     <string name="success_submit">提交成功</string>
+
+
+    <string name="dialog_delete">"确认是否删除？"</string>
     <!--main-->
     <string name="main_menu_base_title">基础资料</string>
     <string name="main_menu_base_customer">客户档案</string>

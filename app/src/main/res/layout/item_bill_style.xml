@@ -20,7 +20,7 @@
         android:layout_below="@id/iv_logo"
         android:layout_centerHorizontal="true"
         android:singleLine="true"
-        android:textColor="@color/main_activity_top"
+        android:textColor="@color/form_bg_title"
         android:textSize="@dimen/sp_10" />
 
     <TextView

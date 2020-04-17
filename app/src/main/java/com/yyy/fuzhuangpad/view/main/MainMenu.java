@@ -24,6 +24,7 @@ public class MainMenu extends LinearLayout {
     private int textSize;
     private TextView tvContent;
     private ImageView ivImg;
+    private boolean imgShow;
 
     public void setText(String text) {
         this.text = text;
@@ -64,12 +65,14 @@ public class MainMenu extends LinearLayout {
         imgSrc = array.getResourceId(R.styleable.MainMenu_imgSrc, 0);
         textColor = array.getColor(R.styleable.MainMenu_tvolor, 0);
         textSize = array.getDimensionPixelSize(R.styleable.MainMenu_tvSize, 100);
+        imgShow = array.getBoolean(R.styleable.MainMenu_imgShow, false);
         array.recycle();
     }
 
     private void initView() {
         initLayout();
-        initImageView();
+        if (imgShow)
+            initImageView();
         initTextView();
     }
 
@@ -108,7 +111,7 @@ public class MainMenu extends LinearLayout {
 
     private LinearLayout.LayoutParams tvParams() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.leftMargin = context.getResources().getDimensionPixelOffset(R.dimen.dp_3);
+//        params.leftMargin = context.getResources().getDimensionPixelOffset(R.dimen.dp_3);
         return params;
     }
 }

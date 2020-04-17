@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.application.BaseActivity;
+import com.yyy.fuzhuangpad.dialog.JudgeDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
@@ -101,6 +102,7 @@ public class CustomerDetailActivity extends BaseActivity {
     private int listPos = -1;
     private Popwin popType;
     private Popwin popSaler;
+    private JudgeDialog judgeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -397,6 +399,18 @@ public class CustomerDetailActivity extends BaseActivity {
         initDialogWindow(pvDate.getDialog().getWindow());
     }
 
+    private void jugdeDelete() {
+        if (judgeDialog == null) {
+            judgeDialog = new JudgeDialog(this);
+            judgeDialog.setContent(getString(R.string.dialog_delete));
+            judgeDialog.setOnCloseListener(confirm -> {
+                if (confirm) {
+                    delete();
+                }
+            });
+        }
+    }
+
     @OnClick({R.id.bw_exit, R.id.bw_save, R.id.bw_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -429,7 +443,7 @@ public class CustomerDetailActivity extends BaseActivity {
 //                save();
                 break;
             case R.id.bw_delete:
-                delete();
+                jugdeDelete();
                 break;
         }
     }

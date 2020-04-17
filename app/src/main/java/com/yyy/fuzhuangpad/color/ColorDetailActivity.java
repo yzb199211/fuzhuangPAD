@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.application.BaseActivity;
+import com.yyy.fuzhuangpad.dialog.JudgeDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
 import com.yyy.fuzhuangpad.interfaces.OnSelectClickListener;
@@ -82,6 +83,7 @@ public class ColorDetailActivity extends BaseActivity {
     //private Popwin popType;
     String operatortype = "";
     int listPos = -1;
+    private JudgeDialog judgeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -286,8 +288,20 @@ public class ColorDetailActivity extends BaseActivity {
                 save();
                 break;
             case R.id.bw_delete:
-                delete();
+                jugdeDelete();
                 break;
+        }
+    }
+
+    private void jugdeDelete() {
+        if (judgeDialog == null) {
+            judgeDialog = new JudgeDialog(this);
+            judgeDialog.setContent(getString(R.string.dialog_delete));
+            judgeDialog.setOnCloseListener(confirm -> {
+                if (confirm) {
+                    delete();
+                }
+            });
         }
     }
 

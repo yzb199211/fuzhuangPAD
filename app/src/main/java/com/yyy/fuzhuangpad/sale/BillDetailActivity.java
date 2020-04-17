@@ -26,6 +26,7 @@ import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.customer.CustomerDetailActivity;
 import com.yyy.fuzhuangpad.customer.CustomerUtil;
 import com.yyy.fuzhuangpad.dialog.EditDialog;
+import com.yyy.fuzhuangpad.dialog.JudgeDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.dialog.SelectDialog;
 import com.yyy.fuzhuangpad.interfaces.OnDeleteListener;
@@ -159,6 +160,8 @@ public class BillDetailActivity extends BaseActivity {
     private Popwin popShop;
     private Popwin popClass;
     private boolean canEdit = true;
+
+    private JudgeDialog judgeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -980,6 +983,18 @@ public class BillDetailActivity extends BaseActivity {
         return params;
     }
 
+    private void jugdeDelete() {
+        if (judgeDialog == null) {
+            judgeDialog = new JudgeDialog(this);
+            judgeDialog.setContent(getString(R.string.dialog_delete));
+            judgeDialog.setOnCloseListener(confirm -> {
+                if (confirm) {
+                    delete();
+                }
+            });
+        }
+    }
+
     @OnClick({R.id.bw_exit, R.id.bw_submit, R.id.bw_save, R.id.bwi_add_customer, R.id.bwi_add_style, R.id.bw_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -987,7 +1002,7 @@ public class BillDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.bw_delete:
-                delete();
+                jugdeDelete();
                 break;
             case R.id.bw_submit:
                 if (shopId == 0) {

@@ -100,6 +100,7 @@
     </declare-styleable>
     <declare-styleable name="MainMenu">
         <attr name="imgSrc" format="reference" />
+        <attr name="imgShow" format="boolean" />
         <attr name="text" format="string" />
         <attr name="tvolor" format="color" />
         <attr name="tvSize" format="dimension" />
@@ -113,8 +114,8 @@
         <attr name="seMust" format="boolean" />
         <attr name="seMaxLength" format="integer" />
         <attr name="seGravity" format="enum">
-            <enum name="center" value="1"/>
-            <enum name="left" value="0"/>
+            <enum name="center" value="1" />
+            <enum name="left" value="0" />
         </attr>
         <attr name="seInputType" format="enum">
             <enum name="normal" value="0" />

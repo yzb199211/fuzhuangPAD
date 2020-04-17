@@ -8,7 +8,8 @@
     <color name="login_scan">#9FBABD</color>
     <color name="login_enter">#0066CC</color>
 
-    <color name="main_menu_title">#017280</color>
+    <color name="main_menu_title">#7f7dd1</color>
+<!--    <color name="main_menu_title">#017280</color>-->
 
     <color name="main_activity_top">#348e99</color>
 
@@ -41,7 +42,7 @@
     <color name="tab_selected">#1296db</color>
     <color name="pickerview_bgColor_overlay">#60000000</color>
     <color name="switch_false">#888</color>
-    <color name="switch_true">#33da33</color>
+    <color name="switch_true">#7f7dd1</color>
     <color name="switch_thumb">#eee</color>
 
     <color name="bottom_delete">#F39C18</color>
@@ -54,11 +55,13 @@
     <!--common-->
     <color name="common_btn_add">#FF0000</color>
     <color name="common_btn_delete">#d81e06</color>
-    <color name="common_btn_search">#4DB2B4</color>
+<!--    <color name="common_btn_search">#4DB2B4</color>-->
+    <color name="common_btn_search">#7f7dd1</color>
     <color name="common_btn_select">#CCCCCC</color>
     <color name="common_btn_color_checked">#FAC012</color>
-    <color name="common_menu_checked">#A6C8CA</color>
+    <color name="common_menu_checked">#AFA4EB</color>
     <!--form-->
-    <color name="form_bg_title">#4DB2B4</color>
+<!--    <color name="form_bg_title">#4DB2B4</color>-->
+    <color name="form_bg_title">#7f7dd1</color>
 
 </resources>

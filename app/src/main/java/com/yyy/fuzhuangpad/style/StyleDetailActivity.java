@@ -21,6 +21,7 @@ import com.yyy.fuzhuangpad.R;
 import com.yyy.fuzhuangpad.application.BaseActivity;
 import com.yyy.fuzhuangpad.customer.CustomerBeans;
 import com.yyy.fuzhuangpad.customer.CustomerUtil;
+import com.yyy.fuzhuangpad.dialog.JudgeDialog;
 import com.yyy.fuzhuangpad.dialog.LoadingDialog;
 import com.yyy.fuzhuangpad.dialog.SelectDialog;
 import com.yyy.fuzhuangpad.interfaces.OnItemClickListener;
@@ -126,6 +127,7 @@ public class StyleDetailActivity extends BaseActivity {
     private Popwin popType;
     private Popwin popSize;
     private Popwin popYear;
+    private JudgeDialog judgeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -664,10 +666,22 @@ public class StyleDetailActivity extends BaseActivity {
                 selectColor();
                 break;
             case R.id.bw_delete:
-                delete();
+                jugdeDelete();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void jugdeDelete() {
+        if (judgeDialog == null) {
+            judgeDialog = new JudgeDialog(this);
+            judgeDialog.setContent(getString(R.string.dialog_delete));
+            judgeDialog.setOnCloseListener(confirm -> {
+                if (confirm) {
+                    delete();
+                }
+            });
         }
     }
 

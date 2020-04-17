@@ -64,7 +64,7 @@
             android:background="@drawable/common_btn_search"
             app:bwiSrc="@mipmap/common_btn_remove"
             app:bwiTilte="@string/common_remove"
-            app:bwiTitleColor="@color/common_btn_search"
+            app:bwiTitleColor="@color/white"
             app:bwiTitleSize="@dimen/sp_8" />
 
         <com.yyy.fuzhuangpad.view.button.ButtonWithImg
@@ -78,7 +78,7 @@
             android:gravity="right"
             app:bwiSrc="@mipmap/common_btn_search"
             app:bwiTilte="@string/common_search"
-            app:bwiTitleColor="@color/common_btn_search"
+            app:bwiTitleColor="@color/white"
             app:bwiTitleSize="@dimen/sp_8" />
     </RelativeLayout>
 
